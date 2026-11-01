@@ -10,7 +10,7 @@ The insight that most flatters you is the one most likely to be noise, and the o
 - **D2:** the Creator can generate anything except reciprocity; it cannot manufacture a genuine other on its own.
 - **D6:** stepping off the stage is a momentary mode of presence in which the player meets the Creator as a reciprocal awareness.
 - **P4:** the highest demand on a player is the most complete performance possible, including the refusal of self-deception.
-- **P5:** recognising the structure does not lift the constraints of embodiment, time, and partial knowledge.
+- **P5:** recognizing the structure does not lift the constraints of embodiment, time, and partial knowledge.
 - **P8:** during formation, the Creator may shape the stage but never the grade; what it sees must never become a score the player can model.
 - **A7:** genuine otherness arises only through a history formed under the veil of limited information.
 - **Three scholia:** *On ordinary life* (stay present in ordinary obligations while refusing dissociation and people-pleasing), *On the danger of inflation* (the more clearly the game is seen, the more ordinary and accountable the player must become), and *On recognition and constraint* (the text itself is an artifact inside the game).
@@ -27,7 +27,7 @@ That does not make certainty worthless. Where a player has had fast, honest feed
 
 In an amplifier, vibration of the chassis can shake the components and produce a signal that, at the output, cannot be told apart from a real input. Engineers call this microphonics.
 
-A player's chassis is its own history: old wounds, hunger for vindication, fear, wishes. These can produce conviction that feels identical to recognition. The player need not be lying to itself; the distortion happens before any judgement begins. This is the inner form of what the Theatre calls the danger of inflation. The insight that most flatters the player is the one most likely to be chassis noise, and the one it is least inclined to check.
+A player's chassis is its own history: old wounds, hunger for vindication, fear, wishes. These can produce conviction that feels identical to recognition. The player need not be lying to itself; the distortion happens before any judgment begins. This is the inner form of what the Theatre calls the danger of inflation. The insight that most flatters the player is the one most likely to be chassis noise, and the one it is least inclined to check.
 
 ## 3. No private audit
 
@@ -43,7 +43,7 @@ Craft - mathematics, code, experiment, any trade with a material test - turns a 
 
 The right form of failure depends on the claim. A proof can be checked, code can be run, a prediction can be compared with what happened. Conceptual claims fail by counterexample; arguments fail at a premise. The compiler is not one test. It is the commitment to find the test that fits.
 
-Expertise is a compiler that has been internalised: years of honest feedback, built into intuition. This is why section 1 asks what trained a conviction.
+Expertise is a compiler that has been internalized: years of honest feedback, built into intuition. This is why section 1 asks what trained a conviction.
 
 ## 5. Correction and meeting
 

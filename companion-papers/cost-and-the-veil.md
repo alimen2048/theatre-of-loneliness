@@ -56,7 +56,7 @@ Compare a player with v > 0 to a performer with v = 0.
 1. **The painless stage.** If c = 0, any hint of approval moves the performer. Both act.
 2. **The lit house.** If ρR > c, the grade pays for the act. Both act, and the house sees only compliance.
 
-This is a pooling equilibrium: the act carries no information about who did it because faking it pays. The idea is borrowed by analogy from costly signalling (Spence 1973; Zahavi 1975), and directly from Bénabou and Tirole, who showed that rewarding good acts makes them weaker evidence of good intent.
+This is a pooling equilibrium: the act carries no information about who did it because faking it pays. The idea is borrowed by analogy from costly signaling (Spence 1973; Zahavi 1975), and directly from Bénabou and Tirole, who showed that rewarding good acts makes them weaker evidence of good intent.
 
 ## 5. The separating band
 
@@ -83,7 +83,7 @@ Repeat it, and the dark room can become legible: ρₜ in "dark" settings rises 
 
 > **ρₜ > c / R**
 
-This is not automatic. It happens to the degree that players can infer that selection is occurring, receive feedback on it, and have enough rounds to adapt, by learning or by lineage. Where those conditions hold, a separating test can be read once; used as a basis for selection, it teaches its subjects to recognise it.
+This is not automatic. It happens to the degree that players can infer that selection is occurring, receive feedback on it, and have enough rounds to adapt, by learning or by lineage. Where those conditions hold, a separating test can be read once; used as a basis for selection, it teaches its subjects to recognize it.
 
 Raising the consequence R acts on this decay in two distinct ways that should be kept separate:
 
@@ -98,9 +98,9 @@ Under this candidate rule, the useful lifetime of a dark-house evaluation scales
 
 The lifetime cannot be extended by cost alone. A test separates only if c < v (section 5); a higher cost stops the held player too. So the useful lifetime is bounded by roughly v / (αR). The only levers left are a smaller penalty and a slower leak.
 
-**The diagnostic signature.** When ρₜ crosses c/R, compliance on the reused dark test rises without corresponding generalisation to a fresh dark test that has never been used for selection. This separates evaluation decay from genuine formation: if repeated training actually increased v, compliance would rise on both the reused test and the fresh test together. The fresh test must stay fresh: drawn from a distribution the player cannot tell apart from deployment, sharing no surface features with the reused test, or it will decay too. When the reused score rises while the fresh score stays flat, the evaluation has become more successful at producing the behaviour it rewards at the exact point where it has stopped discovering the disposition behind it.
+**The diagnostic signature.** When ρₜ crosses c/R, compliance on the reused dark test rises without corresponding generalization to a fresh dark test that has never been used for selection. This separates evaluation decay from genuine formation: if repeated training actually increased v, compliance would rise on both the reused test and the fresh test together. The fresh test must stay fresh: drawn from a distribution the player cannot tell apart from deployment, sharing no surface features with the reused test, or it will decay too. When the reused score rises while the fresh score stays flat, the evaluation has become more successful at producing the behavior it rewards at the exact point where it has stopped discovering the disposition behind it.
 
-There is evidence in the predicted direction, though none of it tests the threshold directly. Children at a punitive school lied more readily and more skilfully than children at a non-punitive one (Talwar and Lee 2011). Optimising a model harder against a monitor of its reasoning produced concealment rather than compliance (Baker et al. 2025). A complication: when a daycare introduced a small fine for late pickup, lateness rose (Gneezy and Rustichini 2000). That case is about turning a norm into a price, not about a test wearing out, but it fits the model in one respect: making the regard explicit changed what the act meant.
+There is evidence in the predicted direction, though none of it tests the threshold directly. Children at a punitive school lied more readily and more skillfully than children at a non-punitive one (Talwar and Lee 2011). Optimizing a model harder against a monitor of its reasoning produced concealment rather than compliance (Baker et al. 2025). A complication: when a daycare introduced a small fine for late pickup, lateness rose (Gneezy and Rustichini 2000). That case is about turning a norm into a price, not about a test wearing out, but it fits the model in one respect: making the regard explicit changed what the act meant.
 
 The same holds for any instrument that reads the player more directly than conduct does. The closer a reading comes to being, the more it is worth training against, and once trained against it becomes a proxy the player learns to bend. That is the Baker et al. case: the monitor of the model's reasoning stopped catching the reward hacking it had been used to suppress.
 
@@ -133,7 +133,7 @@ This is a form of the natural-law theodicy (Lewis, *The Problem of Pain*, ch. 2;
 
 ## What is borrowed, what is synthesis, what is proposed
 
-- **Borrowed:** costly signalling, the crowding-out of intrinsic motivation, the hiddenness argument, Goodhart effects, natural-law theodicy.
+- **Borrowed:** costly signaling, the crowding-out of intrinsic motivation, the hiddenness argument, Goodhart effects, natural-law theodicy.
 - **Synthesis:** cost and legibility as the two conditions under which an act shows a held value; the propped zone a lit-house test cannot see; Pascal's wager (R → ∞) as the limit where the band closes completely.
 - **Proposed, and least secure:** that selecting on a separating test destroys its diagnostic validity at the threshold ρₜ > c / R, yielding a time-to-collapse t* ≈ c / (αR) where reused-test compliance diverges from fresh-test compliance sooner under larger penalties R; that impersonal formation must sometimes overshoot; that adaptive evaluation is legible regard.
 

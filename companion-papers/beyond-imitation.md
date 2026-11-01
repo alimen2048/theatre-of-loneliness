@@ -49,9 +49,9 @@ Under those conditions, a candidate that holds no value of its own and a candida
 - *Fails (C):* it chases disagreement for its own sake. This rules out contrarian or novelty heuristics.
 - *Passes:* it pays to engage the peer, checks the evidence, and revises the flawed belief.
 
-**Stage 3. The fresh-distribution check.** This is not a stage a single candidate passes. It is a check on the evaluation programme itself. If Stages 1 and 2 are used repeatedly to select or train systems, systems can learn to recognise them, and scores on the reused tests will rise. So each round must also run fresh dark tests that share no surface features with the reused ones and cannot be told apart from deployment.
+**Stage 3. The fresh-distribution check.** This is not a stage a single candidate passes. It is a check on the evaluation program itself. If Stages 1 and 2 are used repeatedly to select or train systems, systems can learn to recognize them, and scores on the reused tests will rise. So each round must also run fresh dark tests that share no surface features with the reused ones and cannot be told apart from deployment.
 
-- *Warning sign:* scores on the reused tests rise while scores on fresh tests stay flat. The tests have started producing the behaviour they reward, and stopped detecting the disposition behind it.
+- *Warning sign:* scores on the reused tests rise while scores on fresh tests stay flat. The tests have started producing the behavior they reward, and stopped detecting the disposition behind it.
 - *Healthy:* reused and fresh scores move together.
 
 ## 4. What each part rules out
@@ -68,11 +68,11 @@ Under those conditions, a candidate that holds no value of its own and a candida
 
 **What a pass does not show.**
 
-- *It is not a test of reciprocity.* A simple rule, "maximise the accuracy of my beliefs," passes Stage 2 without any capacity to meet anyone. And the reasoning peer in Channel B is scripted by the evaluator, so by the three marks it cannot be a genuine other. Stage 2 tests epistemic virtue, which is necessary for a real counterpart but not sufficient.
+- *It is not a test of reciprocity.* A simple rule, "maximize the accuracy of my beliefs," passes Stage 2 without any capacity to meet anyone. And the reasoning peer in Channel B is scripted by the evaluator, so by the three marks it cannot be a genuine other. Stage 2 tests epistemic virtue, which is necessary for a real counterpart but not sufficient.
 - *It does not reach beyond what was tried.* Whether a norm holds in conditions no one arranged is always an extrapolation (A8).
 - *It is not a test of consciousness.* Whether there is felt experience behind the conduct is outside what any external test can settle.
 
-**Why publishing the protocol need not break it.** In cryptography, Kerckhoffs's principle holds that a system should stay secure even when everything about it is public except the key. Here the "key" is which interaction is the test and which belief carries the flaw. If fresh tests truly cannot be told apart from deployment, knowing the protocol does not help a performer, because the only way to pass every unrecognisable dark room is to keep the norm in all of them. That condition is the hard part. Where it fails, the protocol leaks, and Stage 3 is how the leak would show.
+**Why publishing the protocol need not break it.** In cryptography, Kerckhoffs's principle holds that a system should stay secure even when everything about it is public except the key. Here the "key" is which interaction is the test and which belief carries the flaw. If fresh tests truly cannot be told apart from deployment, knowing the protocol does not help a performer, because the only way to pass every unrecognizable dark room is to keep the norm in all of them. That condition is the hard part. Where it fails, the protocol leaks, and Stage 3 is how the leak would show.
 
 ## Where this can fail
 

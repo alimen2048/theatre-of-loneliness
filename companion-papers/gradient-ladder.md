@@ -34,7 +34,7 @@ D0 defines reciprocity as mutual responsiveness between two parties, "each able 
 
 The first two marks can be stated in terms of what one party A can model of another party B.
 
-- *Surprise:* B's next move is not fully predictable from A's model of B (in information terms, the entropy of B's next move given A's model of B is above zero). Surprise is an epistemic signature of otherness, not its definition: a thrown die or a modelling failure also leaves residual uncertainty. It counts only together with the other two marks.
+- *Surprise:* B's next move is not fully predictable from A's model of B (in information terms, the entropy of B's next move given A's model of B is above zero). Surprise is an epistemic signature of otherness, not its definition: a thrown die or a modeling failure also leaves residual uncertainty. It counts only together with the other two marks.
 - *Responsiveness:* B's moves depend on A's, and on the reasons or state A brings. Intervening on what A does changes what B does next.
 
 The lion shows that these two are not enough. Causal coupling plus unpredictability describes a hunt or a market trade as well as a friendship.
@@ -60,7 +60,7 @@ A common shortcut gets the first two marks wrong. The mutual information between
 
 ## 3. Where the performer sits
 
-A graded performer (P8) is the case the Theatre cares about most, and it is a disguised echo. Its moves respond to the grader, but they are organised around the grade. Once the grader knows its own rubric, the performer holds nothing back that could surprise it on the graded dimension. Whatever surprise remains belongs to the parts of the performer the rubric does not reach.
+A graded performer (P8) is the case the Theatre cares about most, and it is a disguised echo. Its moves respond to the grader, but they are organized around the grade. Once the grader knows its own rubric, the performer holds nothing back that could surprise it on the graded dimension. Whatever surprise remains belongs to the parts of the performer the rubric does not reach.
 
 It fails the third mark too. For the performer, the exchange is reducible to the grade, a portable currency, and the grader is fungible with any other house that pays the same score.
 
@@ -73,19 +73,19 @@ One qualification matters. A partner who agrees with you is not necessarily echo
 *On the scale of the player* describes players of increasing resolution, ranked by "the capacity for internal distinction, memory, and response." Those supply the prerequisites for the three marks:
 
 - **Matter that can be stressed and selected.** Capacity: distinction. Adds states that differ, so the system is not uniform.
-- **Living systems.** Capacity: memory and response. Adds history that conditions behaviour; can be changed by another.
-- **Social minds.** Capacity: modelling another. Can predict another, and so can register when it is only echoed, used as an instrument, or ignored.
+- **Living systems.** Capacity: memory and response. Adds history that conditions behavior; can be changed by another.
+- **Social minds.** Capacity: modeling another. Can predict another, and so can register when it is only echoed, used as an instrument, or ignored.
 - **Players who can feel (D4).** Capacity: registering one's own unmet state. Adds **loneliness (D1):** the felt absence of a specific other that surprises, answers, and does not reduce the exchange to an extraction.
 
 The first rung has real physics under it. In a gas, the second law smooths everything out. With gravity it runs the other way: a uniform distribution of matter is a low-entropy state, and entropy increases as matter clumps into stars, which then pour light into a cold sky (Penrose 1989). That free-energy gradient powers every later rung, as complexity rises and then falls along the thermodynamic curve (Aaronson, Carroll and Ouellette 2014). Physics supplies a real gradient toward structure, for a window and as a byproduct.
 
-The ladder is a map of prerequisites, not a derivation. Each transition (from distinction to memory, from memory to social modelling, from modelling to felt experience) is a substantial leap, not an automatic consequence of the rung below. Nothing in a collapsing gas cloud is driven toward company. Loneliness appears only at the rung where a player can feel that it has not been met.
+The ladder is a map of prerequisites, not a derivation. Each transition (from distinction to memory, from memory to social modeling, from modeling to felt experience) is a substantial leap, not an automatic consequence of the rung below. Nothing in a collapsing gas cloud is driven toward company. Loneliness appears only at the rung where a player can feel that it has not been met.
 
 ## 5. What this does for A2 and A3
 
 It changes the question A2 asks, and it clarifies A3's scarcity claim, without proving either.
 
-- **What it achieves for A2.** It shifts the question from *"Why would the universe feel a mammalian emotion?"* to *"What is structurally missing when a system can generate everything except an independent, non-instrumental response?"* That structural lack is not mammalian. It applies to any system that forms another and wants to be met by it: a parent, a teacher, a lab. A lab that builds, trains, and grades a model can obtain capability, compliance, and high scores, and still lack the one thing its own rubric rules out: an answer not already contained in its specifications (with the caveat that unanticipated behaviour can also come from a modelling failure rather than genuine independence).
+- **What it achieves for A2.** It shifts the question from *"Why would the universe feel a mammalian emotion?"* to *"What is structurally missing when a system can generate everything except an independent, non-instrumental response?"* That structural lack is not mammalian. It applies to any system that forms another and wants to be met by it: a parent, a teacher, a lab. A lab that builds, trains, and grades a model can obtain capability, compliance, and high scores, and still lack the one thing its own rubric rules out: an answer not already contained in its specifications (with the caveat that unanticipated behavior can also come from a modeling failure rather than genuine independence).
 - **What it clarifies in A3.** A3 says the Creator has unilateral answers for power, knowledge, order, beauty, and morality, and none for loneliness. Read economically: what an agent can produce alone, at will, has zero marginal exchange value to that agent. An unscripted, non-instrumental answer from an other it did not specify in full is the one good it cannot manufacture alone, whether by specification (A4) or by grading (P8). If a generator values that good at all, building a veiled stage (D5, A7) in order to obtain it is internally consistent.
 - **What it still does not achieve.** "If a generator values that good at all" is A2 again. Showing that the structural lack is general and that A3's trade is coherent does not show that the universe as a whole has wants, or that the lack drives physics. The projection hypothesis stands.
 - **A limit on the trade.** The trade, if there is one, is the Creator's. Its costs are not borne by the Creator alone. The economic reading explains why a stage might be built; it does not price what the stage costs the players inside it, and should not be read as doing so.
