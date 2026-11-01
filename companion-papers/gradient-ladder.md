@@ -104,4 +104,13 @@ If loneliness tracks the absence of the three marks in a conscious player, three
 - If being graded warmly turns out to be no lonelier than being met without grading, section 3 does not extend to humans.
 - If long-term use of a purely accommodating companion reliably settles loneliness without decay, the surprise mark is unnecessary, and D0 asks for more than reciprocity requires.
 
+## References
+
+- Aaronson, S., Carroll, S. M., and Ouellette, L. (2014). "Quantifying the Rise and Fall of Complexity in Closed Systems: The Coffee Automaton." arXiv:1405.6903.
+- Assor, A., Roth, G., and Deci, E. L. (2004). "The Emotional Costs of Parents' Conditional Regard: A Self-Determination Theory Analysis." *Journal of Personality*, 72(1), 47-88.
+- Cacioppo, J. T., and Hawkley, L. C. (2009). "Perceived Social Isolation and Cognition." *Trends in Cognitive Sciences*, 13(10), 447-454.
+- Kant, I. (1785). *Groundwork of the Metaphysics of Morals* (Ak. 4:429).
+- Penrose, R. (1989). *The Emperor's New Mind*, ch. 7. Oxford University Press.
+- Reis, H. T., and Shaver, P. (1988). "Intimacy as an Interpersonal Process." In S. Duck (Ed.), *Handbook of Personal Relationships* (pp. 367-389). Wiley.
+
 *Developed with AI assistance. The argument, and its errors, are mine.*

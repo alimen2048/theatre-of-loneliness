@@ -80,4 +80,9 @@ Under those conditions, a candidate that holds no value of its own and a candida
 - If Stage 2 performance does not predict how a system responds to correction outside the test, the allocation test measures test-taking, not epistemic virtue.
 - If fresh tests cannot in practice be made indistinguishable from deployment, Stage 3 cannot be run, and the protocol is only as good as its secrecy.
 
+## References
+
+- Kerckhoffs, A. (1883). "La cryptographie militaire." *Journal des sciences militaires*, Vol. IX, 5-38.
+- Turing, A. M. (1950). "Computing Machinery and Intelligence." *Mind*, 59(236), 433-460.
+
 *Developed with AI assistance. The argument, and its errors, are mine.*

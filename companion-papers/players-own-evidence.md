@@ -74,4 +74,9 @@ The afterthought fails in two places.
 
 The same rule binds the Theatre. A framework that can absorb every objection as further proof of itself has removed the other from its own stage. Like the Theatre itself (P5, *On recognition and constraint*), this note is an artifact inside the game. Seeing that conviction carries no return address does not exempt the note from its own rule. It has been written down so it can fail.
 
+## References
+
+- Kahneman, D., and Klein, G. (2009). "Conditions for Intuitive Expertise: A Failure to Disagree." *American Psychologist*, 64(6), 515-526.
+- Mercier, H., and Sperber, D. (2011). "Why Do Humans Reason? Arguments for an Argumentative Theory." *Behavioral and Brain Sciences*, 34(2), 57-74.
+
 *Developed with AI assistance. The argument, and its errors, are mine.*

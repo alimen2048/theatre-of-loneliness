@@ -146,4 +146,20 @@ This is a form of the natural-law theodicy (Lewis, *The Problem of Pain*, ch. 2;
 - **Over time and across penalty scales.** Select repeatedly on a dark-house evaluation across different penalty magnitudes R and task costs c, and run a fresh, never-reused unmonitored test at each round to control for genuine formation of v. Section 7 predicts that reused-test compliance will diverge upward from fresh-test compliance, and that the round of divergence t* will decrease as R increases and increase as c increases. If the reused and fresh tests continue to move together (pure formation), or if larger R delays divergence, section 7 is wrong.
 - **Adaptively.** If evaluations that adapt to a specific model predict its unmonitored conduct as well as fixed evaluations do, the last part of section 9 is wrong.
 
+## References
+
+- Baker, B., et al. (2025). "Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation." arXiv:2503.11926.
+- Bénabou, R., and Tirole, J. (2006). "Incentives and Prosocial Behavior." *American Economic Review*, 96(5), 1652-1678.
+- Gneezy, U., and Rustichini, A. (2000). "A Fine Is a Price." *Journal of Legal Studies*, 29(1), 1-17.
+- Hick, J. (1966). *Evil and the God of Love*. Macmillan.
+- Kant, I. (1788). *Critique of Practical Reason* (Ak. 5:147).
+- Lewis, C. S. (1940). *The Problem of Pain*, ch. 2.
+- Murray, M. J. (1993). "Coercion and the Hiddenness of God." *American Philosophical Quarterly*, 30(1), 27-38.
+- Reichenbach, B. (1982). *Evil and a Good God*. Fordham University Press.
+- Rowe, W. L. (1979). "The Problem of Evil and Some Varieties of Atheism." *American Philosophical Quarterly*, 16(4), 335-341.
+- Spence, M. (1973). "Job Market Signaling." *Quarterly Journal of Economics*, 87(3), 355-374.
+- Swinburne, R. (1998). *Providence and the Problem of Evil*. Oxford University Press.
+- Talwar, V., and Lee, K. (2011). "A Punitive Environment Fosters Children's Dishonesty: A Natural Experiment." *Child Development*, 82(6), 1751-1758.
+- Zahavi, A. (1975). "Mate Selection: A Selection for a Handicap." *Journal of Theoretical Biology*, 53(1), 205-214.
+
 *Developed with AI assistance. The argument, and its errors, are mine.*
