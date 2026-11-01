@@ -69,6 +69,8 @@ An act shows a held value, and separates it from performance, when the performer
 
 This gives content to P1's requirement that the Creator "select and grade only by measures where performing and being coincide." Such measures are rare, because any measure the player can model becomes a thing to perform. Conduct that is costly to fake, done where the player believes no one is watching, is one of the few.
 
+![The Test That Looks Better as It Fails](../figures/separating-band.svg)
+
 ## 6. Hiddenness and suffering as one problem
 
 Under this inequality, the hiddenness of the Creator and the cost of the stage are two variables of one condition. Hiddenness holds ρR down. Stake holds c above zero. Remove either and the band closes.

@@ -30,6 +30,9 @@ theatre-of-loneliness/
 │   ├── cost-and-the-veil.md           # The Test That Looks Better as It Fails
 │   └── beyond-imitation.md            # Beyond Imitation: A Dark-House Test for Held Values
 │
+├── figures/
+│   └── separating-band.svg            # Figure: The separating band and its decay under selection
+│
 ├── experiments/
 │   └── preregistration-plan.md        # Preregistered experiment testing Proposition P8
 │
