@@ -125,7 +125,7 @@ The argument here is conditional. **If** deep values are formed through costly c
 
 **The second premise.** Suppose every cost were capped just below each player's current vᵢ. Then the test presupposes its answer, since the house must already know vᵢ to cap below it. And the cost becomes a readout: each player's depth can be read from what the world permits to happen to it, by any observer and by the player. The stage becomes legible regard, which P8 forbids. Section 7 already limits the Creator's shaping to coarse, late, population-level responses for the same reason. So at the scale of single players, costs must be drawn without regard to the player. A distribution that reaches high enough to test deep values will sometimes land on a player whose vᵢ is lower than the draw.
 
-**What this rules out, and what it does not.** It rules out fine-grained tailoring. It does not rule out coarse protection. A stage could exempt whole categories, the very young for example, and remain unreadable for any individual within them. The argument says nothing against that. This is Rowe's objection at the level of categories: regularity explains why *some* costs must exceed what a player can bear, not why *this* cost, or this kind of cost, could not have been spared (Rowe 1979).
+**What this rules out, and what it does not.** It rules out fine-grained tailoring. It weakens, but does not rule out, coarse protection: an exemption sharp enough to be noticed, a law that changes at a visible boundary, would itself be legible regard. But protection need not be sharp, and much of the worst suffering is done by other players, where this argument becomes the familiar free-will defense. It does not show why *this* cost, or this kind of cost, could not have been spared (Rowe 1979). And it offers nothing to the one who bore it: as Ivan Karamazov saw, an explanation of the price is not a payment to the one who paid it.
 
 **Depth, not proportion.** The stage can hurt as deeply as the meeting it aims at requires. It does not follow that it must hurt as much as it does. The argument fixes how high costs can reach, not how often they land there, and much of the worst suffering falls on players who cannot yet hold a deep value, where it separates nothing. Nor would a match in size be a balance. The one who pays and the one who is met are not the same, and a cost that buys someone else's meeting has not been answered for the one who bore it.
 
@@ -150,6 +150,7 @@ This is a form of the natural-law theodicy (Lewis, *The Problem of Pain*, ch. 2;
 
 - Baker, B., et al. (2025). "Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation." arXiv:2503.11926.
 - Bénabou, R., and Tirole, J. (2006). "Incentives and Prosocial Behavior." *American Economic Review*, 96(5), 1652-1678.
+- Dostoevsky, F. (1880). *The Brothers Karamazov*, Book V, ch. 4 ("Rebellion").
 - Gneezy, U., and Rustichini, A. (2000). "A Fine Is a Price." *Journal of Legal Studies*, 29(1), 1-17.
 - Hick, J. (1966). *Evil and the God of Love*. Macmillan.
 - Kant, I. (1788). *Critique of Practical Reason* (Ak. 5:147).
