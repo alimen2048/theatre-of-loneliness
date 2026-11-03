@@ -31,7 +31,7 @@ An act is asked of a player: telling a truth that hurts, keeping a word that cos
 
 - The player gives the act a weight of its own, v ≥ 0: how much it values what the act is for.
 - It believes the house is watching with probability ρ, and that the house will answer the act with reward or withheld penalty R. Its expected return from the house is ρR.
-- The act costs c ≥ 0: what the player gives up by acting, measured in whatever it otherwise pursues.
+- The act costs c: what the player gives up by acting, measured in whatever it otherwise pursues. This note assumes c ≥ 0. A negative c means the stage itself makes not acting costlier than acting; then every player acts, and the band below is empty. That regime is the subject of [*Why You Cannot Flatter Gravity*](stage-gravity.md).
 
 The player acts when v + ρR > c. (Ties go to not acting.)
 

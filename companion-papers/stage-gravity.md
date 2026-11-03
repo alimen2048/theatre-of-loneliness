@@ -27,6 +27,14 @@ Split the cost of keeping a norm into two parts: the effort it takes (e), and th
 
 That is P8 in one line: **put consequences in c, never in ρR.** A consequence in ρR changes with the watcher and teaches the player to manage the watcher. A consequence in c does not change with the watcher, so there is nothing to manage. You cannot flatter gravity, and you cannot wait until it looks away.
 
+**Three consequences, not one.** A collapse is a fact about the world. It shapes the engineer only if it reaches him.
+
+- **The world consequence:** the bridge falls.
+- **The player consequence:** the engineer bears a loss he can learn from, such as liability, a ruined name, or simply seeing it fall.
+- **The inherited consequence:** whoever comes next lives with the fallen bridge (section 5).
+
+Only the second teaches the one who acted. It can arrive through other people, through courts and reputation, and still belong to the stage rather than the house, because what triggers it is the collapse, and a collapse cannot go unseen. Where the world's consequence never reaches the actor, it exposes the act but teaches nothing. That is the problem of section 4, and handoff in section 5 is an attempt to route the inherited consequence back to the actor.
+
 Neither half of this is new. Organizations that pay for a visible proxy while hoping for the real goal get the proxy (Kerr 1975). In child-rearing, the distinction between a punishment an adult imposes and a natural consequence the world delivers is old practical advice, and it comes with the same warning: once the adult adds a lecture, the consequence becomes a grade again (Dreikurs and Soltz 1964). What the model adds is where these sit: one term in the payoff, and why moving a consequence from one term to the other changes what is learned.
 
 ## 2. What gravity does, and what it does not

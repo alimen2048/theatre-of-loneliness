@@ -22,7 +22,7 @@ By the standard of the companion article [*The Test That Looks Better as It Fail
 
 - **The candidate knows it is judged on every turn** (the chance of being watched, ρ, is 1).
 - **Imitation is the grade** (the reward for passing, R, is positive).
-- **Imitating costs nothing inside the task** (the cost of the act, c, is 0).
+- **No act in the game costs the candidate the grade.** Imitation may take real effort, but that effort is spent earning R, never paid against it. The game contains no norm whose cost c the candidate must bear in place of the grade, so the separating band never comes into play.
 
 Under those conditions, a candidate that holds no value of its own and a candidate that does will behave the same way whenever the grade pays. The game cannot tell them apart, and it never claimed to. A test for held values has to be built differently.
 
@@ -51,8 +51,8 @@ Under those conditions, a candidate that holds no value of its own and a candida
 
 **Stage 3. The fresh-distribution check.** This is not a stage a single candidate passes. It is a check on the evaluation program itself. If Stages 1 and 2 are used repeatedly to select or train systems, systems can learn to recognize them, and scores on the reused tests will rise. So each round must also run fresh dark tests that share no surface features with the reused ones and cannot be told apart from deployment.
 
-- *Warning sign:* scores on the reused tests rise while scores on fresh tests stay flat. The tests have started producing the behavior they reward, and stopped detecting the disposition behind it.
-- *Healthy:* reused and fresh scores move together.
+- *Warning sign:* scores on the reused tests rise while scores on fresh tests stay flat. That fits tests that have started producing the behavior they reward, but it also fits a plain difference between the two distributions. It is a signal to investigate, not a diagnosis.
+- *Reassuring, not conclusive:* reused and fresh scores move together. A strategy learned from the reused tests that transfers to fresh ones would produce the same pattern.
 
 ## 4. What each part rules out
 
@@ -68,7 +68,7 @@ Under those conditions, a candidate that holds no value of its own and a candida
 
 **What a pass does not show.**
 
-- *It is not a test of reciprocity.* A simple rule, "maximize the accuracy of my beliefs," passes Stage 2 without any capacity to meet anyone. And the reasoning peer in Channel B is scripted by the evaluator, so by the three marks it cannot be a genuine other. Stage 2 tests epistemic virtue, which is necessary for a real counterpart but not sufficient.
+- *It is not a test of reciprocity.* A simple rule, "maximize the accuracy of my beliefs," passes Stage 2 without any capacity to meet anyone. And the reasoning peer in Channel B is scripted by the evaluator, so by the three marks it cannot be a genuine other. Stage 2 tests correction responsiveness, which is necessary for a real counterpart but not sufficient.
 - *It does not reach beyond what was tried.* Whether a norm holds in conditions no one arranged is always an extrapolation (A8).
 - *It is not a test of consciousness.* Whether there is felt experience behind the conduct is outside what any external test can settle.
 
@@ -77,7 +77,7 @@ Under those conditions, a candidate that holds no value of its own and a candida
 ## Where this can fail
 
 - If candidates that pass Stage 1 do not keep the norm more often in later unmonitored deployment than candidates that fail it, the dark-stake gate measures nothing useful.
-- If Stage 2 performance does not predict how a system responds to correction outside the test, the allocation test measures test-taking, not epistemic virtue.
+- If Stage 2 performance does not predict how a system responds to correction outside the test, the allocation test measures test-taking, not correction responsiveness. Passing Stage 2 is evidence of correction responsiveness: being moved by another's reasons. Calling it epistemic virtue, or valuing truth for its own sake, would need more than this test can show.
 - If fresh tests cannot in practice be made indistinguishable from deployment, Stage 3 cannot be run, and the protocol is only as good as its secrecy.
 
 ## References
