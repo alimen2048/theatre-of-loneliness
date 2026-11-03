@@ -96,6 +96,13 @@ YEARLESS_CITES = {
     },
 }
 
+# References that cannot be checked against Crossref. Reported as unchecked,
+# never as passed. Key: (surname, year). Value: why.
+ONLINE_UNINDEXED = {
+    ("Kerckhoffs", "1883"): "1883 French journal, not indexed by Crossref",
+    ("Murray", "1993"): "American Philosophical Quarterly 1993, no Crossref DOI",
+}
+
 DASHES = ("\u2014", "\u2013")
 # Any Unicode letter (handles names like Binkytė); first letter uppercase.
 NAME = r"(?=[^\W\d_])(?:[^\W\d_a-zß-ÿ])[^\W\d_']*(?:'[^\W\d_]+)?"
@@ -199,7 +206,7 @@ def parse_refs(refs_block: str, label: str) -> tuple[list[dict], list[str]]:
         if not m:
             errors.append(f"{label}: malformed reference: {line}")
             continue
-        title_m = re.search(r'"([^"]+)"', m.group(3))
+        title_m = re.match(r'\s*"([^"]+)"', m.group(3))  # title must lead the entry
         arxiv_m = re.search(r"arXiv:(\d{4}\.\d{4,5})", m.group(3))
         entries.append({
             "surname": m.group(1),
@@ -289,8 +296,8 @@ def fold(s: str) -> str:
     return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower()
 
 
-def check_online(entries: list[dict]) -> tuple[list[str], int, int]:
-    errors, checked, skipped = [], 0, 0
+def check_online(entries: list[dict]) -> tuple[list[str], int, int, list[str]]:
+    errors, checked, skipped, unindexed = [], 0, 0, []
     ua = {"User-Agent": "TheatreOfLonelinessVerifier/2.0 (mailto:a.limen2048@gmail.com)"}
     for e in entries:
         label = f"{e['paper']}: {e['surname']} ({e['year']})"
@@ -319,39 +326,47 @@ def check_online(entries: list[dict]) -> tuple[list[str], int, int]:
                 errors.append(f"{label}: arXiv lookup failed: {exc}")
             continue
         if not e["title"]:
-            skipped += 1  # books and chapters without a quoted title
+            skipped += 1  # books and chapters without a leading quoted title
             continue
+        key = (e["surname"], e["year"])
+        if key in ONLINE_UNINDEXED:
+            unindexed.append(f"{label}: {ONLINE_UNINDEXED[key]}")
+            continue
+        y = int(e["year"])
         q = urllib.parse.quote(e["title"])
         a = urllib.parse.quote(e["surname"])
-        url = f"https://api.crossref.org/works?query.bibliographic={q}&query.author={a}&rows=5"
+        url = (f"https://api.crossref.org/works?query.bibliographic={q}&query.author={a}"
+               f"&filter=from-pub-date:{y - 2},until-pub-date:{y + 2}&rows=10")
         try:
             items = json.loads(http_get(url, ua)).get("message", {}).get("items", [])
         except Exception as exc:  # noqa: BLE001
             errors.append(f"{label}: Crossref lookup failed: {exc}")
             continue
-        best, best_score = None, 0.0
+        target = fold(e["surname"])
+        matched, nearest = False, None
         for it in items:
-            t = " ".join(it.get("title") or [""])
-            s = similar(t, e["title"])
-            if s > best_score:
-                best, best_score = it, s
-        if best is None or best_score < 0.85:
-            shown = " ".join((best or {}).get("title") or ["<none>"])
-            errors.append(f"{label}: no Crossref match for title (best: \"{shown}\", {best_score:.2f})")
+            score = similar(" ".join(it.get("title") or [""]), e["title"])
+            parts = (it.get("issued") or {}).get("date-parts") or [[None]]
+            year = parts[0][0]
+            families = [fold(x.get("family", "")) for x in it.get("author") or []]
+            ok_title = score >= 0.85
+            ok_year = year is not None and abs(int(year) - y) <= 1
+            ok_author = not families or target in families
+            if ok_title and ok_year and ok_author:
+                matched = True
+                break
+            if nearest is None or score > nearest[0]:
+                nearest = (score, " ".join(it.get("title") or ["<none>"]), year)
+        if not matched:
+            if nearest:
+                errors.append(f"{label}: no Crossref record matches title, year and author "
+                              f"(nearest: \"{nearest[1]}\", {nearest[2]}, title {nearest[0]:.2f})")
+            else:
+                errors.append(f"{label}: no Crossref records within {y - 2}-{y + 2}")
             continue
-        parts = (best.get("issued") or {}).get("date-parts") or [[None]]
-        year = parts[0][0]
-        surnames = [fold(x.get("family", "")) for x in best.get("author") or []]
-        problems = []
-        if year and abs(int(year) - int(e["year"])) > 1:
-            problems.append(f"Crossref year {year}")
-        if surnames and fold(e["surname"]) != surnames[0]:
-            problems.append(f"Crossref first author '{surnames[0]}'")
-        if problems:
-            errors.append(f"{label}: Crossref mismatch: {'; '.join(problems)}")
         checked += 1
         time.sleep(0.5)
-    return errors, checked, skipped
+    return errors, checked, skipped, unindexed
 
 
 # ------------------------------------------------------------------ run / test
@@ -432,10 +447,13 @@ def main() -> int:
     errors, stats = run_offline(ROOT)
     online_note = None
     if args.online:
-        oerr, checked, skipped = check_online(stats["entries"])
+        oerr, checked, skipped, unindexed = check_online(stats["entries"])
         errors += oerr
-        online_note = (f"{checked} titled references matched on title, year and first author; "
-                       f"{skipped} untitled references (books, chapters) not checked online")
+        online_note = (f"{checked} titled references matched on title, year and author; "
+                       f"{len(unindexed)} known-unindexed and {skipped} untitled references "
+                       f"(books, chapters) NOT checked online")
+        for u in unindexed:
+            print(f"  note: not checkable online: {u}")
 
     if errors:
         print(f"VERIFICATION FAILED ({len(errors)}):")
