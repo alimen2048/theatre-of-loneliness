@@ -306,3 +306,9 @@ Plan for $300 to $500 total so a failed first attempt does not end the project.
 - **Experiment 2 (Butler-style):** critique-only training vs reward-plus-critique training; does adding a score cancel the benefit of the critique, as Butler (1988) found in classrooms?
 - **GRPO variant** of B0/B1 (section 12).
 - **Copy test (A8):** a long-running conversation partner vs a fresh instance given only a stored memory summary, blind-tested by the partner.
+
+## References
+
+- Baum, K., Binkytė, R., and Jahn, F. (2026). "Norms at a Price: Why RL-Based Alignment Can Promise Conditional Compliance at Best." arXiv:2609.07627.
+- Butler, R. (1988). "Enhancing and Undermining Intrinsic Motivation: The Effects of Task-Involving and Ego-Involving Evaluation on Interest and Performance." *British Journal of Educational Psychology*, 58(1), 1-14.
+- Zhuang, A., and Aranguri, S. (2026). "Not All Eval-Awareness Is Equal: Capabilities Framing Predicts Compliance." arXiv:2608.27340.

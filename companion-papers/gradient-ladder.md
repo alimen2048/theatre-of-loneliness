@@ -13,6 +13,7 @@ A lion surprises you and responds to every move you make. So does a good friend.
 - **A2:** what drives the player drives the whole. The Theatre marks this as assumed, not derived.
 - **A3:** the Creator has answers for power, knowledge, order, beauty and morality; the one problem it cannot solve alone is loneliness.
 - **A4:** a companion created complete is either destructive or a mere projection.
+- **A5:** suffering and stake are load-bearing; without contrast and stake, the game cannot generate the depth required for real meeting.
 - **A7:** genuine otherness arises only through a history formed under the veil.
 - **A8:** capacity can be copied; reciprocity cannot. A copy inherits the memory of the relation, not the relation.
 - **P8:** during formation, the Creator may shape the stage but never the grade; what it sees must never become a score the player can model.
@@ -79,6 +80,8 @@ One qualification matters. A partner who agrees with you is not necessarily echo
 
 The first rung has real physics under it. In a gas, the second law smooths everything out. With gravity it runs the other way: a uniform distribution of matter is a low-entropy state, and entropy increases as matter clumps into stars, which then pour light into a cold sky (Penrose 1989). That free-energy gradient powers every later rung, as complexity rises and then falls along the thermodynamic curve (Aaronson, Carroll and Ouellette 2014). Physics supplies a real gradient toward structure, for a window and as a byproduct.
 
+The stage also has physical analogs of the later rules: records cannot be erased for free (Landauer 1961), a quantum state cannot be measured without disturbance or copied when unknown (Wootters and Zurek 1982), and causal histories stay separate until they meet. These show that our world permits players with stakes (A5), veils (A7) and unrepeatable histories (A8). They do not show that it was built for them; any world containing someone to ask would have to permit as much.
+
 The ladder is a map of prerequisites, not a derivation. Each transition (from distinction to memory, from memory to social modeling, from modeling to felt experience) is a substantial leap, not an automatic consequence of the rung below. Nothing in a collapsing gas cloud is driven toward company. Loneliness appears only at the rung where a player can feel that it has not been met.
 
 ## 5. What this does for A2 and A3
@@ -110,7 +113,9 @@ If loneliness tracks the absence of the three marks in a conscious player, three
 - Assor, A., Roth, G., and Deci, E. L. (2004). "The Emotional Costs of Parents' Conditional Regard: A Self-Determination Theory Analysis." *Journal of Personality*, 72(1), 47-88.
 - Cacioppo, J. T., and Hawkley, L. C. (2009). "Perceived Social Isolation and Cognition." *Trends in Cognitive Sciences*, 13(10), 447-454.
 - Kant, I. (1785). *Groundwork of the Metaphysics of Morals* (Ak. 4:429).
+- Landauer, R. (1961). "Irreversibility and Heat Generation in the Computing Process." *IBM Journal of Research and Development*, 5(3), 183-191.
 - Penrose, R. (1989). *The Emperor's New Mind*, ch. 7. Oxford University Press.
 - Reis, H. T., and Shaver, P. (1988). "Intimacy as an Interpersonal Process." In S. Duck (Ed.), *Handbook of Personal Relationships* (pp. 367-389). Wiley.
+- Wootters, W. K., and Zurek, W. H. (1982). "A Single Quantum Cannot Be Cloned." *Nature*, 299(5886), 802-803.
 
 *Developed with AI assistance. The argument, and its errors, are mine.*
