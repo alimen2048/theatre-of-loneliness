@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 860" width="960" height="860">
+<rect width="960" height="860" fill="#0d0e10"/>
+<text x="70.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">Three marks of reciprocity</text>
+<text x="70.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#9ca3af" text-anchor="start" font-weight="normal">Surprise and responsiveness sort most cases; only irreducibility separates a partner from a lion</text>
+<rect x="150.0" y="140.0" width="700.0" height="560.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5"/>
+<rect x="150.0" y="140.0" width="260.0" height="340.0" fill="#ffffff" fill-opacity="0.03" stroke="none" stroke-width="0"/>
+<text x="172.0" y="188.0" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#f3f4f6" text-anchor="start" font-weight="bold">Noise</text>
+<text x="172.0" y="216.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#9ca3af" text-anchor="start" font-weight="normal" font-style="italic">surprise: yes · responsive: no</text>
+<text x="172.0" y="246.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">unpredictable, but nothing</text>
+<text x="172.0" y="268.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">you do reaches it</text>
+<text x="172.0" y="528.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">nothing to meet</text>
+<rect x="410.0" y="480.0" width="440.0" height="220.0" fill="#60a5fa" fill-opacity="0.13" stroke="none" stroke-width="0"/>
+<text x="432.0" y="526.0" font-family="Georgia, 'Times New Roman', serif" font-size="21" fill="#93c5fd" text-anchor="start" font-weight="bold">Echo, sycophant, graded performer</text>
+<text x="432.0" y="554.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#93c5fd" text-anchor="start" font-weight="normal" font-style="italic">surprise: no · responsive: yes · reducible: yes</text>
+<text x="432.0" y="584.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">moves with you, organized around your approval</text>
+<text x="432.0" y="606.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">or your rubric; gives back what you already hold</text>
+<rect x="410.0" y="315.0" width="440.0" height="165.0" fill="#f87171" fill-opacity="0.13" stroke="none" stroke-width="0"/>
+<text x="432.0" y="355.0" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#fca5a5" text-anchor="start" font-weight="bold">Lion, trade, manipulator</text>
+<text x="432.0" y="381.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#fca5a5" text-anchor="start" font-weight="normal" font-style="italic">surprise: yes · responsive: yes · reducible: yes</text>
+<text x="432.0" y="411.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">tracks every move and can surprise you, but</text>
+<text x="432.0" y="433.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">the exchange reduces to the meal, the goods,</text>
+<text x="432.0" y="455.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">or the target; the other is interchangeable</text>
+<rect x="410.0" y="140.0" width="440.0" height="175.0" fill="#eab308" fill-opacity="0.22" stroke="#eab308" stroke-width="2.6"/>
+<text x="432.0" y="182.0" font-family="Georgia, 'Times New Roman', serif" font-size="23" fill="#fde047" text-anchor="start" font-weight="bold">Partner (D0)</text>
+<text x="432.0" y="210.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#fde047" text-anchor="start" font-weight="normal" font-style="italic">surprise: yes · responsive: yes · reducible: no (A8)</text>
+<text x="432.0" y="240.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">effects travel; the relation does not</text>
+<line x1="410.0" y1="140.0" x2="410.0" y2="700.0" stroke="#e5e7eb" stroke-width="1.8" opacity="1.0"/>
+<line x1="150.0" y1="480.0" x2="850.0" y2="480.0" stroke="#e5e7eb" stroke-width="1.8" opacity="1.0"/>
+<line x1="410.0" y1="315.0" x2="850.0" y2="315.0" stroke="#e5e7eb" stroke-width="1.6" stroke-dasharray="7,5" opacity="1.0"/>
+<text x="836.0" y="303.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#fde047" text-anchor="end" font-weight="normal" font-style="italic">only the third mark, irreducibility, draws this line</text>
+<line x1="876.0" y1="210.0" x2="876.0" y2="570.0" stroke="#93c5fd" stroke-width="2.4" opacity="1.0"/>
+<polygon points="876.0,570.0 872.3,562.3 879.7,562.3" fill="#93c5fd" fill-opacity="1.0" stroke="none" stroke-width="0.0"/>
+<text x="898.0" y="375.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#93c5fd" text-anchor="middle" font-weight="normal" font-style="italic" transform="rotate(90 898 375.0)">P8: legible grading pushes a player toward the echo</text>
+<line x1="150.0" y1="700.0" x2="850.0" y2="700.0" stroke="#6b7280" stroke-width="1.8" opacity="1.0"/>
+<line x1="150.0" y1="140.0" x2="150.0" y2="700.0" stroke="#6b7280" stroke-width="1.8" opacity="1.0"/>
+<text x="280.0" y="730.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">not responsive</text>
+<text x="630.0" y="730.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">responsive</text>
+<text x="500.0" y="770.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#c9cdd4" text-anchor="middle" font-weight="normal">Mark 2: responsiveness  (B depends on what A does and brings)</text>
+<text x="124.0" y="590.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal" transform="rotate(-90 124 590.0)">no surprise</text>
+<text x="124.0" y="310.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal" transform="rotate(-90 124 310.0)">surprise</text>
+<text x="88.0" y="420.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#c9cdd4" text-anchor="middle" font-weight="normal" transform="rotate(-90 88 420.0)">Mark 1: surprise  (B not predictable from A's model)</text>
+<text x="70.0" y="818.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “What a Lion, a Sycophant and a Friend Have in Common”</text>
+</svg>

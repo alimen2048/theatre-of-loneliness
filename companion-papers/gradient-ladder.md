@@ -69,6 +69,10 @@ This is P8 restated in the terms above. Making the grade legible does not make t
 
 One qualification matters. A partner who agrees with you is not necessarily echoing you; it may agree because you are right. And a contrarian who disagrees on cue is still performing. The test of independence is not how often B disagrees with A, but whether B's responses remain sensitive to reasons and evidence when they cut against A's expectations or approval.
 
+![A grid of surprise against responsiveness. Noise: surprise without responsiveness. Echo, sycophant and graded performer: responsive without surprise. Lion, trade and manipulator: both, but reducible. Partner: both, and not reducible. An arrow marks P8 pushing a player from partner toward echo](../figures/gradient-ladder-marks.svg)
+
+*The first two marks sort the echo, the noise and the rest; only the third, irreducibility, separates the partner from the lion, the trade and the manipulator. P8: legible grading pushes a player toward the echo.*
+
 ## 4. The ladder
 
 *On the scale of the player* describes players of increasing resolution, ranked by "the capacity for internal distinction, memory, and response." Those supply the prerequisites for the three marks:

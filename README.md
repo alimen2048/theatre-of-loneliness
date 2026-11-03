@@ -32,6 +32,7 @@ theatre-of-loneliness/
 │   └── stage-gravity.md               # Why You Cannot Flatter Gravity
 │
 ├── figures/
+│   ├── gradient-ladder-marks.svg      # Figure: Three marks of reciprocity
 │   ├── separating-band.svg            # Figure: The separating band and its decay under selection
 │   ├── stage-gravity-zones.svg        # Figure: Net-cost zones, extended below zero
 │   └── stage-gravity-handoff.svg      # Figure: Graded episode vs handoff
