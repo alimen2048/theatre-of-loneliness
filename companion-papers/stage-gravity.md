@@ -47,6 +47,10 @@ So gravity forms **reliable conduct**, not **visible values**. It is the soft fo
 
 Whether stage consequences also *form* held values better than grades do is a separate claim. It is close to A7, which holds that otherness arises only through a history under the veil, and it is a hypothesis, not a result of the model.
 
+![Why You Cannot Flatter Gravity](../figures/stage-gravity.svg)
+
+*Left: the zones of section 2 on one scale of net cost c. Below c = 0 every player keeps the norm, watched or not, so conduct is reliable and v is hidden. Right: (A) a graded episode, section 4; (B) handoff, section 5, where the successors' score returns to the writer; (C) the scale of section 3. Handoff sits with unit tests: a measurement placed downstream of the report, not gravity.*
+
 ## 3. The consequence must be the target
 
 Gravity cannot be gamed for a second reason, and it matters more than the first. There is no gap between the consequence and what it is about. The bridge falling *is* the failure. Nothing measures the bridge; the bridge simply does what it does.

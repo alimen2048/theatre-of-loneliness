@@ -32,7 +32,8 @@ theatre-of-loneliness/
 │   └── stage-gravity.md               # Why You Cannot Flatter Gravity
 │
 ├── figures/
-│   └── separating-band.svg            # Figure: The separating band and its decay under selection
+│   ├── separating-band.svg            # Figure: The separating band and its decay under selection
+│   └── stage-gravity.svg              # Figure: Extended net-cost zones and handoff routing
 │
 ├── experiments/
 │   └── preregistration-plan.md        # Draft preregistration plan (pre-pilot) testing P8
