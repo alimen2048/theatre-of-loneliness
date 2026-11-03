@@ -1,0 +1,44 @@
+name: Verify
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "0 6 * * 1"   # Mondays 06:00 UTC: online bibliography check
+  workflow_dispatch:
+    inputs:
+      online:
+        description: "Also run the online bibliography check"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Quotes, citations, links, typography
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Offline checks
+        run: python3 scripts/verify_repo.py
+      - name: Self-test (each check must be able to fail)
+        run: python3 scripts/verify_repo.py --self-test
+
+  online:
+    name: Bibliography against Crossref / arXiv
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.online)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Online checks
+        run: python3 scripts/verify_repo.py --online
