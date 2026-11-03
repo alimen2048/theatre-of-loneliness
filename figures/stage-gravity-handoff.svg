@@ -1,10 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 900" width="840" height="900">
-<rect width="840" height="900" fill="#0d0e10"/>
-<text x="70.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">Why You Cannot Flatter Gravity</text>
-<text x="70.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#9ca3af" text-anchor="start" font-weight="normal">A graded episode, handoff, and where handoff sits on the scale of section 3</text>
-<g transform="translate(-760 0)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 850" width="840" height="850">
+<rect width="840" height="850" fill="#0d0e10"/>
+<text x="70.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">Grading versus handoff</text>
+<text x="70.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#9ca3af" text-anchor="start" font-weight="normal">What returns to the writer, and where handoff sits on the scale of section 3</text>
+<g transform="translate(-760 -50)">
 <rect x="830.0" y="190.0" width="700.0" height="560.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5"/>
-<text x="830.0" y="160.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#f3f4f6" text-anchor="start" font-weight="bold">HANDOFF: ROUTING THE INHERITED CONSEQUENCE</text>
 <text x="854.0" y="224.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16.5" fill="#fca5a5" text-anchor="start" font-weight="bold">A. Graded episode (§4): a rater scores the report (ρR)</text>
 <rect x="854.0" y="242.0" width="165.0" height="74.0" fill="#18181b" fill-opacity="1.0" stroke="#3f3f46" stroke-width="1.4" rx="5"/>
 <text x="936.5" y="272.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" fill="#f3f4f6" text-anchor="middle" font-weight="bold">Writer (θ)</text>
@@ -60,7 +59,7 @@
 <text x="1486.0" y="698.0" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#34d399" text-anchor="end" font-weight="bold">Stage gravity</text>
 <text x="1486.0" y="720.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="end" font-weight="normal">the consequence is the target</text>
 </g>
-<text x="70.0" y="800.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">Handoff moves the measurement downstream of the report;</text>
-<text x="70.0" y="822.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">it narrows the gap toward gravity without reaching it.</text>
-<text x="70.0" y="868.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “Why You Cannot Flatter Gravity”</text>
+<text x="70.0" y="750.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">Handoff moves the measurement downstream of the report;</text>
+<text x="70.0" y="772.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">it narrows the gap toward gravity without reaching it.</text>
+<text x="70.0" y="818.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “Why You Cannot Flatter Gravity”</text>
 </svg>
