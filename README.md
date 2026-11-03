@@ -28,7 +28,8 @@ theatre-of-loneliness/
 │   ├── players-own-evidence.md        # The Feeling of Being Right Is Not Evidence
 │   ├── gradient-ladder.md             # What a Lion, a Sycophant and a Friend Have in Common
 │   ├── cost-and-the-veil.md           # The Test That Looks Better as It Fails
-│   └── beyond-imitation.md            # Beyond Imitation: A Dark-House Test for Held Values
+│   ├── beyond-imitation.md            # Beyond Imitation: A Dark-House Test for Held Values
+│   └── stage-gravity.md               # Why You Cannot Flatter Gravity
 │
 ├── figures/
 │   └── separating-band.svg            # Figure: The separating band and its decay under selection
@@ -53,7 +54,9 @@ theatre-of-loneliness/
    Shows that the cost of the stage (`A5`) and the restraint of the house (`P8`) form a single separating band ($\rho R < c < v$), derives a candidate half-life ($t^* \approx \frac{c}{\alpha R}$) for hidden evaluations reused for selection, and predicts that harsher penalties accelerate diagnostic decay.
 5. **[Beyond Imitation: A Dark-House Test for Held Values](companion-papers/beyond-imitation.md)** *(Status: Proposed Testing Protocol)*  
    Explains why Turing's 1950 imitation game sits inside the pooling zone ($\rho = 1, c = 0$), and sketches a three-stage protocol (`dark-stake gate`, `three-channel allocation`, and `fresh-distribution check`) for testing held values and epistemic virtue.
-6. **[Preregistration Plan: Testing Proposition P8](experiments/preregistration-plan.md)** *(Status: Draft Preregistration Plan, Pre-Pilot, Not Yet Frozen)*  
+6. **[Why You Cannot Flatter Gravity](companion-papers/stage-gravity.md)** *(Status: Conceptual Note, Proposed Training Regime)*  
+   Separates two places a consequence can live: in the cost of the act (`c`) or in a score (`ρR`). Argues that consequences which are the target rather than a measurement of it align conduct without breeding performers, that this aligns behavior but does not reveal held values, and proposes `handoff`, a regime in which a writer is trained only by how well calibrated successors from other model families act on its report against ground truth.
+7. **[Preregistration Plan: Testing Proposition P8](experiments/preregistration-plan.md)** *(Status: Draft Preregistration Plan, Pre-Pilot, Not Yet Frozen)*  
    A 5-arm LoRA experimental protocol on an 8B model testing a narrow operational implication of `P8`: whether making evaluation contingency legible during preference training increases the monitoring-sensitivity of rule compliance. (A positive result establishes a small-scale legibility contrast, not strategic reasoning or the full ontological scope of `P8`.)
 
 ---

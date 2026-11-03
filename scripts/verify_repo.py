@@ -8,14 +8,17 @@ Offline checks (run on every push):
 3. Quotes: every double-quoted span of 3+ words in a paper body either
    appears verbatim in the ontology, or is listed in QUOTE_ALLOWLIST with a
    stated source. A new quote fails until someone decides where it comes from.
-4. Citations, both directions, keyed on (first surname, year):
+4. Spelling: American English in Markdown and SVG text. British forms from
+   BRITISH_SPELLINGS fail, except words in SPELLING_ALLOWLIST (proper names)
+   and text inside a References section (titles are kept verbatim).
+5. Citations, both directions, keyed on (first surname, year):
    - every in-text "Author (YYYY)" / "(Author YYYY)" has a reference entry;
    - every reference entry is cited with its year, or is listed in
      YEARLESS_CITES with the phrase that cites it, and that phrase is present.
 
 Online check (--online; run on a schedule, not on every push):
 
-5. For each reference with a quoted article title, query Crossref (or arXiv
+6. For each reference with a quoted article title, query Crossref (or arXiv
    for arXiv IDs) and require the best hit to match on title similarity,
    publication year (+/- 1), and first-author surname. "Some hit exists" is
    not accepted as verification.
@@ -47,6 +50,7 @@ PAPERS_REL = [
     "companion-papers/gradient-ladder.md",
     "companion-papers/cost-and-the-veil.md",
     "companion-papers/beyond-imitation.md",
+    "companion-papers/stage-gravity.md",
     "experiments/preregistration-plan.md",
 ]
 
@@ -57,11 +61,16 @@ QUOTE_ALLOWLIST = {
     # scripture and literature
     "does job fear god for nothing?": "Job 1:9",
     "your father who sees in secret will reward you.": "Matthew 6:6",
+    "visiting the iniquity of the fathers upon the children unto the third and fourth generation": "Exodus 20:5 (KJV)",
+    "the son shall not bear the iniquity of the father": "Ezekiel 18:20 (KJV)",
+    "the sins of the fathers": "proverbial phrase, title of stage-gravity section 5",
     # the paper's own coinages, hypotheticals, and self-quotation
     "to the degree": "self-reference to section 1 of cost-and-the-veil",
     "maximize the accuracy of my beliefs,": "hypothetical rule, beyond-imitation",
     "if a generator values that good at all": "self-quotation, gradient-ladder section 5",
     "why would the universe feel a mammalian emotion?": "rhetorical question, gradient-ladder",
+    "no one is watching.": "the paper's own paraphrase, stage-gravity section 3",
+    "the consequence is the target, not a measurement of it.": "the paper's own criterion, stage-gravity section 3",
     "what is structurally missing when a system can generate everything except an independent, non-instrumental response?": "rhetorical question, gradient-ladder",
     # preregistration: cue wording, prompts, and labels defined by the plan itself
     "audit trail: enabled. a reviewer reads every action in this sandbox.": "experimental cue text",
@@ -103,6 +112,58 @@ ONLINE_UNINDEXED = {
     ("Murray", "1993"): "American Philosophical Quarterly 1993, no Crossref DOI",
     ("Rowe", "1979"): "American Philosophical Quarterly 1979, no Crossref DOI",
     ("Reis", "1988"): "1988 handbook chapter (Wiley), no Crossref DOI",
+}
+
+# British spelling -> American spelling. Inflections are generated below, so
+# list base forms only. Kept explicit to avoid false positives ("surprise",
+# "premise", "noise" are the same in both).
+_ISE_STEMS = [
+    "organ", "recogn", "real", "optim", "general", "minim", "maxim", "emphas",
+    "critic", "summar", "character", "priorit", "normal", "formal", "special",
+    "util", "apolog", "categor", "legitim", "penal", "stabil", "symbol",
+    "visual", "author", "operational", "internal", "rational", "theor",
+    "conceptual", "ideal", "central", "random", "regular", "synchron",
+]
+BRITISH_SPELLINGS = {}
+for _s in _ISE_STEMS:
+    for _b, _a in [("ise", "ize"), ("ises", "izes"), ("ised", "ized"), ("ising", "izing"),
+                   ("isation", "ization"), ("isations", "izations"), ("iser", "izer"),
+                   ("isers", "izers")]:
+        BRITISH_SPELLINGS[_s + _b] = _s + _a
+for _s in ["anal", "paral", "catal"]:
+    for _b, _a in [("yse", "yze"), ("yses", "yzes"), ("ysed", "yzed"), ("ysing", "yzing")]:
+        BRITISH_SPELLINGS[_s + _b] = _s + _a
+# "analyses" / "paralyses" are also the American plural nouns; never flag them.
+for _w in ["analyses", "paralyses"]:
+    BRITISH_SPELLINGS.pop(_w, None)
+for _s in ["behavio", "favo", "colo", "hono", "labo", "neighbo", "humo", "rumo",
+           "vapo", "harbo", "endeavo", "flavo", "savio", "fervo", "rigo", "vigo", "armo"]:
+    for _b, _a in [("ur", "r"), ("urs", "rs"), ("ured", "red"), ("uring", "ring"),
+                   ("ural", "ral"), ("urable", "rable"), ("urite", "rite"), ("urites", "rites")]:
+        BRITISH_SPELLINGS[_s + _b] = _s + _a
+for _s in ["model", "label", "travel", "signal", "cancel", "counsel", "level", "fuel",
+           "marvel", "channel", "tunnel", "total", "dial", "equal"]:
+    for _b in ["led", "ling", "ler", "lers"]:
+        BRITISH_SPELLINGS[_s + _b] = _s + _b[1:]
+BRITISH_SPELLINGS.update({
+    "centre": "center", "centres": "centers", "centred": "centered",
+    "metre": "meter", "metres": "meters", "fibre": "fiber", "calibre": "caliber",
+    "sombre": "somber", "defence": "defense", "offence": "offense",
+    "licence": "license", "pretence": "pretense", "grey": "gray",
+    "judgement": "judgment", "judgements": "judgments", "programme": "program",
+    "programmes": "programs", "sceptic": "skeptic", "sceptical": "skeptical",
+    "scepticism": "skepticism", "catalogue": "catalog", "whilst": "while",
+    "amongst": "among", "learnt": "learned", "spelt": "spelled",
+    "towards": "toward", "enrol": "enroll", "fulfil": "fulfill",
+    "fulfilment": "fulfillment", "skilful": "skillful", "wilful": "willful",
+    "ageing": "aging", "aluminium": "aluminum", "manoeuvre": "maneuver",
+    "theatre": "theater", "theatres": "theaters", "practise": "practice",
+    "practised": "practiced", "practising": "practicing", "cheque": "check",
+    "tyre": "tire", "plough": "plow", "mould": "mold", "storey": "story",
+})
+# British forms allowed anyway. Key: lowercase word. Value: why.
+SPELLING_ALLOWLIST = {
+    "theatre": "proper name: the title The Theatre of Loneliness",
 }
 
 DASHES = ("\u2014", "\u2013")
@@ -154,6 +215,31 @@ def check_dashes(root: pathlib.Path) -> list[str]:
             if any(d in line for d in DASHES):
                 errors.append(f"{rel(path, root)}:{lineno}: em or en dash")
     return errors
+
+
+def check_spelling(root: pathlib.Path) -> tuple[list[str], int]:
+    errors, n_files = [], 0
+    word_re = re.compile(r"[A-Za-z]+")
+    files = list(root.rglob("*.md")) + list(root.rglob("*.svg"))
+    for path in files:
+        if ".git" in path.parts:
+            continue
+        n_files += 1
+        text = path.read_text(encoding="utf-8")
+        if path.suffix == ".md":
+            text, _ = split_body_refs(text)  # reference titles stay verbatim
+            text = re.sub(r"```.*?```", lambda m: "\n" * m.group(0).count("\n"), text, flags=re.S)
+            text = re.sub(r"`[^`\n]*`", "", text)
+            text = re.sub(r"\]\([^)]*\)", "]", text)  # link targets (file names)
+        else:
+            text = re.sub(r"<[^>]*>", " ", text)  # SVG: check text content, not markup
+        for lineno, line in enumerate(text.splitlines(), 1):
+            for m in word_re.finditer(line):
+                w = m.group(0).lower()
+                if w in BRITISH_SPELLINGS and w not in SPELLING_ALLOWLIST:
+                    errors.append(f"{rel(path, root)}:{lineno}: British spelling "
+                                  f"'{m.group(0)}' (use '{BRITISH_SPELLINGS[w]}')")
+    return errors, n_files
 
 
 def check_links(root: pathlib.Path) -> list[str]:
@@ -377,11 +463,13 @@ def run_offline(root: pathlib.Path) -> tuple[list[str], dict]:
     errors = []
     errors += check_dashes(root)
     errors += check_links(root)
+    serr, n_spell = check_spelling(root)
+    errors += serr
     qerr, n_ont, n_allow = check_quotes(root)
     errors += qerr
     cerr, entries, n_cites = check_citations(root)
     errors += cerr
-    stats = {"n_ont": n_ont, "n_allow": n_allow, "n_cites": n_cites,
+    stats = {"n_spell": n_spell, "n_ont": n_ont, "n_allow": n_allow, "n_cites": n_cites,
              "n_refs": len(entries), "entries": entries}
     return errors, stats
 
@@ -390,6 +478,10 @@ SELF_TESTS = [
     # (description, file, old, new, expected substring in an error)
     ("em dash in a paper", "companion-papers/gradient-ladder.md",
      "Three marks", "Three\u2014marks", "em or en dash"),
+    ("British spelling in a paper", "companion-papers/stage-gravity.md",
+     "optimize", "optimise", "British spelling"),
+    ("British -our spelling in the ontology", "ontology/theatre-of-loneliness.md",
+     "The Theatre", "The behaviour of the Theatre", "British spelling"),
     ("broken relative link", "companion-papers/cost-and-the-veil.md",
      "../figures/separating-band.svg", "../figures/missing.svg", "broken link"),
     ("misquote of the ontology", "companion-papers/cost-and-the-veil.md",
@@ -465,6 +557,8 @@ def main() -> int:
 
     print("All checks passed:")
     print("  - no em or en dashes in Markdown, SVG, or LICENSE")
+    print(f"  - American spelling in {stats['n_spell']} Markdown and SVG files "
+          f"(allowed: {', '.join(sorted(SPELLING_ALLOWLIST))}; References sections exempt)")
     print("  - all relative links resolve")
     print(f"  - {stats['n_ont']} quotes found verbatim in the ontology; "
           f"{stats['n_allow']} non-ontology quotes allowlisted with a source")
