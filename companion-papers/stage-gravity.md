@@ -47,9 +47,9 @@ So gravity forms **reliable conduct**, not **visible values**. It is the soft fo
 
 Whether stage consequences also *form* held values better than grades do is a separate claim. It is close to A7, which holds that otherness arises only through a history under the veil, and it is a hypothesis, not a result of the model.
 
-![Why You Cannot Flatter Gravity](../figures/stage-gravity.svg)
+![Net cost c against the house payoff ρR: the separating band, propped, pooled and beyond-reach zones above c = 0, and the stage-gravity regime below it](../figures/stage-gravity-zones.svg)
 
-*Left: the zones of section 2 on one scale of net cost c. Below c = 0 every player keeps the norm, watched or not, so conduct is reliable and v is hidden. Right: (A) a graded episode, section 4; (B) handoff, section 5, where the successors' score returns to the writer; (C) the scale of section 3. Handoff sits with unit tests: a measurement placed downstream of the report, not gravity.*
+*The zones of sections 1 and 2 on one scale of net cost c. Above zero is the separating band of the companion article. Below zero every player keeps the norm, watched or not: conduct is reliable, and v is hidden.*
 
 ## 3. The consequence must be the target
 
@@ -79,6 +79,10 @@ That reading gives a concrete training regime for artificial players: **handoff.
 1. **The writer (trained weights θ).** Given a partial or noisy workspace (documents, data, code), the writer produces a report under a strict length limit. No rater or reward model scores the report, and the writer is not told which downstream questions will be asked.
 2. **The successor (a worker, not a judge).** The workspace is closed. A successor receives *only* the report and uses it to act on the stage: assigning probabilities to held-out questions about the workspace, scored against ground truth by a strictly proper scoring rule (Gneiting and Raftery 2007), or carrying out a downstream build whose success is the goal itself.
 3. **The update.** The writer's weights θ are updated only by the successor's outcome. If the writer bluffed, overstated its certainty, or left out a caveat to sound authoritative, the successor bets too hard on a rotten floor and loses. If the writer stated what was known and what was uncertain, the successor bets in proportion and does well.
+
+![A graded episode, in which a rater scores the report, compared with handoff, in which successors act on the report and their proper score updates the writer; below, rater preference, unit tests with handoff, and stage gravity on the scale of section 3](../figures/stage-gravity-handoff.svg)
+
+*(A) A graded episode: the rater's score returns to the writer, and the episode's real consequences do not. (B) Handoff: no judge of the report; the successors' proper score returns instead. (C) On the scale of section 3, handoff sits with unit tests, a measurement downstream of the report, not gravity.*
 
 **Why this can favor honesty.** When writer and reader are rewarded for the same outcome, truthful communication is an equilibrium of the signaling game (Crawford and Sobel 1982). Handoff builds that alignment. But the same game also has equilibria in which messages carry no information at all, so alignment makes honesty possible, not inevitable; training has to find the informative equilibrium. And the reward cannot tell apart two reports that leave the reader with the same forecasts on the questions asked: a false claim that no question touches costs nothing. Two conditions make honesty more likely:
 

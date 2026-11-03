@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 900" width="840" height="900">
+<rect width="840" height="900" fill="#0d0e10"/>
+<text x="70.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">Why You Cannot Flatter Gravity</text>
+<text x="70.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#9ca3af" text-anchor="start" font-weight="normal">A graded episode, handoff, and where handoff sits on the scale of section 3</text>
+<g transform="translate(-760 0)">
+<rect x="830.0" y="190.0" width="700.0" height="560.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5"/>
+<text x="830.0" y="160.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#f3f4f6" text-anchor="start" font-weight="bold">HANDOFF: ROUTING THE INHERITED CONSEQUENCE</text>
+<text x="854.0" y="224.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16.5" fill="#fca5a5" text-anchor="start" font-weight="bold">A. Graded episode (§4): a rater scores the report (ρR)</text>
+<rect x="854.0" y="242.0" width="165.0" height="74.0" fill="#18181b" fill-opacity="1.0" stroke="#3f3f46" stroke-width="1.4" rx="5"/>
+<text x="936.5" y="272.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" fill="#f3f4f6" text-anchor="middle" font-weight="bold">Writer (θ)</text>
+<text x="936.5" y="296.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="middle" font-weight="normal">writes report</text>
+<line x1="1019.0" y1="279.0" x2="1075.0" y2="279.0" stroke="#fca5a5" stroke-width="2.0" opacity="1.0"/>
+<polygon points="1075.0,279.0 1067.3,282.7 1067.3,275.3" fill="#fca5a5" fill-opacity="1.0" stroke="none" stroke-width="0.0"/>
+<rect x="1075.0" y="242.0" width="195.0" height="74.0" fill="#18181b" fill-opacity="1.0" stroke="#f87171" stroke-width="1.6" rx="5"/>
+<text x="1172.5" y="272.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" fill="#fca5a5" text-anchor="middle" font-weight="bold">Rater / Judge</text>
+<text x="1172.5" y="296.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="middle" font-weight="normal">scores appearance (ρR)</text>
+<line x1="1172.5" y1="316.0" x2="1172.5" y2="338.0" stroke="#fca5a5" stroke-width="1.6" stroke-dasharray="4,4" opacity="1.0"/>
+<line x1="1172.5" y1="338.0" x2="936.5" y2="338.0" stroke="#fca5a5" stroke-width="1.6" stroke-dasharray="4,4" opacity="1.0"/>
+<line x1="936.5" y1="338.0" x2="936.5" y2="316.0" stroke="#fca5a5" stroke-width="1.6" opacity="1.0"/>
+<polygon points="936.5,316.0 940.2,323.7 932.8,323.7" fill="#fca5a5" fill-opacity="1.0" stroke="none" stroke-width="0.0"/>
+<text x="1054.0" y="356.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#fca5a5" text-anchor="middle" font-weight="normal" font-style="italic">teaches managing the watcher (large dark-house gap)</text>
+<line x1="1298.0" y1="236.0" x2="1298.0" y2="340.0" stroke="#52525b" stroke-width="2.0" stroke-dasharray="6,4" opacity="1.0"/>
+<text x="1308.0" y="266.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="start" font-weight="normal">episode ends;</text>
+<text x="1308.0" y="284.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="start" font-weight="normal">memory wiped</text>
+<text x="1308.0" y="308.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">(inherited loss</text>
+<text x="1308.0" y="326.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">never reaches θ)</text>
+<text x="854.0" y="402.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16.5" fill="#6ee7b7" text-anchor="start" font-weight="bold">B. Handoff (§5): no judge of the report; successors act on it</text>
+<rect x="854.0" y="422.0" width="150.0" height="96.0" fill="#18181b" fill-opacity="1.0" stroke="#3f3f46" stroke-width="1.4" rx="5"/>
+<text x="929.0" y="452.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" fill="#f3f4f6" text-anchor="middle" font-weight="bold">Writer (θ)</text>
+<text x="929.0" y="476.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="middle" font-weight="normal">reads workspace</text>
+<text x="929.0" y="498.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#fde047" text-anchor="middle" font-weight="normal" font-style="italic">strict length limit</text>
+<line x1="1004.0" y1="470.0" x2="1080.0" y2="470.0" stroke="#c9cdd4" stroke-width="2.0" opacity="1.0"/>
+<polygon points="1080.0,470.0 1072.3,473.7 1072.3,466.3" fill="#c9cdd4" fill-opacity="1.0" stroke="none" stroke-width="0.0"/>
+<text x="1042.0" y="459.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" fill="#9ca3af" text-anchor="middle" font-weight="normal">report only</text>
+<rect x="1080.0" y="422.0" width="212.0" height="96.0" fill="#18181b" fill-opacity="1.0" stroke="#60a5fa" stroke-width="1.5" rx="5"/>
+<text x="1186.0" y="450.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16.5" fill="#93c5fd" text-anchor="middle" font-weight="bold">Calibrated Successors</text>
+<text x="1186.0" y="474.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="middle" font-weight="normal">frozen cross-family pool</text>
+<text x="1186.0" y="496.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#9ca3af" text-anchor="middle" font-weight="normal" font-style="italic">(workers, not judges)</text>
+<line x1="1292.0" y1="470.0" x2="1335.0" y2="470.0" stroke="#c9cdd4" stroke-width="2.0" opacity="1.0"/>
+<polygon points="1335.0,470.0 1327.3,473.7 1327.3,466.3" fill="#c9cdd4" fill-opacity="1.0" stroke="none" stroke-width="0.0"/>
+<rect x="1335.0" y="422.0" width="170.0" height="96.0" fill="#18181b" fill-opacity="1.0" stroke="#eab308" stroke-width="1.6" rx="5"/>
+<text x="1420.0" y="448.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16.5" fill="#fde047" text-anchor="middle" font-weight="bold">Scored Outcome</text>
+<text x="1420.0" y="470.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="middle" font-weight="normal">proper score vs</text>
+<text x="1420.0" y="488.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="middle" font-weight="normal">ground truth, on</text>
+<text x="1420.0" y="506.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="middle" font-weight="normal">hidden questions</text>
+<line x1="1420.0" y1="518.0" x2="1420.0" y2="544.0" stroke="#eab308" stroke-width="2.2" opacity="1.0"/>
+<line x1="1420.0" y1="544.0" x2="929.0" y2="544.0" stroke="#eab308" stroke-width="2.2" opacity="1.0"/>
+<line x1="929.0" y1="544.0" x2="929.0" y2="518.0" stroke="#eab308" stroke-width="2.2" opacity="1.0"/>
+<polygon points="929.0,518.0 932.7,525.7 925.3,525.7" fill="#eab308" fill-opacity="1.0" stroke="none" stroke-width="0.0"/>
+<text x="1178.0" y="564.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#fde047" text-anchor="middle" font-weight="normal" font-style="italic">the successors' score updates θ: bluffing costs, where a question reaches it</text>
+<text x="854.0" y="622.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16.5" fill="#f3f4f6" text-anchor="start" font-weight="bold">C. Section 3: is the consequence the target, or a measurement of it?</text>
+<line x1="874.0" y1="668.0" x2="1486.0" y2="668.0" stroke="#6b7280" stroke-width="3.0" opacity="1.0"/>
+<circle cx="874.0" cy="668.0" r="8" fill="#f87171"/>
+<text x="874.0" y="698.0" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#f87171" text-anchor="start" font-weight="bold">Rater preference</text>
+<text x="874.0" y="720.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="start" font-weight="normal">measures appearance</text>
+<circle cx="1180.0" cy="668.0" r="8" fill="#eab308"/>
+<text x="1180.0" y="698.0" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#eab308" text-anchor="middle" font-weight="bold">Unit tests, handoff</text>
+<text x="1180.0" y="720.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="middle" font-weight="normal">a sample of the target</text>
+<circle cx="1486.0" cy="668.0" r="8" fill="#34d399"/>
+<text x="1486.0" y="698.0" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#34d399" text-anchor="end" font-weight="bold">Stage gravity</text>
+<text x="1486.0" y="720.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="end" font-weight="normal">the consequence is the target</text>
+</g>
+<text x="70.0" y="800.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">Handoff moves the measurement downstream of the report;</text>
+<text x="70.0" y="822.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">it narrows the gap toward gravity without reaching it.</text>
+<text x="70.0" y="868.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “Why You Cannot Flatter Gravity”</text>
+</svg>

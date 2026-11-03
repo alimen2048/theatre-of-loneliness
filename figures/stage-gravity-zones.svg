@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 900" width="820" height="900">
+<rect width="820" height="900" fill="#0d0e10"/>
+<text x="70.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">Why You Cannot Flatter Gravity</text>
+<text x="70.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#9ca3af" text-anchor="start" font-weight="normal">Net cost of keeping the norm, extended below zero</text>
+<rect x="140.0" y="190.0" width="560.0" height="560.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5"/>
+<text x="140.0" y="160.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#f3f4f6" text-anchor="start" font-weight="bold">FIVE ZONES ACROSS NET COST  c = e - L</text>
+<polygon points="140.0,563.3 700.0,563.3 700.0,190.0" fill="#f87171" fill-opacity="0.12" stroke="none" stroke-width="0.0"/>
+<polygon points="140.0,376.7 420.0,190.0 700.0,190.0 420.0,376.7" fill="#60a5fa" fill-opacity="0.12" stroke="none" stroke-width="0.0"/>
+<polygon points="140.0,376.7 140.0,190.0 420.0,190.0" fill="#ffffff" fill-opacity="0.03" stroke="none" stroke-width="0.0"/>
+<polygon points="140.0,563.3 140.0,376.7 420.0,376.7" fill="#eab308" fill-opacity="0.22" stroke="none" stroke-width="0.0"/>
+<polygon points="140.0,750.0 700.0,750.0 700.0,563.3 140.0,563.3" fill="#34d399" fill-opacity="0.16" stroke="none" stroke-width="0.0"/>
+<line x1="140.0" y1="563.3" x2="700.0" y2="190.0" stroke="#e5e7eb" stroke-width="2.0" opacity="1.0"/>
+<line x1="140.0" y1="376.7" x2="420.0" y2="376.7" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="7,5" opacity="1.0"/>
+<line x1="140.0" y1="376.7" x2="420.0" y2="190.0" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="7,5" opacity="1.0"/>
+<line x1="140.0" y1="563.3" x2="700.0" y2="563.3" stroke="#34d399" stroke-width="2.4" opacity="1.0"/>
+<polygon points="140.0,563.3 140.0,376.7 420.0,376.7" fill="none" fill-opacity="0" stroke="#eab308" stroke-width="2.4"/>
+<text x="158.0" y="610.0" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#6ee7b7" text-anchor="start" font-weight="bold">Stage gravity  (c &lt; 0,  L &gt; e)</text>
+<text x="158.0" y="638.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">breaking the norm costs more on the stage than keeping it;</text>
+<text x="158.0" y="660.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">everyone acts (lit or dark): reliable conduct, v hidden</text>
+<text x="154.0" y="406.5" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="#fde047" text-anchor="start" font-weight="bold">Separating band</text>
+<text x="154.0" y="430.5" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#fde047" text-anchor="start" font-weight="normal" font-style="italic">0 ≤ ρR &lt; c &lt; v</text>
+<text x="154.0" y="452.5" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#c9cdd4" text-anchor="start" font-weight="normal">only held v acts</text>
+<text x="358.4" y="268.4" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="#93c5fd" text-anchor="start" font-weight="bold">Propped</text>
+<text x="358.4" y="292.4" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#93c5fd" text-anchor="start" font-weight="normal" font-style="italic">v ≤ c &lt; v + ρR</text>
+<text x="470.4" y="484.9" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="#fca5a5" text-anchor="start" font-weight="bold">Pooled  (c &lt; ρR)</text>
+<text x="470.4" y="508.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#c9cdd4" text-anchor="start" font-weight="normal">grade pays for the act</text>
+<text x="158.0" y="231.1" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#f3f4f6" text-anchor="start" font-weight="bold">Beyond reach</text>
+<text x="158.0" y="254.1" font-family="Georgia, 'Times New Roman', serif" font-size="16" fill="#9ca3af" text-anchor="start" font-weight="normal" font-style="italic">c ≥ v + ρR</text>
+<line x1="140.0" y1="750.0" x2="700.0" y2="750.0" stroke="#6b7280" stroke-width="1.8" opacity="1.0"/>
+<line x1="140.0" y1="190.0" x2="140.0" y2="750.0" stroke="#6b7280" stroke-width="1.8" opacity="1.0"/>
+<line x1="140.0" y1="750.0" x2="140.0" y2="757.0" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="140.0" y="780.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="middle" font-weight="normal">0</text>
+<line x1="420.0" y1="750.0" x2="420.0" y2="757.0" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="420.0" y="780.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="middle" font-weight="normal" font-style="italic">v</text>
+<line x1="700.0" y1="750.0" x2="700.0" y2="757.0" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="700.0" y="780.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="middle" font-weight="normal" font-style="italic">2v</text>
+<line x1="133.0" y1="750.0" x2="140.0" y2="750.0" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="126.0" y="756.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="end" font-weight="normal" font-style="italic">-v</text>
+<line x1="133.0" y1="563.3" x2="140.0" y2="563.3" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="126.0" y="569.3" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="end" font-weight="normal">0</text>
+<line x1="133.0" y1="376.7" x2="140.0" y2="376.7" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="126.0" y="382.7" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="end" font-weight="normal" font-style="italic">v</text>
+<line x1="133.0" y1="190.0" x2="140.0" y2="190.0" stroke="#6b7280" stroke-width="1.5" opacity="1.0"/>
+<text x="126.0" y="196.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#9ca3af" text-anchor="end" font-weight="normal" font-style="italic">2v</text>
+<text x="690.0" y="555.3" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#6ee7b7" text-anchor="end" font-weight="normal" font-style="italic">c = 0  (L = e)</text>
+<text x="140.0" y="804.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#71717a" text-anchor="middle" font-weight="normal">dark house</text>
+<text x="420.0" y="832.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#c9cdd4" text-anchor="middle" font-weight="normal">Expected payoff from the house,  ρR</text>
+<text x="76.0" y="470.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#c9cdd4" text-anchor="middle" font-weight="normal" transform="rotate(-90 76 470.0)">Net cost of keeping the norm,  c = e - L</text>
+<text x="70.0" y="868.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “Why You Cannot Flatter Gravity”</text>
+</svg>

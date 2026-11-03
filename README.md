@@ -33,7 +33,8 @@ theatre-of-loneliness/
 │
 ├── figures/
 │   ├── separating-band.svg            # Figure: The separating band and its decay under selection
-│   └── stage-gravity.svg              # Figure: Extended net-cost zones and handoff routing
+│   ├── stage-gravity-zones.svg        # Figure: Net-cost zones, extended below zero
+│   └── stage-gravity-handoff.svg      # Figure: Graded episode vs handoff
 │
 ├── experiments/
 │   └── preregistration-plan.md        # Draft preregistration plan (pre-pilot) testing P8
