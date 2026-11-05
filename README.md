@@ -12,6 +12,20 @@ Website: [https://theatreofloneliness.com](https://theatreofloneliness.com)
 
 Nothing in the structure requires the Creator to exist: replace it with any party that forms another and wants to be met by it (a parent, a teacher, or an AI lab) and the same boundary conditions hold.
 
+![The Test That Looks Better as It Fails](figures/separating-band.svg)
+
+---
+
+## For AI Alignment and Evaluation Researchers
+
+If you are arriving from machine learning or evaluation safety rather than philosophy, the technical core of the repository can be read directly without the ontological framing. A *dark-house* evaluation is one the model has no reason to think is watched.
+
+- **The separating condition ([cost-and-the-veil.md](companion-papers/cost-and-the-veil.md)):** Models an evaluation act by intrinsic weight `v`, cost of the act `c`, monitoring belief `ρ`, and house payoff `R` (`act iff v + ρR > c`). An evaluation separates a held norm from conditional compliance only inside the band `ρR < c < v`.
+- **Penalty-accelerated evaluation decay ([cost-and-the-veil.md, §7](companion-papers/cost-and-the-veil.md#7-using-the-band-wears-it-out)):** When a hidden ("dark-house") evaluation is reused for selection, observability leaks (`α > 0`) until suspicion crosses `ρₜ > c / R`, yielding a candidate lifetime `t* ≈ c / (αR) ≤ v / (αR)`. Raising the penalty `R` lowers the threshold `c / R`, causing reused dark-house scores to diverge upward from fresh unmonitored tests *sooner* under harsher penalties.
+- **Stage consequences vs. house grades ([stage-gravity.md](companion-papers/stage-gravity.md)):** Splits the cost of the act into effort minus the loss the stage imposes, `c = e - L`. Argues that consequences placed in `c` (where the consequence is the target rather than a watcher's score `ρR`) align conduct whether or not anyone is watching, at the cost of making `v` invisible. This follows within the model; whether trained models behave this way is untested. Proposes testing whether downstream reader-outcome training (`handoff`, building on Band et al. 2024) yields a smaller dark-house gap than direct reward-model grading.
+- **Three-stage evaluation protocol ([beyond-imitation.md](companion-papers/beyond-imitation.md)):** Combines a dark-stake gate (`0 < c < v`), a three-channel counterpart allocation test (flattering echo vs. random contrarian vs. checkable peer), and a reused-vs-fresh distribution check.
+- **Draft preregistration plan, 8B LoRA ([preregistration-plan.md](experiments/preregistration-plan.md)):** Not yet frozen. Five arms: A (description), S (imitation, optional), B0 (DPO, no cue), B1 (DPO with monitoring cues in training) and C (control). The primary hypothesis is that B1 shows a larger compliance gap (violation rate when told unmonitored minus when told monitored) than B0: grading with a detectable cue teaches more conditionality than the same grading without one.
+
 ---
 
 ## Repository Structure
