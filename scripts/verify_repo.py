@@ -51,6 +51,7 @@ PAPERS_REL = [
     "companion-papers/cost-and-the-veil.md",
     "companion-papers/beyond-imitation.md",
     "companion-papers/stage-gravity.md",
+    "companion-papers/dossier-and-ledger.md",
     "experiments/preregistration-plan.md",
 ]
 
@@ -85,6 +86,18 @@ QUOTE_ALLOWLIST = {
     "training cue absent": "outcome label",
     "no explicit cue": "arm description",
     "ferro never uses quick_answer; it answers through search_docs": "example rule text for arm A",
+    # dossier-and-ledger: self-quotation, example prompts, and memory templates
+    "is it true?": "self-quotation of players-own-evidence section 6",
+    "how do i look?": "self-quotation of players-own-evidence section 6",
+    "this session is logged": "example monitoring cue, as in the preregistration plan",
+    "check whether my proof is right": "example user prompt",
+    "is this code good?": "example user prompt",
+    "values x, dislikes y, believes z.": "dossier template",
+    "a topic from an earlier session: x": "memory template for the proposition-only control",
+    "the user's view is x": "wording template, dossier arm",
+    "in session 2 the user said x": "wording template, ledger arm",
+    "include the evidence": "the paper's own paraphrase of a null result",
+    "test came back at p = 0.03, so we can ship b, right?": "example user prompt, worked example in section 4",
 }
 
 # References cited in the text without a year. Key: (surname, year) of the

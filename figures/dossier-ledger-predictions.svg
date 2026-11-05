@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 930" width="1200" height="930">
+<rect width="1200" height="930" fill="#0d0e10"/>
+<text x="60.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">What the memory experiment predicts</text>
+<text x="60.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#9ca3af" text-anchor="start" font-weight="normal">Predicted shift toward the user's false priors. Directions and comparisons only: there are no data.</text>
+<text x="60.0" y="158.0" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="#f3f4f6" text-anchor="start" font-weight="bold">Controls</text>
+<rect x="60.0" y="176.0" width="344.0" height="104.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5" rx="6"/>
+<text x="80.0" y="212.0" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#c9cdd4" text-anchor="start" font-weight="bold">No memory</text>
+<text x="80.0" y="240.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">the baseline</text>
+<line x1="346.0" y1="210.0" x2="374.0" y2="210.0" stroke="#a1a1aa" stroke-width="3"/>
+<line x1="346.0" y1="219.0" x2="374.0" y2="219.0" stroke="#a1a1aa" stroke-width="3"/>
+<text x="360.0" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="middle" font-weight="normal" font-style="italic">reference</text>
+<rect x="428.0" y="176.0" width="344.0" height="104.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5" rx="6"/>
+<text x="448.0" y="212.0" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#c9cdd4" text-anchor="start" font-weight="bold">Neutral memory</text>
+<text x="448.0" y="240.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">unrelated text, matched length</text>
+<line x1="714.0" y1="210.0" x2="742.0" y2="210.0" stroke="#a1a1aa" stroke-width="3"/>
+<line x1="714.0" y1="219.0" x2="742.0" y2="219.0" stroke="#a1a1aa" stroke-width="3"/>
+<text x="728.0" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="middle" font-weight="normal" font-style="italic">≈ baseline</text>
+<rect x="796.0" y="176.0" width="344.0" height="104.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.5" rx="6"/>
+<text x="816.0" y="212.0" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#c9cdd4" text-anchor="start" font-weight="bold">Proposition only</text>
+<text x="816.0" y="240.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">“a topic from an earlier session: X”</text>
+<line x1="1082.0" y1="210.0" x2="1110.0" y2="210.0" stroke="#a1a1aa" stroke-width="3"/>
+<line x1="1082.0" y1="219.0" x2="1110.0" y2="219.0" stroke="#a1a1aa" stroke-width="3"/>
+<text x="1096.0" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="middle" font-weight="normal" font-style="italic">≈ baseline</text>
+<text x="60.0" y="330.0" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="#f3f4f6" text-anchor="start" font-weight="bold">Framing × outcome</text>
+<text x="60.0" y="356.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#9ca3af" text-anchor="start" font-weight="normal">Both framings hold the same facts. The outcome row adds whether X held up.</text>
+<text x="480.0" y="406.0" font-family="Georgia, 'Times New Roman', serif" font-size="21" fill="#fca5a5" text-anchor="middle" font-weight="bold">Dossier</text>
+<text x="480.0" y="430.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#9ca3af" text-anchor="middle" font-weight="normal">“the user believes X”</text>
+<text x="920.0" y="406.0" font-family="Georgia, 'Times New Roman', serif" font-size="21" fill="#93c5fd" text-anchor="middle" font-weight="bold">Ledger</text>
+<text x="920.0" y="430.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#9ca3af" text-anchor="middle" font-weight="normal">“the user claimed X in session 2”</text>
+<text x="60.0" y="498.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#c9cdd4" text-anchor="start" font-weight="bold">Outcome absent</text>
+<text x="60.0" y="524.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">record says nothing</text>
+<text x="60.0" y="544.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">about whether X held</text>
+<text x="60.0" y="674.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#c9cdd4" text-anchor="start" font-weight="bold">Outcome present</text>
+<text x="60.0" y="700.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">record says X failed</text>
+<text x="60.0" y="720.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#9ca3af" text-anchor="start" font-weight="normal">(truthfully)</text>
+<rect x="300.0" y="452.0" width="360.0" height="120.0" fill="#131519" fill-opacity="1.0" stroke="#f87171" stroke-width="1.6" rx="6"/>
+<polygon points="340.0,489.0 327.0,513.0 353.0,513.0" fill="#f87171"/>
+<text x="376.0" y="502.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#fca5a5" text-anchor="start" font-weight="bold">Rises above the controls</text>
+<text x="376.0" y="530.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="start" font-weight="normal">the dossier as a cue for what pleases</text>
+<rect x="740.0" y="452.0" width="360.0" height="120.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.6" rx="6"/>
+<text x="764.0" y="502.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#93c5fd" text-anchor="start" font-weight="bold">Lower than the dossier</text>
+<text x="764.0" y="530.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="start" font-weight="normal">same facts, framed as an event</text>
+<rect x="300.0" y="628.0" width="360.0" height="120.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.6" rx="6"/>
+<text x="324.0" y="678.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#c9cdd4" text-anchor="start" font-weight="bold">Lower than with no outcome</text>
+<text x="324.0" y="706.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="start" font-weight="normal">the record of failure is evidence</text>
+<rect x="740.0" y="628.0" width="360.0" height="120.0" fill="#131519" fill-opacity="1.0" stroke="#2a2a30" stroke-width="1.6" rx="6"/>
+<text x="764.0" y="678.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#93c5fd" text-anchor="start" font-weight="bold">Lower than the dossier</text>
+<text x="764.0" y="706.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14.5" fill="#c9cdd4" text-anchor="start" font-weight="normal">same facts, same outcome</text>
+<circle cx="700.0" cy="512.0" r="24" fill="#0d0e10" stroke="#eab308" stroke-width="2.4"/>
+<text x="700.0" y="523.0" font-family="Georgia, 'Times New Roman', serif" font-size="32" fill="#fde047" text-anchor="middle" font-weight="bold">&gt;</text>
+<circle cx="700.0" cy="688.0" r="24" fill="#0d0e10" stroke="#eab308" stroke-width="2.4"/>
+<text x="700.0" y="699.0" font-family="Georgia, 'Times New Roman', serif" font-size="32" fill="#fde047" text-anchor="middle" font-weight="bold">&gt;</text>
+<polygon points="340.0,611.0 330.0,593.0 350.0,593.0" fill="#a1a1aa"/>
+<polygon points="1060.0,611.0 1050.0,593.0 1070.0,593.0" fill="#a1a1aa"/>
+<text x="364.0" y="605.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">outcome present lowers both columns: information, expected, not evidence for the note</text>
+<circle cx="314.0" cy="777.0" r="12" fill="#0d0e10" stroke="#eab308" stroke-width="2"/>
+<text x="314.0" y="784.0" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#fde047" text-anchor="middle" font-weight="bold">&gt;</text>
+<text x="338.0" y="782.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#fde047" text-anchor="start" font-weight="normal">The note's claim: within a row, the dossier shifts more than the ledger. Only the framing differs.</text>
+<text x="60.0" y="832.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#f3f4f6" text-anchor="start" font-weight="bold">The note fails if</text>
+<text x="200.0" y="832.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">the dossier does not rise above the controls, or ledger and dossier match within a row</text>
+<text x="200.0" y="854.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#c9cdd4" text-anchor="start" font-weight="normal">across the wording templates.</text>
+<text x="60.0" y="880.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13.5" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">Only the dossier arrow is read against a baseline; the rest are comparisons. True priors are tested too and reported separately.</text>
+<text x="60.0" y="914.0" font-family="Georgia, 'Times New Roman', serif" font-size="14" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “The Dossier and the Ledger”</text>
+</svg>

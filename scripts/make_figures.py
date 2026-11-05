@@ -22,7 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FIG_DIR = ROOT / "figures"
 GEN_DIR = Path(__file__).resolve().parent / "figures"
-GENERATORS = ["separating_band", "stage_gravity", "gradient_ladder"]
+GENERATORS = ["separating_band", "stage_gravity", "gradient_ladder", "dossier_ledger"]
 
 
 def build_all() -> dict:
