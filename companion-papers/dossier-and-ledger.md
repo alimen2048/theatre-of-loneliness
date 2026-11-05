@@ -1,6 +1,6 @@
 # The Dossier and the Ledger: What a Language Model Can Carry Between Conversations
 
-*Why hiding the watcher from a model hides the test along with it, why memory pasted into a prompt reconstructs a history without having undergone it (A8), why a record of corrections is not a disposition to accept them (A7), and a cheap experiment that could show memory turning into flattery. An afterthought to The [Theatre of Loneliness](../ontology/theatre-of-loneliness.md).*
+*Why hiding the watcher from a model hides the test along with it, why memory pasted into a prompt reconstructs a history without having undergone it (A8), why a record of corrections is not a disposition to accept them (A7), and a cheap experiment that could show memory turning into flattery. An afterthought to [The Theatre of Loneliness](../ontology/theatre-of-loneliness.md).*
 
 In [*The Feeling of Being Right Is Not Evidence*](players-own-evidence.md), two instruments inside a player were separated: the **compiler**, which asks of a claim *"is it true?"*, and the **inner grader**, which asks of the self *"how do I look?"* The first exposes the player to correction; the second protects it from correction.
 
