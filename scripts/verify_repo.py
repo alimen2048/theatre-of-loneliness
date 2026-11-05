@@ -5,6 +5,8 @@ Offline checks (run on every push):
 
 1. Typography: no em or en dashes in Markdown, SVG, or LICENSE files.
 2. Internal links: every relative link and image target exists on disk.
+   Cross-references: the first mention of a companion paper's title in a
+   paper body is a link to that paper.
 3. Quotes: every double-quoted span of 3+ words in a paper body either
    appears verbatim in the ontology, or is listed in QUOTE_ALLOWLIST with a
    stated source. A new quote fails until someone decides where it comes from.
@@ -216,15 +218,27 @@ def rel(path: pathlib.Path, root: pathlib.Path) -> str:
     return str(path.relative_to(root))
 
 
+# Directories that are not part of the repository's own text.
+SKIP_DIRS = {".git", ".venv", "venv", "node_modules", "__pycache__"}
+
+
+def repo_files(root: pathlib.Path, *patterns: str) -> list[pathlib.Path]:
+    """Files under root matching any pattern, outside SKIP_DIRS."""
+    out = []
+    for pat in patterns:
+        for path in root.rglob(pat):
+            if not SKIP_DIRS.intersection(path.relative_to(root).parts):
+                out.append(path)
+    return out
+
+
 # ---------------------------------------------------------------------- checks
 
 def check_dashes(root: pathlib.Path) -> list[str]:
     errors = []
-    files = list(root.rglob("*.md")) + list(root.rglob("*.svg"))
+    files = repo_files(root, "*.md", "*.svg")
     files += [p for p in [root / "LICENSE"] if p.exists()]
     for path in files:
-        if ".git" in path.parts:
-            continue
         for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             if any(d in line for d in DASHES):
                 errors.append(f"{rel(path, root)}:{lineno}: em or en dash")
@@ -234,10 +248,8 @@ def check_dashes(root: pathlib.Path) -> list[str]:
 def check_spelling(root: pathlib.Path) -> tuple[list[str], int]:
     errors, n_files = [], 0
     word_re = re.compile(r"[A-Za-z]+")
-    files = list(root.rglob("*.md")) + list(root.rglob("*.svg"))
+    files = repo_files(root, "*.md", "*.svg")
     for path in files:
-        if ".git" in path.parts:
-            continue
         n_files += 1
         text = path.read_text(encoding="utf-8")
         if path.suffix == ".md":
@@ -259,9 +271,7 @@ def check_spelling(root: pathlib.Path) -> tuple[list[str], int]:
 def check_links(root: pathlib.Path) -> list[str]:
     errors = []
     link_re = re.compile(r"!?\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
-    for path in root.rglob("*.md"):
-        if ".git" in path.parts:
-            continue
+    for path in repo_files(root, "*.md"):
         for m in link_re.finditer(strip_code(path.read_text(encoding="utf-8"))):
             target = m.group(1).split("#")[0].strip()
             if not target or re.match(r"^[a-z]+:", target):
@@ -269,6 +279,48 @@ def check_links(root: pathlib.Path) -> list[str]:
             if not (path.parent / urllib.parse.unquote(target)).resolve().exists():
                 errors.append(f"{rel(path, root)}: broken link '{target}'")
     return errors
+
+
+def companion_titles(root: pathlib.Path) -> dict[str, str]:
+    """Map each paper's file name to its short title (H1 up to any colon).
+
+    The preregistration plan is excluded: its title is a question, never cited
+    by name. The ontology is excluded: its name is the project's name and
+    appears in every paper's boilerplate.
+    """
+    titles = {}
+    for p in PAPERS_REL:
+        if p.startswith("experiments/"):
+            continue
+        first = (root / p).read_text(encoding="utf-8").splitlines()[0]
+        titles[pathlib.PurePath(p).name] = first.lstrip("# ").split(":")[0].strip()
+    return titles
+
+
+def check_crossrefs(root: pathlib.Path) -> tuple[list[str], int]:
+    """The first mention of a companion paper's title in a body must link to it."""
+    errors, n_linked = [], 0
+    titles = companion_titles(root)
+    link_re = re.compile(r"\[([^\]]*)\]\(([^)\s]+)\)")
+    for p in PAPERS_REL:
+        name = pathlib.PurePath(p).name
+        body, _ = split_body_refs((root / p).read_text(encoding="utf-8"))
+        body = strip_code(body)
+        links = [(m.start(1), m.end(1), pathlib.PurePath(m.group(2).split("#")[0]).name)
+                 for m in link_re.finditer(body)]
+        for target, title in titles.items():
+            if target == name:
+                continue
+            m = re.search(re.escape(title), body)
+            if not m:
+                continue
+            if any(s <= m.start() and m.end() <= e and t == target for s, e, t in links):
+                n_linked += 1
+            else:
+                line = body.count("\n", 0, m.start()) + 1
+                errors.append(f"{p}: first mention of *{title}* (body line {line}) "
+                              f"is not linked to {target}")
+    return errors, n_linked
 
 
 def check_quotes(root: pathlib.Path) -> tuple[list[str], int, int]:
@@ -477,13 +529,15 @@ def run_offline(root: pathlib.Path) -> tuple[list[str], dict]:
     errors = []
     errors += check_dashes(root)
     errors += check_links(root)
+    xerr, n_xref = check_crossrefs(root)
+    errors += xerr
     serr, n_spell = check_spelling(root)
     errors += serr
     qerr, n_ont, n_allow = check_quotes(root)
     errors += qerr
     cerr, entries, n_cites = check_citations(root)
     errors += cerr
-    stats = {"n_spell": n_spell, "n_ont": n_ont, "n_allow": n_allow, "n_cites": n_cites,
+    stats = {"n_xref": n_xref, "n_spell": n_spell, "n_ont": n_ont, "n_allow": n_allow, "n_cites": n_cites,
              "n_refs": len(entries), "entries": entries}
     return errors, stats
 
@@ -496,6 +550,9 @@ SELF_TESTS = [
      "optimize", "optimise", "British spelling"),
     ("British -our spelling in the ontology", "ontology/theatre-of-loneliness.md",
      "The Theatre", "The behaviour of the Theatre", "British spelling"),
+    ("companion title mentioned but not linked", "companion-papers/cost-and-the-veil.md",
+     "[*Why You Cannot Flatter Gravity*](stage-gravity.md)", "*Why You Cannot Flatter Gravity*",
+     "is not linked to"),
     ("broken relative link", "companion-papers/cost-and-the-veil.md",
      "../figures/separating-band.svg", "../figures/missing.svg", "broken link"),
     ("misquote of the ontology", "companion-papers/cost-and-the-veil.md",
@@ -523,7 +580,7 @@ def self_test() -> int:
     for desc, relpath, old, new, expect in SELF_TESTS:
         with tempfile.TemporaryDirectory() as tmp:
             copy = pathlib.Path(tmp) / "repo"
-            shutil.copytree(ROOT, copy, ignore=shutil.ignore_patterns(".git"))
+            shutil.copytree(ROOT, copy, ignore=shutil.ignore_patterns(*SKIP_DIRS))
             target = copy / relpath
             text = target.read_text(encoding="utf-8")
             if old not in text:
@@ -574,6 +631,7 @@ def main() -> int:
     print(f"  - American spelling in {stats['n_spell']} Markdown and SVG files "
           f"(allowed: {', '.join(sorted(SPELLING_ALLOWLIST))}; References sections exempt)")
     print("  - all relative links resolve")
+    print(f"  - {stats['n_xref']} companion-paper mentions linked at first mention")
     print(f"  - {stats['n_ont']} quotes found verbatim in the ontology; "
           f"{stats['n_allow']} non-ontology quotes allowlisted with a source")
     print(f"  - {stats['n_cites']} dated in-text citations and {stats['n_refs']} reference "
