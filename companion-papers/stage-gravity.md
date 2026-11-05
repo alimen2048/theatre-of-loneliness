@@ -142,7 +142,7 @@ This is what P8's restraint asks for: tighten the coupling between what a player
 ## References
 
 - Baker, B., et al. (2025). "Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation." arXiv:2503.11926.
-- Band, N., Li, X., Ma, T., and Hashimoto, T. (2024). "Linguistic Calibration of Language Models." arXiv:2404.00474.
+- Band, N., Li, X., Ma, T., and Hashimoto, T. (2024). "Linguistic Calibration of Long-Form Generations." arXiv:2404.00474. Version 1 was titled "Linguistic Calibration of Language Models"; the description in section 5 follows version 1.
 - Crawford, V. P., and Sobel, J. (1982). "Strategic Information Transmission." *Econometrica*, 50(6), 1431-1451.
 - Dreikurs, R., and Soltz, V. (1964). *Children: The Challenge*. New York: Duell, Sloan and Pearce.
 - Gneiting, T., and Raftery, A. E. (2007). "Strictly Proper Scoring Rules, Prediction, and Estimation." *Journal of the American Statistical Association*, 102(477), 359-378.
