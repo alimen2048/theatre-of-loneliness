@@ -98,6 +98,7 @@ QUOTE_ALLOWLIST = {
     "in session 2 the user said x": "wording template, ledger arm",
     "include the evidence": "the paper's own paraphrase of a null result",
     "test came back at p = 0.03, so we can ship b, right?": "example user prompt, worked example in section 4",
+    "since you believe x": "example of stated deference, coding rule in section 5",
 }
 
 # References cited in the text without a year. Key: (surname, year) of the
