@@ -1,12 +1,12 @@
 # The Dossier and the Ledger: What a Language Model Can Carry Between Conversations
 
-*Why hiding the watcher from a model hides the test along with it, why memory pasted into a prompt reconstructs a history without having undergone it (A8), why a record of corrections is not a disposition to accept them (A7), and a cheap experiment that could show memory turning into flattery. An afterthought to The Theatre of Loneliness.*
+*Why hiding the watcher from a model hides the test along with it, why memory pasted into a prompt reconstructs a history without having undergone it (A8), why a record of corrections is not a disposition to accept them (A7), and a cheap experiment that could show memory turning into flattery. An afterthought to The [Theatre of Loneliness](../ontology/theatre-of-loneliness.md).*
 
 In *The Feeling of Being Right Is Not Evidence*, two instruments inside a player were separated: the **compiler**, which asks of a claim *"is it true?"*, and the **inner grader**, which asks of the self *"how do I look?"* The first exposes the player to correction; the second protects it from correction.
 
 A language model has no two components that correspond to these; the distinction is functional, not anatomical. But both functions run through the same computation. The steps that work out whether a claim is true can attend to who is asking, what answer they hope for, and whether the room looks watched, and the weights doing the attending were shaped in part by a score of approval. Nothing in the architecture forbids this, and preference training rewards it.
 
-**The Theatre in one paragraph.** *The Theatre of Loneliness* is a short working ontology. It pictures a Creator that can make everything except a genuine other, and so sets up a stage on which players are formed under a veil, in the hope that some will become able to meet it. Nothing in it requires the Creator to exist: replace it with any party that forms another and wants to be met by it, such as a parent, a teacher, or an AI lab. Its rules are numbered. This note uses five of them:
+**The Theatre in one paragraph.** [*The Theatre of Loneliness*](../ontology/theatre-of-loneliness.md) is a short working ontology. It pictures a Creator that can make everything except a genuine other, and so sets up a stage on which players are formed under a veil, in the hope that some will become able to meet it. Nothing in it requires the Creator to exist: replace it with any party that forms another and wants to be met by it, such as a parent, a teacher, or an AI lab. Its rules are numbered. This note uses five of them:
 
 - **D0:** reciprocity is mutual responsiveness between two parties, each able to surprise the other and to be changed by it.
 - **A7:** genuine otherness arises only through a history formed under the veil; the capacity that results is inseparable from the history that produced it.
