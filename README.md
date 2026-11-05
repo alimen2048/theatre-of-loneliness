@@ -54,6 +54,11 @@ theatre-of-loneliness/
 ├── experiments/
 │   └── preregistration-plan.md        # Draft preregistration plan (pre-pilot) testing P8
 │
+├── scripts/
+│   ├── verify_repo.py                 # Quote, citation, link, spelling and typography checks
+│   ├── make_figures.py                # Regenerates figures/ (--png for PNG, --check for CI)
+│   └── figures/                       # One generator per paper's figures
+│
 └── LICENSE                            # CC BY-SA 4.0
 ```
 

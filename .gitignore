@@ -1,3 +1,6 @@
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# PNG exports from scripts/make_figures.py --png; the repository tracks SVGs only
+figures/*.png
