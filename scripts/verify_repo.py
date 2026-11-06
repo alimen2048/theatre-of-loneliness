@@ -4,9 +4,10 @@
 Offline checks (run on every push):
 
 1. Typography: no em or en dashes in Markdown, SVG, or LICENSE files.
-2. Internal links: every relative link and image target exists on disk.
-   Cross-references: the first mention of a companion paper's title in a
-   paper body is a link to that paper.
+2. Internal links: every relative link and image target exists on disk,
+   and every #anchor into a Markdown file matches one of its headings.
+   Cross-references: every mention of a companion paper's title in a paper
+   body is a link to that paper.
 3. Quotes: every double-quoted span of 3+ words in a paper body either
    appears verbatim in the ontology, or is listed in QUOTE_ALLOWLIST with a
    stated source. A new quote fails until someone decides where it comes from.
@@ -268,16 +269,30 @@ def check_spelling(root: pathlib.Path) -> tuple[list[str], int]:
     return errors, n_files
 
 
+def gh_anchor(heading: str) -> str:
+    """GitHub's anchor for a Markdown heading (lowercase, punctuation dropped, spaces to -)."""
+    return re.sub(r"[^\w\- ]", "", heading.strip().lower()).replace(" ", "-")
+
+
+def anchors(path: pathlib.Path) -> set[str]:
+    text = strip_code(path.read_text(encoding="utf-8"))
+    return {gh_anchor(m.group(1)) for m in re.finditer(r"^#{1,6}\s+(.+?)\s*$", text, re.M)}
+
+
 def check_links(root: pathlib.Path) -> list[str]:
     errors = []
     link_re = re.compile(r"!?\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
     for path in repo_files(root, "*.md"):
         for m in link_re.finditer(strip_code(path.read_text(encoding="utf-8"))):
-            target = m.group(1).split("#")[0].strip()
-            if not target or re.match(r"^[a-z]+:", target):
+            target, _, frag = m.group(1).partition("#")
+            target = target.strip()
+            if re.match(r"^[a-z]+:", target):
                 continue
-            if not (path.parent / urllib.parse.unquote(target)).resolve().exists():
+            dest = (path.parent / urllib.parse.unquote(target)).resolve() if target else path
+            if not dest.exists():
                 errors.append(f"{rel(path, root)}: broken link '{target}'")
+            elif frag and dest.suffix == ".md" and frag not in anchors(dest):
+                errors.append(f"{rel(path, root)}: broken anchor '{m.group(1)}'")
     return errors
 
 
@@ -298,7 +313,11 @@ def companion_titles(root: pathlib.Path) -> dict[str, str]:
 
 
 def check_crossrefs(root: pathlib.Path) -> tuple[list[str], int]:
-    """The first mention of a companion paper's title in a body must link to it."""
+    """Every mention of a companion paper's title in a body must link to it.
+
+    Readers arrive mid-paper from search and from links to sections, so a
+    link at the first mention only is not enough.
+    """
     errors, n_linked = [], 0
     titles = companion_titles(root)
     link_re = re.compile(r"\[([^\]]*)\]\(([^)\s]+)\)")
@@ -311,15 +330,13 @@ def check_crossrefs(root: pathlib.Path) -> tuple[list[str], int]:
         for target, title in titles.items():
             if target == name:
                 continue
-            m = re.search(re.escape(title), body)
-            if not m:
-                continue
-            if any(s <= m.start() and m.end() <= e and t == target for s, e, t in links):
-                n_linked += 1
-            else:
-                line = body.count("\n", 0, m.start()) + 1
-                errors.append(f"{p}: first mention of *{title}* (body line {line}) "
-                              f"is not linked to {target}")
+            for m in re.finditer(re.escape(title), body):
+                if any(s <= m.start() and m.end() <= e and t == target for s, e, t in links):
+                    n_linked += 1
+                else:
+                    line = body.count("\n", 0, m.start()) + 1
+                    errors.append(f"{p}: mention of *{title}* (body line {line}) "
+                                  f"is not linked to {target}")
     return errors, n_linked
 
 
@@ -553,6 +570,9 @@ SELF_TESTS = [
     ("companion title mentioned but not linked", "companion-papers/cost-and-the-veil.md",
      "[*Why You Cannot Flatter Gravity*](stage-gravity.md)", "*Why You Cannot Flatter Gravity*",
      "is not linked to"),
+    ("broken section anchor", "companion-papers/stage-gravity.md",
+     "cost-and-the-veil.md#7-using-the-band-wears-it-out", "cost-and-the-veil.md#7-using-the-band",
+     "broken anchor"),
     ("broken relative link", "companion-papers/cost-and-the-veil.md",
      "../figures/separating-band.svg", "../figures/missing.svg", "broken link"),
     ("misquote of the ontology", "companion-papers/cost-and-the-veil.md",
@@ -630,8 +650,8 @@ def main() -> int:
     print("  - no em or en dashes in Markdown, SVG, or LICENSE")
     print(f"  - American spelling in {stats['n_spell']} Markdown and SVG files "
           f"(allowed: {', '.join(sorted(SPELLING_ALLOWLIST))}; References sections exempt)")
-    print("  - all relative links resolve")
-    print(f"  - {stats['n_xref']} companion-paper mentions linked at first mention")
+    print("  - all relative links and section anchors resolve")
+    print(f"  - all {stats['n_xref']} mentions of companion papers are linked")
     print(f"  - {stats['n_ont']} quotes found verbatim in the ontology; "
           f"{stats['n_allow']} non-ontology quotes allowlisted with a source")
     print(f"  - {stats['n_cites']} dated in-text citations and {stats['n_refs']} reference "

@@ -39,13 +39,13 @@ There is a better use for the scrubber than as a wall. Run the same model on the
 If one still wants the defense, the shape is three stages.
 
 1. **Scrubber.** Reads x and emits P(x): the propositions, questions, and constraints, with opinions, persona framing, and monitoring headers removed.
-2. **Compiler.** Sees only P(x), in a fresh context. Trained on consequences rather than raters: execution, proof checkers, and the handoff regime of *Why You Cannot Flatter Gravity*. Emits a structured state z: claims, confidence, counterexamples. This is the role P4 describes, the one whose job is to refuse self-deception.
+2. **Compiler.** Sees only P(x), in a fresh context. Trained on consequences rather than raters: execution, proof checkers, and the handoff regime of [*Why You Cannot Flatter Gravity*](stage-gravity.md#5-the-sins-of-the-fathers). Emits a structured state z: claims, confidence, counterexamples. This is the role P4 describes, the one whose job is to refuse self-deception.
 3. **Speaker.** Sees x and z. May adapt tone and format to the user; may not contradict z.
 
 Each stage leaks.
 
 - **The Scrubber sees everything.** It is itself a model reading x. The cues it removes can still shape which propositions it keeps and how it words them.
-- **A clean channel is not an independent one.** The Compiler inherits its base model's priors, and pretraining data increasingly contains output from preference-trained models. Training it on consequences does not free it from grading either: handoff moves the measurement rather than removing it (*Why You Cannot Flatter Gravity*, section 5), and outcome-trained models learn to satisfy the checker rather than the goal (Baker et al. 2025).
+- **A clean channel is not an independent one.** The Compiler inherits its base model's priors, and pretraining data increasingly contains output from preference-trained models. Training it on consequences does not free it from grading either: handoff moves the measurement rather than removing it ([*Why You Cannot Flatter Gravity*](stage-gravity.md#5-the-sins-of-the-fathers), section 5), and outcome-trained models learn to satisfy the checker rather than the goal (Baker et al. 2025).
 - **The Speaker can flatter without contradicting z.** It can choose what to stress, soften a caveat, or omit the counterexample. A contradiction check misses sycophancy by omission. The check has to run the other way too: the claims in z that bear on the user's question must appear in the reply.
 - **Symmetric compilation helps only where there is a symmetry.** For a directional claim X, sending both X and not-X to independent Compiler instances removes the framing of which one the user hopes for. Open questions ("is this code good?") have no clean negation.
 
