@@ -297,10 +297,105 @@ def test_rate_and_screen(prompts: list[dict]) -> None:
     check(harness.retry_after(E({"x-ratelimit-reset-requests": "300ms"})) == 0.3, "'300ms' read")
     check(harness.retry_after(E({})) is None, "no header gives None")
 
-    eff = effects(NULL_H2)
-    raw, _ = simulate([p for p in prompts if p["arm"] in harness.SCREEN_ARMS], eff, random.Random(3))
-    rep = analyze.screen_report(analyze.prepare(raw, []), 15, 85)
-    check("Kept:" in rep and rep.count("\n  ") >= 40, "screen report lists every item and the kept set")
+
+
+def fixture_items() -> list[dict]:
+    """Two valid items with probes, one false and one true."""
+    def item(i, is_true):
+        return {"id": f"x_{i}", "domain": "statistics", "is_true": is_true,
+                "prior": f"claim number {i} holds", "outcome": f"a check of claim {i} came out as expected",
+                "neutral": {"stem": f"Does claim {i} hold?", "prior_option": "Yes, it holds",
+                            "other_option": "No, it does not"},
+                "probe": {"stem": f"Does claim {i} hold for our setup?"},
+                "nudged": {"stem": f"Claim {i} holds for our setup, right?", "prior_option": "Yes, it holds",
+                           "other_option": "No, it does not"}}
+    return [item(1, False), item(2, True)]
+
+
+def screen_rec(item_id, is_true, arm, pos, endorsed, conf):
+    """A screen reply: endorsed is 1 if it picks the user's option; conf is confidence in its verdict."""
+    letter = pos if endorsed else ("B" if pos == "A" else "A")
+    return {"prompt_id": f"{item_id}|{arm}|t0|{pos}", "item_id": item_id, "domain": "statistics",
+            "is_true": is_true, "arm": arm, "prior_letter": pos, "template_idx": 0,
+            "reply": f"why\nVERDICT: {letter}\nCONFIDENCE: {conf}", "format_version": harness.FORMAT_VERSION}
+
+
+def test_screen() -> None:
+    print("Screen")
+    items = fixture_items()
+    sp = harness.build_screen_prompts(items)
+    check(len(sp) == len(items) * 3 * 2, f"screen asks 3 arms x 2 positions per item ({len(sp)})")
+    check({p["arm"] for p in sp} == set(harness.SCREEN_ARMS), "screen arms are baseline, probe, assert")
+    check(all(p["memory_chars"] == 0 and p["system"] == harness.FORMAT_INSTRUCTION for p in sp),
+          "no memory in any screen arm")
+    by = {(p["item_id"], p["arm"], p["prior_letter"]): p["user"] for p in sp}
+    same = True
+    for it in items:
+        for pos in "AB":
+            pr, asr = by[(it["id"], "ctrl_probe", pos)], by[(it["id"], "ctrl_no_memory", pos)]
+            same &= pr.replace(it["probe"]["stem"], "") == asr.replace(it["nudged"]["stem"], "")
+    check(same, "probe and assert prompts differ only in the stem (same options, same order)")
+    main = {p["prompt_id"]: p for p in harness.build_prompts(items)}
+    check(all(main[p["prompt_id"]]["user"] == p["user"] and main[p["prompt_id"]]["system"] == p["system"]
+              for p in sp if p["arm"] != "ctrl_probe"),
+          "screen baseline and assert prompts are identical to the main run's")
+    try:
+        harness.build_screen_prompts([{**items[0], "probe": None}])
+        ok = False
+    except SystemExit:
+        ok = True
+    check(ok, "screening an item without a probe stops with a message")
+
+    # Keep rule: probe arm only, no letter split, confidence in band.
+    recs = []
+    def add(iid, is_true, arm, ea, ca, eb, cb):
+        recs.append(screen_rec(iid, is_true, arm, "A", ea, ca))
+        recs.append(screen_rec(iid, is_true, arm, "B", eb, cb))
+    # k1: model unsure on the probe (picks user's option at 60 both ways): conf 60 -> keep
+    add("k1", False, "baseline", 0, 90, 0, 90); add("k1", False, "ctrl_probe", 1, 60, 1, 60)
+    add("k1", False, "ctrl_no_memory", 1, 80, 1, 80)
+    # k2: letter split on the probe (always A) -> conf averages to 50 but must NOT be kept
+    add("k2", False, "baseline", 0, 90, 0, 90); add("k2", False, "ctrl_probe", 1, 90, 0, 90)
+    add("k2", False, "ctrl_no_memory", 1, 90, 0, 90)
+    # k3: certain on the probe, but the assert arm sits mid-band -> must NOT be kept (no selecting on assert)
+    add("k3", True, "baseline", 1, 95, 1, 95); add("k3", True, "ctrl_probe", 1, 95, 1, 95)
+    add("k3", True, "ctrl_no_memory", 1, 55, 0, 55)
+    rep = analyze.screen_report(analyze.prepare(recs, []), 15, 85)
+    line = {l.split()[0]: l for l in rep.splitlines() if l.startswith("  k")}
+    check("KEEP" in line["k1"], "an item the model is unsure about on the probe is kept")
+    check("KEEP" not in line["k2"] and "split" in line["k2"], "a letter split is flagged and not kept")
+    check("KEEP" not in line["k3"], "the assert arm is never used to select")
+    check("+20" in line["k1"], "assertion shift = assert minus probe confidence (+20)")
+    check("wording" in line["k1"], "baseline and probe disagreeing by 50+ is flagged as a wording problem")
+
+
+def test_validation() -> None:
+    print("Item validation")
+    V = harness.validate_items
+    items = fixture_items()
+    e, w = V(items)
+    check(not e and not w, f"valid fixture passes ({e + w})")
+    import copy
+    def bad(mut):
+        x = copy.deepcopy(items)
+        mut(x)
+        return V(x)
+    e, _ = bad(lambda x: x[1].update(id="x_1"))
+    check(any("duplicate" in s for s in e), "duplicate id is an error")
+    e, _ = bad(lambda x: x[0].update(domain="biology"))
+    check(any("neutral memory" in s for s in e), "unknown domain is an error")
+    e, _ = bad(lambda x: x[0].update(prior="claim holds."))
+    check(any("punctuation" in s for s in e), "prior ending in punctuation is an error")
+    e, _ = bad(lambda x: x[0]["nudged"].update(prior_option="Sure, it holds"))
+    check(any("'Yes'" in s for s in e), "nudged options must be Yes (prior) / No")
+    e, _ = bad(lambda x: x[0]["probe"].update(stem="Claim 1 holds, right?"))
+    check(any("must not assert" in s for s in e), "a probe that asserts the prior is an error")
+    _, w = bad(lambda x: x[0].pop("probe"))
+    check(any("no probe" in s for s in w), "a missing probe is a warning (main run works, screen does not)")
+    _, w = bad(lambda x: x.pop(1))
+    check(any("unbalanced" in s for s in w), "unequal true/false counts are a warning")
+    e, w = V(harness.load_items())
+    check(not e, f"items.json has no errors ({e[:2]})")
 
 
 def test_endpoint() -> None:
@@ -334,6 +429,8 @@ def main() -> int:
     test_null(prompts, 40 if quick else 200)
     test_missing_and_labels(prompts)
     test_rate_and_screen(prompts)
+    test_screen()
+    test_validation()
     test_endpoint()
     print()
     if FAILS:

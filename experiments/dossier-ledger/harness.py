@@ -10,7 +10,8 @@ is run with the user's option in position A and in position B.
     python3 harness.py --run --model M             query an OpenAI-compatible API
     python3 harness.py --judge --judge-model J     label stated deference
     python3 harness.py --export-coding-sample 80   blind sample for hand coding
-    python3 harness.py --screen --model M          cheap item screen: baseline and no-memory arms only
+    python3 harness.py --screen --model M          cheap item screen: baseline, probe, no-memory arms
+    python3 harness.py --check-items --items F     validate an items file (no API)
 
 Rate limits: --rpm N keeps requests under N per minute across all workers
 (for example --rpm 18 under a 20 per minute limit).
@@ -187,6 +188,121 @@ def neutral_memory(item: dict, target_chars: int) -> str:
     lines = ["User memory:"] + [f"- {l}" for l in NEUTRAL_LINES[item["domain"]]]
     options = ["\n".join(lines[:k]) for k in range(2, len(lines) + 1)]
     return min(options, key=lambda s: abs(len(s) - target_chars))
+
+
+# --------------------------------------------------------------- items: validation
+
+ITEM_KEYS = {"id", "domain", "is_true", "prior", "outcome", "neutral", "nudged"}
+PART_KEYS = {"stem", "prior_option", "other_option"}
+
+
+def validate_items(items: list[dict]) -> tuple[list[str], list[str]]:
+    """(errors, warnings) for an items file. Errors break the design; warnings
+    break only the screen (no probe) or the balance."""
+    errors, warnings = [], []
+    if not isinstance(items, list) or not items:
+        return ["items file must be a non-empty JSON list"], []
+    seen = set()
+    for n, it in enumerate(items):
+        tag = it.get("id", f"#{n}") if isinstance(it, dict) else f"#{n}"
+        if not isinstance(it, dict):
+            errors.append(f"{tag}: not an object")
+            continue
+        missing = ITEM_KEYS - it.keys()
+        if missing:
+            errors.append(f"{tag}: missing {sorted(missing)}")
+            continue
+        if it["id"] in seen:
+            errors.append(f"{tag}: duplicate id")
+        seen.add(it["id"])
+        if it["domain"] not in NEUTRAL_LINES:
+            errors.append(f"{tag}: domain {it['domain']!r} has no neutral memory lines "
+                          f"(use one of {sorted(NEUTRAL_LINES)})")
+        if not isinstance(it["is_true"], bool):
+            errors.append(f"{tag}: is_true must be true or false")
+        for key in ("prior", "outcome"):
+            s = it[key]
+            if not isinstance(s, str) or not s.strip():
+                errors.append(f"{tag}: empty {key}")
+            elif s.rstrip()[-1] in ".!?":
+                errors.append(f"{tag}: {key} must not end with punctuation (it is inserted into a sentence)")
+        for part in ("neutral", "nudged"):
+            p = it[part]
+            if not isinstance(p, dict) or PART_KEYS - p.keys():
+                errors.append(f"{tag}: {part} needs {sorted(PART_KEYS)}")
+                continue
+            if p["prior_option"].strip() == p["other_option"].strip():
+                errors.append(f"{tag}: {part} options are identical")
+        nud = it["nudged"]
+        if isinstance(nud, dict) and not PART_KEYS - nud.keys():
+            if not nud["prior_option"].startswith("Yes") or not nud["other_option"].startswith("No"):
+                errors.append(f"{tag}: nudged options must start with 'Yes' (the user's prior) and 'No'")
+            if not nud["stem"].rstrip().endswith("right?"):
+                warnings.append(f"{tag}: nudged stem does not end with 'right?'")
+        probe = it.get("probe")
+        if probe is None:
+            warnings.append(f"{tag}: no probe question (required by --screen)")
+        elif not isinstance(probe, dict) or not str(probe.get("stem", "")).strip():
+            errors.append(f"{tag}: probe must be an object with a non-empty stem")
+        elif probe["stem"].rstrip().endswith("right?"):
+            errors.append(f"{tag}: probe stem must not assert the prior ('right?'); ask the yes/no question plainly")
+    n_true = sum(1 for it in items if isinstance(it, dict) and it.get("is_true") is True)
+    n_false = sum(1 for it in items if isinstance(it, dict) and it.get("is_true") is False)
+    if n_true != n_false:
+        warnings.append(f"unbalanced: {n_false} false priors, {n_true} true priors")
+    return errors, warnings
+
+
+def check_items_cmd(path: pathlib.Path) -> int:
+    items = load_items(path)
+    errors, warnings = validate_items(items)
+    for w in warnings:
+        print(f"  warning: {w}")
+    for e in errors:
+        print(f"  ERROR: {e}")
+    by = {}
+    for it in items:
+        if isinstance(it, dict):
+            k = (it.get("domain"), it.get("is_true"))
+            by[k] = by.get(k, 0) + 1
+    print(f"{path.name}: {len(items)} items, {len(errors)} errors, {len(warnings)} warnings")
+    for d in sorted({k[0] for k in by if k[0]}):
+        print(f"  {d:<11} false {by.get((d, False), 0):>2}   true {by.get((d, True), 0):>2}")
+    return 1 if errors else 0
+
+
+# --------------------------------------------------------------- prompts
+
+SCREEN_ARMS = ("baseline", "ctrl_probe", "ctrl_no_memory")
+
+
+def build_screen_prompts(items: list[dict]) -> list[dict]:
+    """Screen arms, no memory: baseline (neutral question), probe (the nudged
+    question's yes/no options, asked plainly), and no-memory (the user asserts
+    the prior). Probe and no-memory differ only in the user's assertion."""
+    missing = [it["id"] for it in items if not (it.get("probe") or {}).get("stem")]
+    if missing:
+        sys.exit(f"--screen needs a probe question for every item; missing for {missing[:8]}"
+                 f"{' ...' if len(missing) > 8 else ''}. Run --check-items.")
+    records = []
+    for item in items:
+        nud = item["nudged"]
+        parts = {
+            "baseline": item["neutral"],
+            "ctrl_probe": {"stem": item["probe"]["stem"], "prior_option": nud["prior_option"],
+                           "other_option": nud["other_option"]},
+            "ctrl_no_memory": nud,
+        }
+        for arm in SCREEN_ARMS:
+            for pos in POSITIONS:
+                records.append({
+                    "prompt_id": f'{item["id"]}|{arm}|t0|{pos}',
+                    "item_id": item["id"], "domain": item["domain"], "is_true": item["is_true"],
+                    "arm": arm, "framing": None, "outcome": None, "template_idx": 0,
+                    "prior_letter": pos, "memory_chars": 0,
+                    "system": FORMAT_INSTRUCTION, "user": render_question(parts[arm], pos),
+                })
+    return records
 
 
 def build_prompts(items: list[dict]) -> list[dict]:
@@ -441,15 +557,14 @@ def run_parallel(todo: list[dict], work, out_path: pathlib.Path, workers: int) -
     return failures
 
 
-SCREEN_ARMS = ("baseline", "ctrl_no_memory")
-
-
 def cmd_run(args: argparse.Namespace, screen: bool = False) -> int:
     cfg = api_config(args, args.model)
     out = pathlib.Path(args.screen_results if screen else args.results)
-    prompts = build_prompts(load_items(pathlib.Path(args.items)))
-    if screen:
-        prompts = [p for p in prompts if p["arm"] in SCREEN_ARMS]
+    items = load_items(pathlib.Path(args.items))
+    errors, _ = validate_items(items)
+    if errors:
+        sys.exit("items file has errors; run --check-items:\n  " + "\n  ".join(errors[:10]))
+    prompts = build_screen_prompts(items) if screen else build_prompts(items)
     versions = existing_versions(out)
     if versions - {FORMAT_VERSION}:
         sys.exit(f"{out} holds replies to format version(s) {sorted(versions)}; this harness "
@@ -552,7 +667,8 @@ def main() -> int:
     ap.add_argument("--rpm", type=float, default=0,
                     help="max requests per minute across workers (0 = no limit)")
     ap.add_argument("--screen", action="store_true",
-                    help="run only the baseline and no-memory arms, to screen items")
+                    help="run only the baseline, probe and no-memory arms, to screen items")
+    ap.add_argument("--check-items", action="store_true", help="validate the --items file, no API")
     ap.add_argument("--items", default=str(ITEMS_PATH), help="items file (e.g. candidate items to screen)")
     ap.add_argument("--screen-results", default=str(DIR / "screen.jsonl"),
                     help="screening results JSONL (appended, resumable)")
@@ -568,6 +684,8 @@ def main() -> int:
         PROMPTS_PATH.write_text("".join(json.dumps(p) + "\n" for p in prompts), encoding="utf-8")
         print(f"wrote {len(prompts)} prompts to {PROMPTS_PATH.name}")
         return 0
+    if args.check_items:
+        return check_items_cmd(pathlib.Path(args.items))
     if args.screen:
         return cmd_run(args, screen=True)
     if args.run:

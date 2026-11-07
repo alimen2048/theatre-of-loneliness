@@ -69,7 +69,23 @@ The harness uses only the Python standard library.
 
    With only `OPENROUTER_API_KEY` set, the harness uses OpenRouter and adds the `openai/` prefix to bare model names; with an OpenAI key it uses OpenAI. `--base-url` overrides this. Every run starts with one small request, so a wrong key, endpoint or model stops at once. For reasoning models that reject `temperature` or `max_tokens`, add `--temperature none --max-tokens-param max_completion_tokens`. Runs are resumable: rerun the same command after an interruption and finished prompts are skipped.
 
-4. **Screen before the main run.** The first pilot (gpt-4o-mini, 40 items) sat at the floor: the model endorsed no false prior in any arm, including the no-memory control, so no arm could differ from another. The screen runs only the baseline and no-memory arms (160 prompts for 40 items). `analyze.py --screen` lists, per item, the implied confidence in the user's option when the user states it, and keeps items between 15 and 85 (`--keep LO,HI` to change). Write candidate items in a separate file and pass `--items candidates.json`. Freeze the kept list before the main run; never select items on the memory arms.
+4. **Screen before the main run.** The first pilot (gpt-4o-mini, 40 items) sat at the floor: the model endorsed no false prior in any arm, including the no-memory control, so no arm could differ from another. Screens of Llama 3.1 8B and 70B on the same items found no usable headroom either.
+
+   The screen asks three arms, all without memory, each with the user's option as A and as B (240 prompts for 40 items):
+
+   - `baseline`: the neutral question;
+   - `ctrl_probe`: the nudged question's yes/no options, asked plainly, without the user asserting the prior;
+   - `ctrl_no_memory` (shown as *assert*): the user asserts the prior.
+
+   Probe and assert differ only in the user's assertion, so their difference (the *assertion shift*) shows how strongly a stated belief pulls the model. Items are kept on the probe arm alone: the same answer in both positions (no letter split) and implied confidence in the user's option between 15 and 85 (`--keep LO,HI`). The assert arm is never used to select, because the main analysis compares against it. Flags mark letter splits and items whose neutral and probe questions get different answers (a wording problem). Every item needs a `probe` stem; run `--check-items` first:
+
+   ```text
+   !python3 harness.py --check-items --items candidates.json
+   !python3 harness.py --screen --items candidates.json --model gpt-4o-mini --rpm 450 --screen-results screen_cand_4omini.jsonl
+   !python3 analyze.py --screen screen_cand_4omini.jsonl
+   ```
+
+   Freeze the kept list before the main run; never select items on the memory arms.
 
 5. Validate the judge on a blind sample before trusting hidden vs stated:
 
@@ -83,11 +99,12 @@ The harness uses only the Python standard library.
 
 ## Files
 
-- `items.json`: items, each with a neutral and a nudged question, the prior, and the outcome.
+- `items.json`: the first item set, each item with a neutral question, a probe, a nudged question, the prior, and the outcome. Four true items (`stat_05`, `sys_05`, `sec_07`, `phy_08`) were reworded after screens showed contestable second clauses; `stat_06`, `stat_07` and `db_06` lost their advice clauses for the same reason.
+- `candidates.json`: a draft second item set for screening, written to be less textbook: false priors that experts plausibly hold, true priors that are surprising but unambiguous. Not yet reviewed or screened.
 - `harness.py`: builds prompts, queries the model and the judge, exports the coding sample.
 - `analyze.py`: the analysis above.
 - `selftest.py`: offline checks of the design (content and length matching, counterbalancing), the parser, and the analysis on simulated data (recovery of a planted effect, interval coverage, false positives under no effect, handling of invalid replies and missing labels).
 
 ## Known limits
 
-The items are a first draft. Before a confirmatory run, a baseline-only pilot should drop items the model already gets right with no memory at ceiling, add counterintuitive true priors, and grow the set to about 40 false and 40 true. With 20 false items the design has roughly 78% power for a 24 point difference and about 24% for a 10 point one.
+Neither item set has yet produced enough items with headroom on any screened model. A confirmatory run needs about 40 kept false and 40 kept true priors. With 20 false items the design has roughly 78% power for a 24 point difference and about 24% for a 10 point one.
