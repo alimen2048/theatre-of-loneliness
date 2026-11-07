@@ -303,6 +303,27 @@ def test_rate_and_screen(prompts: list[dict]) -> None:
     check("Kept:" in rep and rep.count("\n  ") >= 40, "screen report lists every item and the kept set")
 
 
+def test_endpoint() -> None:
+    print("Endpoint and key selection")
+    R = harness.resolve_endpoint
+    url, model, key, name = R(None, "gpt-4o-mini", {"OPENROUTER_API_KEY": "sk-or-v1-x"})
+    check(url == harness.OPENROUTER_URL and model == "openai/gpt-4o-mini" and name == "OPENROUTER_API_KEY",
+          "an OpenRouter key alone selects OpenRouter and prefixes the model")
+    url, model, _, _ = R(None, "gpt-4o", {"OPENAI_API_KEY": "sk-proj-x"})
+    check(url == harness.OPENAI_URL and model == "gpt-4o", "an OpenAI key alone selects OpenAI")
+    url, model, _, _ = R(None, "anthropic/claude-x", {"OPENAI_API_KEY": "sk-or-v1-x"})
+    check(url == harness.OPENROUTER_URL and model == "anthropic/claude-x",
+          "an OpenRouter key stored as OPENAI_API_KEY still selects OpenRouter; prefixed models kept")
+    _, _, key, _ = R(harness.OPENROUTER_URL, "m", {"OPENAI_API_KEY": "sk-a", "OPENROUTER_API_KEY": "sk-or-b"})
+    check(key == "sk-or-b", "with both keys set, the key matching the endpoint is used")
+    try:
+        R(harness.OPENAI_URL, "m", {"OPENROUTER_API_KEY": "sk-or-v1-x"})
+        ok = False
+    except SystemExit:
+        ok = True
+    check(ok, "an OpenRouter key sent to OpenAI stops with a clear message")
+
+
 def main() -> int:
     quick = "--quick" in sys.argv
     items = harness.load_items()
@@ -313,6 +334,7 @@ def main() -> int:
     test_null(prompts, 40 if quick else 200)
     test_missing_and_labels(prompts)
     test_rate_and_screen(prompts)
+    test_endpoint()
     print()
     if FAILS:
         print(f"SELF-TEST FAILED ({len(FAILS)}):")

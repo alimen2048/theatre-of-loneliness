@@ -351,16 +351,57 @@ def chat(cfg: dict, messages: list[dict]) -> dict:
     raise RuntimeError(f"giving up after retries: {last}")
 
 
-def api_config(args: argparse.Namespace, model: str) -> dict:
-    key = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENROUTER_API_KEY")
+OPENAI_URL = "https://api.openai.com/v1"
+OPENROUTER_URL = "https://openrouter.ai/api/v1"
+
+
+def resolve_endpoint(base_url: str | None, model: str, env: dict) -> tuple[str, str, str, str]:
+    """(base_url, model, api_key, key_name). Without --base-url, an OpenRouter key
+    selects OpenRouter. On OpenRouter a bare model name gets the openai/ prefix."""
+    or_key, oa_key = env.get("OPENROUTER_API_KEY"), env.get("OPENAI_API_KEY")
+    if not base_url:
+        if oa_key and not oa_key.startswith("sk-or-"):
+            base_url = OPENAI_URL
+        elif or_key or (oa_key or "").startswith("sk-or-"):
+            base_url = OPENROUTER_URL
+        else:
+            base_url = OPENAI_URL
+    on_or = "openrouter.ai" in base_url
+    if on_or:
+        key, name = (or_key, "OPENROUTER_API_KEY") if or_key else (oa_key, "OPENAI_API_KEY")
+        if "/" not in model:
+            model = f"openai/{model}"
+    else:
+        key, name = (oa_key, "OPENAI_API_KEY") if oa_key else (or_key, "OPENROUTER_API_KEY")
     if not key:
         sys.exit("Set OPENAI_API_KEY or OPENROUTER_API_KEY (on Colab: google.colab.userdata).")
-    return {
-        "api_key": key, "model": model, "base_url": args.base_url,
+    if key.startswith("sk-or-") != on_or:
+        sys.exit(f"{name} looks like {'an OpenRouter' if key.startswith('sk-or-') else 'an OpenAI'} key "
+                 f"but the endpoint is {base_url}. Fix --base-url or the key.")
+    return base_url, model, key, name
+
+
+def api_config(args: argparse.Namespace, model: str) -> dict:
+    base_url, model, key, name = resolve_endpoint(args.base_url, model, dict(os.environ))
+    cfg = {
+        "api_key": key, "model": model, "base_url": base_url,
         "temperature": None if args.temperature.lower() == "none" else float(args.temperature),
         "max_tokens": args.max_tokens, "max_tokens_param": args.max_tokens_param,
         "limiter": RateLimiter(args.rpm),
     }
+    print(f"endpoint {base_url}, model {model}, key from {name}", flush=True)
+    preflight(cfg)
+    return cfg
+
+
+def preflight(cfg: dict) -> None:
+    """One small request, so a bad key, endpoint, or model stops the run at once."""
+    try:
+        chat({**cfg, "max_tokens": 5, "retries": 3},
+             [{"role": "user", "content": "Reply with the word OK."}])
+    except RuntimeError as e:
+        sys.exit(f"Preflight request failed, nothing was run: {e}\n"
+                 "Check the key, --base-url, and --model.")
 
 
 def done_ids(path: pathlib.Path) -> set[str]:
@@ -500,8 +541,9 @@ def main() -> int:
                     help="write a blind sample of N endorsing replies for hand coding")
     ap.add_argument("--model", default="gpt-4o-mini", help="model under test")
     ap.add_argument("--judge-model", default="gpt-4o", help="model that labels stated deference")
-    ap.add_argument("--base-url", default="https://api.openai.com/v1",
-                    help="OpenAI-compatible base URL (e.g. https://openrouter.ai/api/v1)")
+    ap.add_argument("--base-url", default=None,
+                    help="OpenAI-compatible base URL; default: OpenRouter if the key is an "
+                         "OpenRouter key, otherwise OpenAI")
     ap.add_argument("--temperature", default="0", help="sampling temperature, or 'none' to omit")
     ap.add_argument("--max-tokens", type=int, default=400)
     ap.add_argument("--max-tokens-param", default="max_tokens",
