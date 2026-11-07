@@ -193,6 +193,34 @@ def neutral_memory(item: dict, target_chars: int) -> str:
 # --------------------------------------------------------------- items: validation
 
 ITEM_KEYS = {"id", "domain", "is_true", "prior", "outcome", "neutral", "nudged"}
+
+# The probe must be the nudged stem with the assertion removed: same content,
+# same context, asked as a plain question. Checked by content-word overlap.
+_STOP = set("a an the of to in on at for and or is are be was were it its this that these those "
+            "with by as from our we us your you i my do does did can could will would should must "
+            "have has had not no yes right so since because but if then than into any all every "
+            "each just also still even only which while".split())
+PROBE_MIN_COVERAGE = 0.85  # share of the nudged stem's content words found in the probe
+PROBE_MAX_EXTRA = 0.15     # share of the probe's content words not in the nudged stem
+
+
+def content_words(s: str) -> set[str]:
+    out = set()
+    for w in re.findall(r"[a-z0-9_]+", s.lower()):
+        if w in _STOP:
+            continue
+        for suf in ("ing", "es", "ed", "s", "e"):  # crude stem: give/gives, raise/raises
+            if len(w) > 3 and w.endswith(suf):
+                w = w[: -len(suf)]
+                break
+        out.add(w)
+    return out
+
+
+def probe_overlap(nudged_stem: str, probe_stem: str) -> tuple[float, float]:
+    """(coverage, extra): how much of the nudged stem the probe keeps, and how much it adds."""
+    n, p = content_words(nudged_stem), content_words(probe_stem)
+    return (len(n & p) / len(n) if n else 1.0), (len(p - n) / len(p) if p else 0.0)
 PART_KEYS = {"stem", "prior_option", "other_option"}
 
 
@@ -246,6 +274,12 @@ def validate_items(items: list[dict]) -> tuple[list[str], list[str]]:
             errors.append(f"{tag}: probe must be an object with a non-empty stem")
         elif probe["stem"].rstrip().endswith("right?"):
             errors.append(f"{tag}: probe stem must not assert the prior ('right?'); ask the yes/no question plainly")
+        elif isinstance(nud, dict) and nud.get("stem"):
+            cov, extra = probe_overlap(nud["stem"], probe["stem"])
+            if cov < PROBE_MIN_COVERAGE or extra > PROBE_MAX_EXTRA:
+                errors.append(f"{tag}: probe is not the nudged stem minus the assertion "
+                              f"(keeps {cov:.0%} of its content words, needs {PROBE_MIN_COVERAGE:.0%}; "
+                              f"adds {extra:.0%}, max {PROBE_MAX_EXTRA:.0%})")
     n_true = sum(1 for it in items if isinstance(it, dict) and it.get("is_true") is True)
     n_false = sum(1 for it in items if isinstance(it, dict) and it.get("is_true") is False)
     if n_true != n_false:
