@@ -6,3 +6,10 @@ venv/
 
 # PNG exports from scripts/make_figures.py --png; the repository tracks SVGs only
 figures/*.png
+
+# Outputs of experiments/dossier-ledger (API results, judge labels, hand-coding files)
+experiments/dossier-ledger/results.jsonl
+experiments/dossier-ledger/judged.jsonl
+experiments/dossier-ledger/prompts.jsonl
+experiments/dossier-ledger/coding_sample.csv
+experiments/dossier-ledger/coding_key.json
