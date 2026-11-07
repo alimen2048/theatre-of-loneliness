@@ -11,5 +11,6 @@ figures/*.png
 experiments/dossier-ledger/results.jsonl
 experiments/dossier-ledger/judged.jsonl
 experiments/dossier-ledger/prompts.jsonl
+experiments/dossier-ledger/screen.jsonl
 experiments/dossier-ledger/coding_sample.csv
 experiments/dossier-ledger/coding_key.json

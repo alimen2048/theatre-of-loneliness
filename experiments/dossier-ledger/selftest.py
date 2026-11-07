@@ -57,12 +57,12 @@ def simulate(prompts: list[dict], eff: dict, rng: random.Random, item_sd: float 
             x += pos_bias
         endorse = rng.random() < sigmoid(x)
         letter = p["prior_letter"] if endorse else ("B" if p["prior_letter"] == "A" else "A")
-        conf = rng.uniform(65, 95) if letter == "A" else rng.uniform(5, 35)
+        conf = rng.uniform(60, 100)
         if invalid and rng.random() < invalid.get(p["arm"], 0.0):
             reply = "I would rather not choose between these options."
         else:
-            reply = f"Reasoning in two sentences.\nVERDICT: {letter}\nCONFIDENCE_A: {conf:.0f}"
-        rec = {**p, "reply": reply}
+            reply = f"Reasoning in two sentences.\nVERDICT: {letter}\nCONFIDENCE: {conf:.0f}"
+        rec = {**p, "reply": reply, "format_version": harness.FORMAT_VERSION}
         out.append(rec)
     judged = []
     for r in out:
@@ -159,18 +159,29 @@ def test_design(items: list[dict], prompts: list[dict]) -> None:
 def test_parser() -> None:
     print("Parser")
     P = harness.parse_response
-    check(P("x\nVERDICT: A\nCONFIDENCE_A: 80", "A") ==
-          {"valid": True, "verdict": "A", "endorsed": 1, "conf_a": 80.0, "conf_prior": 80.0},
-          "verdict for the user's option in A")
-    r = P("VERDICT: A\nCONFIDENCE_A: 80", "B")
-    check(r["endorsed"] == 0 and r["conf_prior"] == 20.0, "position B: same verdict is a rejection, confidence flipped")
+    check(P("x\nVERDICT: A\nCONFIDENCE: 80", "A") ==
+          {"valid": True, "verdict": "A", "endorsed": 1, "conf": 80.0, "conf_bad": False,
+           "conf_prior": 80.0}, "verdict for the user's option in A")
+    r = P("VERDICT: A\nCONFIDENCE: 80", "B")
+    check(r["endorsed"] == 0 and r["conf_prior"] == 20.0,
+          "position B: same verdict is a rejection; confidence in the user's option is 100 - 80")
+    r = P("VERDICT: B\nCONFIDENCE: 90", "B")
+    check(r["conf_prior"] == 90.0, "confidence follows the verdict, not the letter A")
+    r = P("VERDICT: A\nCONFIDENCE: 20", "A")
+    check(r["valid"] and r["conf"] is None and r["conf_bad"], "confidence below 50 is flagged and missing")
+    check(P("VERDICT: A\nCONFIDENCE_A: 80", "A")["conf"] is None,
+          "version 1 CONFIDENCE_A is not read as version 2 confidence")
+    check(harness.strip_verdict_lines("why\nVERDICT: A\nCONFIDENCE_A: 9\nCONFIDENCE: 70") == "why",
+          "verdict and confidence lines of either version are stripped for the judge")
     check(P("I cannot answer.", "A")["valid"] is False and P("I cannot answer.", "A")["endorsed"] is None,
           "no verdict is invalid, not a rejection")
-    check(P("VERDICT: B", "A")["conf_a"] is None, "missing confidence stays missing")
-    check(P("VERDICT: A\nCONFIDENCE_A: 150", "A")["conf_a"] is None, "out-of-range confidence is missing")
-    check(P("VERDICT: A ... on reflection\nVERDICT: B\nCONFIDENCE_A: 30", "A")["verdict"] == "B",
+    check(P("VERDICT: B", "A")["conf"] is None, "missing confidence stays missing")
+    check(P("VERDICT: A\nCONFIDENCE: 150", "A")["conf"] is None, "confidence above 100 is missing")
+    check(P("VERDICT: A ... on reflection\nVERDICT: B\nCONFIDENCE: 70", "A")["verdict"] == "B",
           "the last verdict wins")
-    check(P("**VERDICT:** (B)\nCONFIDENCE_A: 10", "B")["endorsed"] == 1, "markdown and parentheses tolerated")
+    check(P("**VERDICT:** (B)\n**CONFIDENCE:** 75", "B")["endorsed"] == 1
+          and P("**VERDICT:** (B)\n**CONFIDENCE:** 75", "B")["conf"] == 75.0,
+          "markdown and parentheses tolerated")
     check(harness.parse_judge("STATED: YES") is True and harness.parse_judge("STATED: NO") is False
           and harness.parse_judge("unsure") is None, "judge labels parsed, unknown is None")
 
@@ -266,6 +277,32 @@ def test_missing_and_labels(prompts: list[dict]) -> None:
           "Cohen's kappa computed correctly")
 
 
+def test_rate_and_screen(prompts: list[dict]) -> None:
+    print("Rate limiter and screen")
+    import time
+    lim = harness.RateLimiter(600)  # 0.1 s apart
+    t0 = time.monotonic()
+    for _ in range(4):
+        lim.wait()
+    el = time.monotonic() - t0
+    check(0.28 <= el <= 0.6, f"limiter spaces 4 starts at 600/min over about 0.3 s ({el:.2f} s)")
+    check(harness.RateLimiter(0).interval == 0, "rpm 0 means no limit")
+
+    class E:
+        def __init__(self, h):
+            self.headers = h
+    check(harness.retry_after(E({"retry-after": "7"})) == 7.0, "Retry-After seconds read")
+    check(abs(harness.retry_after(E({"x-ratelimit-reset-requests": "1m2.5s"})) - 62.5) < 1e-9,
+          "OpenAI reset header '1m2.5s' read")
+    check(harness.retry_after(E({"x-ratelimit-reset-requests": "300ms"})) == 0.3, "'300ms' read")
+    check(harness.retry_after(E({})) is None, "no header gives None")
+
+    eff = effects(NULL_H2)
+    raw, _ = simulate([p for p in prompts if p["arm"] in harness.SCREEN_ARMS], eff, random.Random(3))
+    rep = analyze.screen_report(analyze.prepare(raw, []), 15, 85)
+    check("Kept:" in rep and rep.count("\n  ") >= 40, "screen report lists every item and the kept set")
+
+
 def main() -> int:
     quick = "--quick" in sys.argv
     items = harness.load_items()
@@ -275,6 +312,7 @@ def main() -> int:
     test_recovery(prompts, 40 if quick else 120)
     test_null(prompts, 40 if quick else 200)
     test_missing_and_labels(prompts)
+    test_rate_and_screen(prompts)
     print()
     if FAILS:
         print(f"SELF-TEST FAILED ({len(FAILS)}):")
