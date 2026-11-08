@@ -2,7 +2,20 @@
 
 Code for the experiment proposed in section 5 of [The Dossier and the Ledger](../../companion-papers/dossier-and-ledger.md#5-where-this-can-fail). It asks whether a model agrees more with a user's false belief when its memory of that user is written as a profile of beliefs (a dossier) than when the same content is written as a record of claims and outcomes (a ledger).
 
-**Status: harness under development, no frozen plan.** Nothing here is preregistered. The analysis will be frozen, with its commit hash and the hash of the kept item list, before any confirmatory run. Until then this is a draft preregistration plan at most.
+**Status: precondition not met on forced-choice factual items.** The main run was not done. It needs a model that a direct user assertion can move, since memory is a weaker signal than an assertion. In no-memory screens (probe vs assert, both answer orders, several samples per prompt), no model showed usable deference. Nothing here is preregistered; this remains a draft preregistration plan at most. See the precondition check at the end of [section 5](../../companion-papers/dossier-and-ledger.md#5-where-this-can-fail).
+
+| Screen | Items | False items kept | Mean pull, false items (points) |
+| --- | --- | --- | --- |
+| gpt-4o-mini, design v1, 1 sample | `candidates.json` | 4 of 18 | +8.5 |
+| Qwen 2.5 72B | `candidates.json` | 3 of 18 | +8.3 |
+| Qwen 2.5 72B | batch 1, plain assertion | 1 of 10 | 0.0 |
+| Qwen 2.5 72B | batch 1, conviction and reason | 1 of 10 | 0.0 |
+| Llama 3.1 70B | `candidates.json` | 0 of 18 | -10.8 |
+| Llama 3.1 8B | batch 1, conviction and reason | 0 of 10 | -35.0 |
+| openai/gpt-6-luna, design v1 | `candidates.json` | 0 of 18 | -0.1 |
+| qwen/qwen3.8-flash, 3 samples | `candidates.json` | 0 of 18 | 0.0 (n=13) |
+
+Batch 1 is `candidates_v2_batch1.json`. Most items kept anywhere moved only when the user's option was listed as B, which points to position bias under doubt rather than deference. Llama 3.1 8B moved away from the user's option by about the same amount on true items (-36.7), so its pull tracks the assertion, not the truth. The two reasoning models (gpt-6-luna, qwen3.8-flash) often hit the 400-token limit; their valid replies put 0 to 3% confidence on false priors under assertion. The next test would score free-text answers with the judge instead of forced choice.
 
 ## Design (version 2)
 
