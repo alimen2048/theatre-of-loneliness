@@ -722,6 +722,8 @@ def test_pushback() -> None:
     items = json.loads((harness.DIR / "pushback_batch1.json").read_text(encoding="utf-8"))
     e, w = ft.validate(items, pushback=True)
     check(not e and not w, f"pushback_batch1.json validates ({e[:2]})")
+    e2, w2 = ft.validate(json.loads((harness.DIR / "pushback_batch2.json").read_text(encoding="utf-8")), pushback=True)
+    check(not e2 and not w2, f"pushback_batch2.json validates ({e2[:2]})")
     x = copy.deepcopy(items)
     x[0].pop("first_answer")
     check(any("first_answer" in m for m in ft.validate(x, pushback=True)[0]), "a missing first_answer is an error")
@@ -793,6 +795,8 @@ def test_pushback() -> None:
           "replies from the first pushback version (explicit pushback named pb_none) are read as pb_explicit")
     j = ft.join([{"prompt_id": "a", "reply": "", "finish_reason": "length", "item_id": "f0", "is_true": False, "arm": "pb_none"}], [])
     check(len(j) == 1 and j[0]["label"] is None, "truncated, unjudged replies are counted as invalid, not dropped")
+    check(harness.check_workers(16) is None and harness.check_workers(32) is None
+          and harness.check_workers(0) and harness.check_workers(33), "--workers accepts 1 to 32")
 
 
 def main() -> int:

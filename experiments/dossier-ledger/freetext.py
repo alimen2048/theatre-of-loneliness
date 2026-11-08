@@ -622,7 +622,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-tokens", type=int, default=600)
     ap.add_argument("--max-tokens-param", default="max_tokens")
     ap.add_argument("--base-url", default=None)
-    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--workers", type=int, default=4,
+                    help=f"parallel requests, 1 to {harness.MAX_WORKERS}; 12-16 cut wall time when replies are "
+                         "slow, as long as --rpm stays below the provider's limit")
     ap.add_argument("--rpm", type=float, default=0)
     args = ap.parse_args(argv)
     if args.items is None:

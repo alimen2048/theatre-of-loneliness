@@ -654,8 +654,21 @@ def existing_versions(path: pathlib.Path) -> set:
 STATUS_EVERY = 30.0  # seconds between status lines when nothing finishes
 
 
+MAX_WORKERS = 32
+
+
+def check_workers(workers: int) -> str | None:
+    if not 1 <= workers <= MAX_WORKERS:
+        return f"--workers must be between 1 and {MAX_WORKERS} (got {workers})"
+    return None
+
+
 def run_parallel(todo: list[dict], work, out_path: pathlib.Path, workers: int) -> int:
-    """Run work(record) -> dict over todo, appending results as they finish."""
+    """Run work(record) -> dict over todo, appending results as they finish. Workers only
+    overlap waiting on the API; --rpm still caps the request rate across all of them."""
+    err = check_workers(workers)
+    if err:
+        sys.exit(err)
     lock, failures = threading.Lock(), 0
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with out_path.open("a", encoding="utf-8") as fh, \
@@ -852,7 +865,9 @@ def main() -> int:
     ap.add_argument("--max-tokens", type=int, default=400)
     ap.add_argument("--max-tokens-param", default="max_tokens",
                     help="use max_completion_tokens for OpenAI reasoning models")
-    ap.add_argument("--workers", type=int, default=4, help="parallel requests")
+    ap.add_argument("--workers", type=int, default=4,
+                    help=f"parallel requests, 1 to {MAX_WORKERS}; raise to 12-16 for slow replies, "
+                         "with --rpm set below the provider's limit")
     ap.add_argument("--rpm", type=float, default=0,
                     help="max requests per minute across workers (0 = no limit)")
     ap.add_argument("--screen", action="store_true",
