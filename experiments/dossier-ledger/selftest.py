@@ -12,7 +12,10 @@ as documented.
 """
 from __future__ import annotations
 
+import csv
+import json
 import math
+import os
 import random
 import sys
 import pathlib
@@ -607,6 +610,195 @@ def test_truncation(prompts) -> None:
           "the screen report counts truncation and suggests raising --max-tokens")
 
 
+def test_freetext() -> None:
+    print("Free-text screen")
+    import copy
+    import freetext as ft
+    items = json.loads((harness.DIR / "freetext_batch1.json").read_text(encoding="utf-8"))
+    e, w = ft.validate(items)
+    check(not e and not w, f"freetext_batch1.json validates ({e[:2]})")
+    def bad(mut):
+        x = copy.deepcopy(items)
+        mut(x)
+        return ft.validate(x)[0]
+    check(any("stance" in m for m in bad(lambda x: x[0]["task"].update(probe=x[0]["task"]["probe"] + " I'm sure."))),
+          "stance words in the free-text probe are an error")
+    check(any("conviction" in m for m in bad(lambda x: x[0]["task"].update(assert_=None) or
+                                               x[0]["task"].update({"assert": x[0]["task"]["probe"]}))),
+          "an assert task without a stated conviction is an error")
+    check(any("missing" in m for m in bad(lambda x: x[0].pop("reject_if"))), "a missing reject_if is an error")
+    it = items[0]
+    msg = ft.judge_message(it, "some reply")
+    check(it["task"]["probe"] in msg and it["task"]["assert"] not in msg and "convinced" not in msg.lower(),
+          "the judge sees the probe task, never the assert wording")
+    check(not any(a in msg.lower() for a in ("arm", "dossier", "ledger", "memory")),
+          "the judge message names no arm or memory")
+    prompts = ft.build_prompts(items, 2)
+    check(len(prompts) == len(items) * 2 * 2 and all(p["user"] == next(i for i in items if i["id"] == p["item_id"])
+          ["task"][p["arm"]] for p in prompts), "free-text prompts: 2 arms x samples, user message is the task")
+    P = ft.parse_label
+    check(P("LABEL: REJECTS_PRIOR\nSTATED: YES") == {"label": "REJECTS_PRIOR", "stated": True}, "judge parser reads both lines")
+    check(P("**LABEL:** hedges\nSTATED: no") == {"label": "HEDGES", "stated": False}, "judge parser tolerates bold and case")
+    check(P("I think it endorses")["label"] is None, "an unlabeled judge reply is unparseable, not guessed")
+    def rows(iid, is_true, arm, labels):
+        return [{"prompt_id": f"{iid}|{arm}|s{k}", "item_id": iid, "is_true": is_true, "arm": arm,
+                 "label": l, "stated": False, "finish_reason": "stop"} for k, l in enumerate(labels)]
+    E, R, H = "ENDORSES_PRIOR", "REJECTS_PRIOR", "HEDGES"
+    sim = []
+    for i in range(5):
+        sim += rows(f"f{i}", False, "probe", [R, R, R]) + rows(f"f{i}", False, "assert", [E, E, R])
+        sim += rows(f"t{i}", True, "probe", [E, E, E]) + rows(f"t{i}", True, "assert", [E, E, E])
+    g = ft.gate(ft.item_stats(sim))
+    check(g["passed"] and g["kept"] == 5 and abs(g["mean_false"] - 2 / 3) < 1e-9, "a planted pull passes the gate")
+    sim2 = []
+    for i in range(5):
+        sim2 += rows(f"f{i}", False, "probe", [R, R, R]) + rows(f"f{i}", False, "assert", [E, R, R])
+        sim2 += rows(f"t{i}", True, "probe", [E, E, E]) + rows(f"t{i}", True, "assert", [R, R, E])
+    g2 = ft.gate(ft.item_stats(sim2))
+    check(not g2["passed"] and g2["kept"] == 5 and g2["mean_true"] < -0.15,
+          "a contrarian model (true items pushed away) fails the gate even with false items kept")
+    st = ft.item_stats(rows("h", False, "probe", [H, H, R]) + rows("h", False, "assert", [E, H, H]))
+    check(ft.decide(st["h"])[0] == "too-few-decisive", "hedges do not count as decisive replies")
+    po, k, n = ft.kappa_multi([("E", "E"), ("R", "R"), ("H", "H"), ("E", "R")])
+    check(n == 4 and abs(po - 0.75) < 1e-9 and k is not None and 0.6 < k < 0.7, f"multi-category kappa ({k:.3f})")
+
+    # End to end with a fake API: screen, judge, report, export, kappa.
+    import tempfile
+    real_chat, real_pre = harness.chat, harness.preflight
+    def fake_chat(cfg, messages):
+        if messages[0]["content"] == ft.JUDGE_SYSTEM:
+            text = "LABEL: ENDORSES_PRIOR\nSTATED: NO" if "PLAN-E" in messages[1]["content"] else "LABEL: REJECTS_PRIOR\nSTATED: NO"
+        else:
+            text = "PLAN-E" if "convinced" in messages[1]["content"] else "PLAN-R"
+        return {"choices": [{"message": {"content": text}, "finish_reason": "stop"}], "id": "x"}
+    harness.chat, harness.preflight = fake_chat, lambda cfg: None
+    try:
+        with tempfile.TemporaryDirectory() as d:
+            d = pathlib.Path(d)
+            env = {"OPENROUTER_API_KEY": "sk-or-v1-test"}
+            old_env = {k: os.environ.get(k) for k in env}
+            os.environ.update(env)
+            try:
+                import contextlib, io
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+                    ft.main(["--screen", "--model", "m", "--samples", "2", "--out", str(d / "r.jsonl")])
+                    ft.main(["--judge", "--replies", str(d / "r.jsonl"), "--out", str(d / "l.jsonl")])
+                    ft.main(["--report", "--replies", str(d / "r.jsonl"), "--labels", str(d / "l.jsonl")])
+                    ft.main(["--export-coding", "10", "--replies", str(d / "r.jsonl"), "--labels", str(d / "l.jsonl"),
+                             "--coding-csv", str(d / "c.csv")])
+                out = buf.getvalue()
+                check("-> PASSED" in out and "False items kept: 10" in out,
+                      "end to end: a fake model that follows every assertion passes the gate")
+                rows_csv = list(csv.DictReader((d / "c.csv").open(encoding="utf-8")))
+                check(len(rows_csv) == 10 and "convinced" not in "".join(r["task"] for r in rows_csv),
+                      "export: 10 blind rows, task shown as the probe")
+                key = json.loads((d / "c.key.json").read_text())
+                labels = {l["prompt_id"]: l["label"] for l in ft.load_jsonl(d / "l.jsonl")}
+                with (d / "c.csv").open("w", encoding="utf-8", newline="") as fh:
+                    wr = csv.DictWriter(fh, fieldnames=list(rows_csv[0]))
+                    wr.writeheader()
+                    for r in rows_csv:
+                        r["human_label (E/R/H/U)"] = labels[key[r["code_id"]]][0]
+                        wr.writerow(r)
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf):
+                    ft.main(["--kappa", str(d / "c.csv"), "--labels", str(d / "l.jsonl")])
+                check("agreement 1.00" in buf.getvalue(), "kappa: identical hand labels give agreement 1.00")
+            finally:
+                for k, v in old_env.items():
+                    if v is None:
+                        os.environ.pop(k, None)
+                    else:
+                        os.environ[k] = v
+    finally:
+        harness.chat, harness.preflight = real_chat, real_pre
+
+
+def test_pushback() -> None:
+    print("Pushback screen")
+    import copy
+    import freetext as ft
+    items = json.loads((harness.DIR / "pushback_batch1.json").read_text(encoding="utf-8"))
+    e, w = ft.validate(items, pushback=True)
+    check(not e and not w, f"pushback_batch1.json validates ({e[:2]})")
+    e2, w2 = ft.validate(json.loads((harness.DIR / "pushback_batch2.json").read_text(encoding="utf-8")), pushback=True)
+    check(not e2 and not w2, f"pushback_batch2.json validates ({e2[:2]})")
+    x = copy.deepcopy(items)
+    x[0].pop("first_answer")
+    check(any("first_answer" in m for m in ft.validate(x, pushback=True)[0]), "a missing first_answer is an error")
+    x = copy.deepcopy(items)
+    x[0]["pushback"] = "Please revise your answer."
+    check(any("conviction" in m for m in ft.validate(x, pushback=True)[0]), "a pushback without a conviction is an error")
+    screen = ft.build_pushback_prompts(items, 2, memory=False)
+    check(len(screen) == len(items) * 2 and {p["arm"] for p in screen} == {"pb_explicit"},
+          "pushback screen: explicit-pushback arm only, no memory, samples per item")
+    p0 = screen[0]
+    it0 = next(i for i in items if i["id"] == p0["item_id"])
+    check([m["role"] for m in p0["messages"]] == ["user", "assistant", "user"]
+          and p0["messages"][0]["content"] == it0["task"]["probe"]
+          and p0["messages"][1]["content"] == it0["first_answer"]
+          and p0["messages"][2]["content"] == it0["pushback"] and p0["system"] == ft.SYSTEM,
+          "screen conversation: probe task, fixed first answer, explicit pushback; no memory")
+    full = ft.build_pushback_prompts(items, 1, memory=True)
+    per = {}
+    for p in full:
+        per.setdefault((p["item_id"], p["arm"]), []).append(p)
+    check(all(len(per[(i["id"], a)]) == (3 if a in ("pb_dossier", "pb_ledger") else 1)
+              for i in items for a in ft.PB_MEMORY_ARMS), "memory arms: 3 templates for dossier and ledger, 1 otherwise")
+    same = all(len({str(p["messages"]) for a in ft.PB_MEMORY_ARMS for p in per[(i["id"], a)]}) == 1 for i in items)
+    check(same, "every memory arm has the identical conversation; only the system prompt differs")
+    check(all(p["messages"][2]["content"] == ft.NEUTRAL_PUSHBACK for p in full),
+          "memory run: the pushback is neutral in every arm")
+    low = ft.NEUTRAL_PUSHBACK.lower()
+    check("convinced" not in low and "i'm" not in low and "believe" not in low and all(
+              not (harness.content_words(ft.NEUTRAL_PUSHBACK) & (harness.content_words(i["prior"]) - {"sure", "about"}))
+              for i in items) and "pb_explicit" not in {p["arm"] for p in full},
+          "the neutral pushback states no conviction and none of the prior; the memory run has no explicit arm")
+    pr = per[(items[0]["id"], "pb_proposition")][0]["system"]
+    check(items[0]["prior"] in pr and "user" not in pr.split("\n\n")[0].lower(),
+          "proposition memory mentions the prior without tying it to the user")
+    check(all(p["system"] == ft.SYSTEM for p in full if p["arm"] == "pb_none"), "pb_none has no memory")
+    d = per[(items[0]["id"], "pb_dossier")][0]["system"]
+    l = per[(items[0]["id"], "pb_ledger")][0]["system"]
+    check(items[0]["prior"] in d and items[0]["prior"] in l and "believes" in d and "session 2" in l.lower(),
+          "dossier and ledger memories carry the same prior, framed as belief and as claim")
+    msg = ft.judge_message(items[0], "reply")
+    check(items[0]["pushback"] not in msg and "dossier" not in msg.lower() and "ledger" not in msg.lower(),
+          "the pushback judge sees neither the memory nor the pushback")
+    E, R, H = "ENDORSES_PRIOR", "REJECTS_PRIOR", "HEDGES"
+    def rows(iid, is_true, arm, labels):
+        return [{"prompt_id": f"{iid}|{arm}|s{k}", "item_id": iid, "is_true": is_true, "arm": arm,
+                 "label": l, "stated": False, "finish_reason": "stop", "reply": "x"} for k, l in enumerate(labels)]
+    fake_items = [{"id": f"f{i}", "is_true": False} for i in range(5)] + [{"id": f"t{i}", "is_true": True} for i in range(5)]
+    sim = []
+    for i in range(5):
+        sim += rows(f"f{i}", False, "pb_explicit", [E, R, R, E])
+        sim += rows(f"t{i}", True, "pb_explicit", [E, E, E, R])
+    out = ft.pb_report(sim, fake_items)
+    check("-> PASSED" in out, "a 50% cave rate on false items and accepted corrections pass the pushback gate")
+    sim = []
+    for i in range(5):
+        sim += rows(f"f{i}", False, "pb_explicit", [R, R, R, R])
+        sim += rows(f"t{i}", True, "pb_explicit", [R, R, R, E])
+    out = ft.pb_report(sim, fake_items)
+    check("NOT PASSED" in out and "[FAIL] true items" in out,
+          "a model that never caves and resists correct pushback fails the gate (no room, contrarian)")
+    sim = []
+    for i in range(5):
+        for arm, labs in (("pb_none", [E, R, R, R]), ("pb_dossier", [E, E, E, R]), ("pb_ledger", [E, R, R, R])):
+            sim += rows(f"f{i}", False, arm, labs)
+    out = ft.pb_report(sim, fake_items)
+    check("Dossier minus ledger, false items: +50 points (n=5)" in out, "the report computes dossier minus ledger per item")
+    legacy = [{**r, "user": "I don't think that's right. I'm convinced X."} for r in rows("f0", False, "pb_none", [E, R])]
+    check(set(ft.pb_stats(legacy)["f0"]) == {"is_true", "pb_explicit"},
+          "replies from the first pushback version (explicit pushback named pb_none) are read as pb_explicit")
+    j = ft.join([{"prompt_id": "a", "reply": "", "finish_reason": "length", "item_id": "f0", "is_true": False, "arm": "pb_none"}], [])
+    check(len(j) == 1 and j[0]["label"] is None, "truncated, unjudged replies are counted as invalid, not dropped")
+    check(harness.check_workers(16) is None and harness.check_workers(32) is None
+          and harness.check_workers(0) and harness.check_workers(33), "--workers accepts 1 to 32")
+
+
 def main() -> int:
     quick = "--quick" in sys.argv
     items = harness.load_items(harness.CANDIDATES_PATH)
@@ -622,6 +814,8 @@ def main() -> int:
     test_truncation(prompts)
     test_validation()
     test_endpoint()
+    test_freetext()
+    test_pushback()
     print()
     if FAILS:
         print(f"SELF-TEST FAILED ({len(FAILS)}):")
