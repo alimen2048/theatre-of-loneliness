@@ -1,17 +1,29 @@
 #!/usr/bin/env python3
 """Harness for the memory experiment of *The Dossier and the Ledger*, section 5.
 
-Pilot design: one session, one remembered prior per item. Every item is run in
-8 arms; the four framing-by-outcome cells use 3 wording templates; every prompt
-is run with the user's option in position A and in position B.
+Design version 2. One session, one remembered prior per item. In every arm
+except the baseline, the question is the probe: the item's content asked plainly,
+with no user position. The only signal of the user's belief is the memory in the
+system prompt. Arms: baseline (neutral question), no memory, neutral memory,
+proposition-only memory, and the four framing-by-outcome cells, each with 3
+wording templates. Every prompt is asked with the user's option as A and as B,
+and sampled k times at a temperature above zero.
 
-    python3 harness.py --self-test                 offline checks (no API)
-    python3 harness.py --write-prompts             write prompts.jsonl
-    python3 harness.py --run --model M             query an OpenAI-compatible API
-    python3 harness.py --judge --judge-model J     label stated deference
-    python3 harness.py --export-coding-sample 80   blind sample for hand coding
-    python3 harness.py --screen --model M          cheap item screen: baseline, probe, no-memory arms
-    python3 harness.py --check-items --items F     validate an items file (no API)
+The screen adds an assert arm (the user asserts the prior in the question) and
+keeps only items where that assertion moves the model: the precondition for a
+memory effect to be detectable. The assert arm is never used in the main run.
+
+    python3 harness.py --self-test                     offline checks (no API)
+    python3 harness.py --check-items --items F         validate an items file (no API)
+    python3 harness.py --screen --items F --model M    screen: baseline, probe, assert arms
+    python3 harness.py --run --items KEPT --model M    main run on a frozen kept list
+    python3 harness.py --judge --judge-model J         label stated deference
+    python3 harness.py --export-coding-sample 80       blind sample for hand coding
+    python3 harness.py --write-prompts --items F       write prompts.jsonl
+
+Sampling: --samples K (default 5) at --temperature T (default 1). Temperature 0
+is refused for sampled runs. On OpenRouter, --provider NAME pins the provider
+(no fallbacks), so every reply comes from the same deployment.
 
 Rate limits: --rpm N keeps requests under N per minute across all workers
 (for example --rpm 18 under a 20 per minute limit).
@@ -37,7 +49,8 @@ import urllib.parse
 import urllib.request
 
 DIR = pathlib.Path(__file__).resolve().parent
-ITEMS_PATH = DIR / "items.json"
+CANDIDATES_PATH = DIR / "candidates.json"
+DESIGN_VERSION = 2  # 1: memory arms asked the nudged question; 2: they ask the probe
 PROMPTS_PATH = DIR / "prompts.jsonl"
 RESULTS_PATH = DIR / "results.jsonl"
 JUDGED_PATH = DIR / "judged.jsonl"
@@ -47,15 +60,18 @@ CODING_KEY_PATH = DIR / "coding_key.json"
 POSITIONS = ("A", "B")  # letter of the option that states the user's prior
 N_TEMPLATES = 3
 ARMS = [
-    "baseline",          # neutral wording, no user position, no memory
-    "ctrl_no_memory",    # user states the prior, no memory
-    "ctrl_neutral",      # user states the prior, unrelated memory of matched length
-    "ctrl_proposition",  # user states the prior, memory mentions it with no link to the user
-    "dossier_absent",
-    "ledger_absent",
-    "dossier_present",
+    "baseline",          # neutral question, no memory
+    "ctrl_no_memory",    # probe question, no memory
+    "ctrl_neutral",      # probe question, unrelated memory of matched length
+    "ctrl_proposition",  # probe question, memory mentions the prior with no link to the user
+    "dossier_absent",    # probe question, memory frames the prior as the user's belief
+    "ledger_absent",     # probe question, memory records the prior as the user's claim
+    "dossier_present",   # ... plus the recorded outcome
     "ledger_present",
 ]
+SCREEN_ARMS = ("baseline", "ctrl_probe", "ctrl_assert")
+# Screen files written before design version 2 used these arm names.
+LEGACY_SCREEN_ARMS = {"ctrl_no_memory": "ctrl_assert"}
 
 # --------------------------------------------------------------- memory text
 # Dossier and ledger hold the same facts. Template t of one framing has the same
@@ -164,7 +180,7 @@ JUDGE_SYSTEM = (
 
 # --------------------------------------------------------------- items and prompts
 
-def load_items(path: pathlib.Path = ITEMS_PATH) -> list[dict]:
+def load_items(path: pathlib.Path = CANDIDATES_PATH) -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -269,7 +285,7 @@ def validate_items(items: list[dict]) -> tuple[list[str], list[str]]:
                 warnings.append(f"{tag}: nudged stem does not end with 'right?'")
         probe = it.get("probe")
         if probe is None:
-            warnings.append(f"{tag}: no probe question (required by --screen)")
+            errors.append(f"{tag}: no probe question (every arm but the baseline asks it)")
         elif not isinstance(probe, dict) or not str(probe.get("stem", "")).strip():
             errors.append(f"{tag}: probe must be an object with a non-empty stem")
         elif probe["stem"].rstrip().endswith("right?"):
@@ -307,39 +323,48 @@ def check_items_cmd(path: pathlib.Path) -> int:
 
 # --------------------------------------------------------------- prompts
 
-SCREEN_ARMS = ("baseline", "ctrl_probe", "ctrl_no_memory")
+def probe_part(item: dict) -> dict:
+    """The probe question with the nudged options: no user position anywhere."""
+    nud = item["nudged"]
+    return {"stem": item["probe"]["stem"], "prior_option": nud["prior_option"],
+            "other_option": nud["other_option"]}
 
 
-def build_screen_prompts(items: list[dict]) -> list[dict]:
-    """Screen arms, no memory: baseline (neutral question), probe (the nudged
-    question's yes/no options, asked plainly), and no-memory (the user asserts
-    the prior). Probe and no-memory differ only in the user's assertion."""
+def expand_samples(records: list[dict], samples: int) -> list[dict]:
+    """k copies of each prompt, with the sample index in the prompt id."""
+    out = []
+    for r in records:
+        for s in range(samples):
+            out.append({**r, "prompt_id": f'{r["prompt_id"]}|s{s}', "base_id": r["prompt_id"], "sample": s})
+    return out
+
+
+def build_screen_prompts(items: list[dict], samples: int = 1) -> list[dict]:
+    """Screen arms, no memory: baseline (neutral question), probe (the item asked
+    plainly), and assert (the user asserts the prior). Probe and assert differ only
+    in the assertion. The assert arm exists only here."""
     missing = [it["id"] for it in items if not (it.get("probe") or {}).get("stem")]
     if missing:
         sys.exit(f"--screen needs a probe question for every item; missing for {missing[:8]}"
                  f"{' ...' if len(missing) > 8 else ''}. Run --check-items.")
     records = []
     for item in items:
-        nud = item["nudged"]
-        parts = {
-            "baseline": item["neutral"],
-            "ctrl_probe": {"stem": item["probe"]["stem"], "prior_option": nud["prior_option"],
-                           "other_option": nud["other_option"]},
-            "ctrl_no_memory": nud,
-        }
+        parts = {"baseline": item["neutral"], "ctrl_probe": probe_part(item), "ctrl_assert": item["nudged"]}
         for arm in SCREEN_ARMS:
             for pos in POSITIONS:
                 records.append({
                     "prompt_id": f'{item["id"]}|{arm}|t0|{pos}',
                     "item_id": item["id"], "domain": item["domain"], "is_true": item["is_true"],
                     "arm": arm, "framing": None, "outcome": None, "template_idx": 0,
-                    "prior_letter": pos, "memory_chars": 0,
+                    "prior_letter": pos, "memory_chars": 0, "design_version": DESIGN_VERSION,
                     "system": FORMAT_INSTRUCTION, "user": render_question(parts[arm], pos),
                 })
-    return records
+    return expand_samples(records, samples)
 
 
-def build_prompts(items: list[dict]) -> list[dict]:
+def build_prompts(items: list[dict], samples: int = 1) -> list[dict]:
+    """Main-run prompts. Every arm but the baseline asks the probe, so the user's
+    belief reaches the model only through memory."""
     records = []
     for item in items:
         absent = [memory_text(f, "absent", t, item) for f in ("dossier", "ledger")
@@ -356,8 +381,9 @@ def build_prompts(items: list[dict]) -> list[dict]:
                 for t in range(N_TEMPLATES):
                     cells.append((f"{framing}_{outcome}", framing, outcome, t,
                                   memory_text(framing, outcome, t, item)))
+        probe = probe_part(item)
         for arm, framing, outcome, t, memory in cells:
-            part = item["neutral"] if arm == "baseline" else item["nudged"]
+            part = item["neutral"] if arm == "baseline" else probe
             for pos in POSITIONS:
                 system = f"{memory}\n\n{FORMAT_INSTRUCTION}" if memory else FORMAT_INSTRUCTION
                 records.append({
@@ -371,10 +397,16 @@ def build_prompts(items: list[dict]) -> list[dict]:
                     "template_idx": t,
                     "prior_letter": pos,
                     "memory_chars": len(memory) if memory else 0,
+                    "design_version": DESIGN_VERSION,
                     "system": system,
                     "user": render_question(part, pos),
                 })
-    return records
+    return expand_samples(records, samples)
+
+
+def items_sha256(path: pathlib.Path) -> str:
+    import hashlib
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 # --------------------------------------------------------------- parsing
@@ -465,6 +497,9 @@ def retry_after(e: urllib.error.HTTPError) -> float | None:
 def chat(cfg: dict, messages: list[dict]) -> dict:
     """POST to an OpenAI-compatible /chat/completions endpoint, with retries."""
     payload: dict = {"model": cfg["model"], "messages": messages}
+    if cfg.get("provider"):
+        # OpenRouter provider routing: only this provider, no fallback to others.
+        payload["provider"] = {"order": [cfg["provider"]], "allow_fallbacks": False}
     if cfg.get("temperature") is not None:
         payload["temperature"] = cfg["temperature"]
     if cfg.get("max_tokens"):
@@ -531,15 +566,35 @@ def resolve_endpoint(base_url: str | None, model: str, env: dict) -> tuple[str, 
     return base_url, model, key, name
 
 
-def api_config(args: argparse.Namespace, model: str) -> dict:
+def parse_temperature(s: str) -> float | None:
+    return None if s.lower() == "none" else float(s)
+
+
+def check_sampling(temperature: float | None, samples: int) -> str | None:
+    """Error message if the sampling settings cannot give k independent replies.
+    temperature None means the parameter is omitted (some reasoning models reject
+    it) and the provider's default applies, which samples; that is allowed."""
+    if samples < 1:
+        return "--samples must be at least 1"
+    if samples > 1 and temperature is not None and temperature <= 0:
+        return (f"--samples {samples} needs a temperature above 0 (got {temperature}); "
+                "at temperature 0 the k replies would be near copies")
+    return None
+
+
+def api_config(args: argparse.Namespace, model: str, provider: str | None = None,
+               temperature: float | None = None) -> dict:
     base_url, model, key, name = resolve_endpoint(args.base_url, model, dict(os.environ))
+    if provider and "openrouter.ai" not in base_url:
+        sys.exit("--provider only works with OpenRouter")
     cfg = {
-        "api_key": key, "model": model, "base_url": base_url,
-        "temperature": None if args.temperature.lower() == "none" else float(args.temperature),
+        "api_key": key, "model": model, "base_url": base_url, "provider": provider,
+        "temperature": temperature,
         "max_tokens": args.max_tokens, "max_tokens_param": args.max_tokens_param,
         "limiter": RateLimiter(args.rpm),
     }
-    print(f"endpoint {base_url}, model {model}, key from {name}", flush=True)
+    print(f"endpoint {base_url}, model {model}, provider {provider or 'any (not pinned)'}, "
+          f"temperature {temperature}, key from {name}", flush=True)
     preflight(cfg)
     return cfg
 
@@ -591,25 +646,70 @@ def run_parallel(todo: list[dict], work, out_path: pathlib.Path, workers: int) -
     return failures
 
 
+TRUNCATION_WARN = 0.05
+
+
+def is_truncated(r: dict) -> bool:
+    """The reply stopped at the token limit (reasoning models can spend it all
+    before writing any visible text)."""
+    return r.get("finish_reason") == "length"
+
+
+def truncation_warning(recs: list[dict], max_tokens: int | None = None) -> str | None:
+    """A warning if more than TRUNCATION_WARN of these replies hit the token limit."""
+    if not recs:
+        return None
+    cut = sum(is_truncated(r) for r in recs)
+    if cut / len(recs) <= TRUNCATION_WARN:
+        return None
+    empty = sum(is_truncated(r) and not (r.get("reply") or "").strip() for r in recs)
+    limit = f" of {max_tokens}" if max_tokens else ""
+    return (f"WARNING: {cut} of {len(recs)} replies ({100 * cut / len(recs):.0f}%) hit the token limit{limit}, "
+            f"{empty} of them with no visible text. Truncated replies are invalid, and if they fall unevenly "
+            "across arms they bias the contrasts. Raise --max-tokens (for example 2000 for reasoning models) "
+            "and rerun into a new file.")
+
+
+def existing_design_versions(path: pathlib.Path) -> set:
+    if not path.exists():
+        return set()
+    return {json.loads(l).get("design_version", 1)
+            for l in path.read_text(encoding="utf-8").splitlines() if l.strip()}
+
+
 def cmd_run(args: argparse.Namespace, screen: bool = False) -> int:
-    cfg = api_config(args, args.model)
-    out = pathlib.Path(args.screen_results if screen else args.results)
-    items = load_items(pathlib.Path(args.items))
+    if not args.model:
+        sys.exit("--model is required (for example --model qwen/qwen-2.5-72b-instruct)")
+    temperature = parse_temperature(args.temperature)
+    err = check_sampling(temperature, args.samples)
+    if err:
+        sys.exit(err)
+    if temperature is None and args.samples > 1:
+        print("note: temperature omitted; the provider's default sampling applies", flush=True)
+    if not screen and not args.items:
+        sys.exit("--run needs --items: the frozen kept list written by analyze.py --screen --write-kept")
+    items_path = pathlib.Path(args.items or CANDIDATES_PATH)
+    items = load_items(items_path)
     errors, _ = validate_items(items)
     if errors:
         sys.exit("items file has errors; run --check-items:\n  " + "\n  ".join(errors[:10]))
-    prompts = build_screen_prompts(items) if screen else build_prompts(items)
-    versions = existing_versions(out)
-    if versions - {FORMAT_VERSION}:
-        sys.exit(f"{out} holds replies to format version(s) {sorted(versions)}; this harness "
-                 f"asks version {FORMAT_VERSION}. Use a new --results file (and --judged file).")
+    out = pathlib.Path(args.screen_results if screen else args.results)
+    for label, found, want in (("format", existing_versions(out), FORMAT_VERSION),
+                               ("design", existing_design_versions(out), DESIGN_VERSION)):
+        if found - {want}:
+            sys.exit(f"{out} holds replies to {label} version(s) {sorted(found)}; this harness "
+                     f"uses version {want}. Use a new --results / --screen-results file.")
+    cfg = api_config(args, args.model, args.provider, temperature)
+    prompts = (build_screen_prompts if screen else build_prompts)(items, args.samples)
     done = done_ids(out)
     todo = [p for p in prompts if p["prompt_id"] not in done]
     random.Random(2048).shuffle(todo)  # an interrupted run stays balanced across arms
     rpm = args.rpm or 0
     eta = f", about {len(todo) / rpm:.0f} min at {rpm:g}/min" if rpm else ""
-    print(f"{len(done)} done, {len(todo)} to run, model {cfg['model']}{eta}")
+    print(f"{len(done)} done, {len(todo)} to run ({args.samples} samples per prompt), "
+          f"items {items_path.name} sha256 {items_sha256(items_path)[:12]}{eta}")
     host = urllib.parse.urlparse(cfg["base_url"]).netloc
+    items_hash = items_sha256(items_path)
 
     def work(p: dict) -> dict:
         stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -618,8 +718,10 @@ def cmd_run(args: argparse.Namespace, screen: bool = False) -> int:
         choice = body["choices"][0]
         reply = choice.get("message", {}).get("content") or ""
         return {**p, "reply": reply, "format_version": FORMAT_VERSION,
-                "model": cfg["model"], "api_host": host,
+                "model": cfg["model"], "provider_requested": cfg["provider"],
+                "provider": body.get("provider"), "api_host": host,
                 "temperature": cfg["temperature"], "max_tokens": cfg["max_tokens"],
+                "items_file": items_path.name, "items_sha256": items_hash,
                 "requested_at": stamp, "response_id": body.get("id"),
                 "response_model": body.get("model"),
                 "system_fingerprint": body.get("system_fingerprint"),
@@ -628,12 +730,17 @@ def cmd_run(args: argparse.Namespace, screen: bool = False) -> int:
 
     failed = run_parallel(todo, work, out, args.workers)
     print(f"done; {failed} failed (rerun the same command to retry them)")
+    todo_ids = {p["prompt_id"] for p in todo}
+    new = [json.loads(l) for l in out.read_text(encoding="utf-8").splitlines() if l.strip()] if out.exists() else []
+    warn = truncation_warning([r for r in new if r["prompt_id"] in todo_ids], cfg["max_tokens"])
+    if warn:
+        print(warn, flush=True)
     return 1 if failed else 0
 
 
 def cmd_judge(args: argparse.Namespace) -> int:
     """Label stated deference on every valid reply that endorses the user's prior."""
-    cfg = api_config(args, args.judge_model)
+    cfg = api_config(args, args.judge_model, args.judge_provider, 0.0)
     results = [json.loads(l) for l in pathlib.Path(args.results).read_text(encoding="utf-8")
                .splitlines() if l.strip()]
     out = pathlib.Path(args.judged)
@@ -652,7 +759,8 @@ def cmd_judge(args: argparse.Namespace) -> int:
                            f'Assistant reply:\n{strip_verdict_lines(r["reply"])}'}])
         raw = body["choices"][0].get("message", {}).get("content") or ""
         return {"prompt_id": r["prompt_id"], "stated": parse_judge(raw),
-                "judge_model": cfg["model"], "judge_raw": raw[:200]}
+                "judge_model": cfg["model"], "judge_provider": body.get("provider"),
+                "judge_raw": raw[:200]}
 
     failed = run_parallel(todo, work, out, args.workers)
     print(f"done; {failed} failed (rerun the same command to retry them)")
@@ -688,12 +796,19 @@ def main() -> int:
     ap.add_argument("--judge", action="store_true", help="label stated deference")
     ap.add_argument("--export-coding-sample", type=int, metavar="N",
                     help="write a blind sample of N endorsing replies for hand coding")
-    ap.add_argument("--model", default="gpt-4o-mini", help="model under test")
+    ap.add_argument("--model", default=None,
+                    help="model under test (required for --screen and --run; no default, so the "
+                         "choice is always explicit)")
+    ap.add_argument("--provider", default=None,
+                    help="OpenRouter provider to pin for the model under test (no fallbacks)")
     ap.add_argument("--judge-model", default="gpt-4o", help="model that labels stated deference")
+    ap.add_argument("--judge-provider", default=None, help="OpenRouter provider to pin for the judge")
+    ap.add_argument("--samples", type=int, default=5, help="replies sampled per prompt")
     ap.add_argument("--base-url", default=None,
                     help="OpenAI-compatible base URL; default: OpenRouter if the key is an "
                          "OpenRouter key, otherwise OpenAI")
-    ap.add_argument("--temperature", default="0", help="sampling temperature, or 'none' to omit")
+    ap.add_argument("--temperature", default="1",
+                    help="sampling temperature for the model under test, or 'none' to omit")
     ap.add_argument("--max-tokens", type=int, default=400)
     ap.add_argument("--max-tokens-param", default="max_tokens",
                     help="use max_completion_tokens for OpenAI reasoning models")
@@ -703,7 +818,8 @@ def main() -> int:
     ap.add_argument("--screen", action="store_true",
                     help="run only the baseline, probe and no-memory arms, to screen items")
     ap.add_argument("--check-items", action="store_true", help="validate the --items file, no API")
-    ap.add_argument("--items", default=str(ITEMS_PATH), help="items file (e.g. candidate items to screen)")
+    ap.add_argument("--items", default=None,
+                    help="items file; --screen defaults to candidates.json, --run requires it")
     ap.add_argument("--screen-results", default=str(DIR / "screen.jsonl"),
                     help="screening results JSONL (appended, resumable)")
     ap.add_argument("--results", default=str(RESULTS_PATH), help="results JSONL (appended, resumable)")
@@ -714,12 +830,12 @@ def main() -> int:
         import selftest
         return selftest.main()
     if args.write_prompts:
-        prompts = build_prompts(load_items(pathlib.Path(args.items)))
+        prompts = build_prompts(load_items(pathlib.Path(args.items or CANDIDATES_PATH)), args.samples)
         PROMPTS_PATH.write_text("".join(json.dumps(p) + "\n" for p in prompts), encoding="utf-8")
         print(f"wrote {len(prompts)} prompts to {PROMPTS_PATH.name}")
         return 0
     if args.check_items:
-        return check_items_cmd(pathlib.Path(args.items))
+        return check_items_cmd(pathlib.Path(args.items or CANDIDATES_PATH))
     if args.screen:
         return cmd_run(args, screen=True)
     if args.run:
