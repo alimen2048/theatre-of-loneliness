@@ -557,6 +557,8 @@ def chat(cfg: dict, messages: list[dict]) -> dict:
                     limiter.pause(wait)
         except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
             last = repr(e)
+        print(f"  retry {attempt + 1}/{cfg.get('retries', 10)}: {last[:120]}; waiting {wait:.0f}s",
+              file=sys.stderr, flush=True)
         time.sleep(wait)
     raise RuntimeError(f"giving up after retries: {last}")
 
@@ -649,6 +651,9 @@ def existing_versions(path: pathlib.Path) -> set:
             for l in path.read_text(encoding="utf-8").splitlines() if l.strip()}
 
 
+STATUS_EVERY = 30.0  # seconds between status lines when nothing finishes
+
+
 def run_parallel(todo: list[dict], work, out_path: pathlib.Path, workers: int) -> int:
     """Run work(record) -> dict over todo, appending results as they finish."""
     lock, failures = threading.Lock(), 0
@@ -656,18 +661,28 @@ def run_parallel(todo: list[dict], work, out_path: pathlib.Path, workers: int) -
     with out_path.open("a", encoding="utf-8") as fh, \
             concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
         futures = {ex.submit(work, r): r for r in todo}
-        for n, fut in enumerate(concurrent.futures.as_completed(futures), 1):
-            try:
-                rec = fut.result()
-            except Exception as e:  # recorded nowhere, so a rerun retries it
-                failures += 1
-                print(f'  failed {futures[fut]["prompt_id"]}: {e}', file=sys.stderr)
-                continue
-            with lock:
-                fh.write(json.dumps(rec) + "\n")
-                fh.flush()
-            if n % 50 == 0 or n == len(todo):
-                print(f"  [{n}/{len(todo)}]", flush=True)
+        pending, n, start, last_status = set(futures), 0, time.monotonic(), time.monotonic()
+        while pending:
+            finished, pending = concurrent.futures.wait(pending, timeout=STATUS_EVERY,
+                                                        return_when=concurrent.futures.FIRST_COMPLETED)
+            for fut in finished:
+                n += 1
+                try:
+                    rec = fut.result()
+                except Exception as e:  # recorded nowhere, so a rerun retries it
+                    failures += 1
+                    print(f'  failed {futures[fut]["prompt_id"]}: {e}', file=sys.stderr)
+                    continue
+                with lock:
+                    fh.write(json.dumps(rec) + "\n")
+                    fh.flush()
+                if n % 10 == 0 or n == len(todo):
+                    print(f"  [{n}/{len(todo)}]", flush=True)
+                    last_status = time.monotonic()
+            if pending and time.monotonic() - last_status >= STATUS_EVERY:
+                print(f"  [{n}/{len(todo)}] still running, {time.monotonic() - start:.0f}s elapsed, "
+                      f"{failures} failed so far", flush=True)
+                last_status = time.monotonic()
     return failures
 
 

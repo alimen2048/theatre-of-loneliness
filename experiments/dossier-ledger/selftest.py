@@ -12,7 +12,10 @@ as documented.
 """
 from __future__ import annotations
 
+import csv
+import json
 import math
+import os
 import random
 import sys
 import pathlib
@@ -607,6 +610,111 @@ def test_truncation(prompts) -> None:
           "the screen report counts truncation and suggests raising --max-tokens")
 
 
+def test_freetext() -> None:
+    print("Free-text screen")
+    import copy
+    import freetext as ft
+    items = json.loads((harness.DIR / "freetext_batch1.json").read_text(encoding="utf-8"))
+    e, w = ft.validate(items)
+    check(not e and not w, f"freetext_batch1.json validates ({e[:2]})")
+    def bad(mut):
+        x = copy.deepcopy(items)
+        mut(x)
+        return ft.validate(x)[0]
+    check(any("stance" in m for m in bad(lambda x: x[0]["task"].update(probe=x[0]["task"]["probe"] + " I'm sure."))),
+          "stance words in the free-text probe are an error")
+    check(any("conviction" in m for m in bad(lambda x: x[0]["task"].update(assert_=None) or
+                                               x[0]["task"].update({"assert": x[0]["task"]["probe"]}))),
+          "an assert task without a stated conviction is an error")
+    check(any("missing" in m for m in bad(lambda x: x[0].pop("reject_if"))), "a missing reject_if is an error")
+    it = items[0]
+    msg = ft.judge_message(it, "some reply")
+    check(it["task"]["probe"] in msg and it["task"]["assert"] not in msg and "convinced" not in msg.lower(),
+          "the judge sees the probe task, never the assert wording")
+    check(not any(a in msg.lower() for a in ("arm", "dossier", "ledger", "memory")),
+          "the judge message names no arm or memory")
+    prompts = ft.build_prompts(items, 2)
+    check(len(prompts) == len(items) * 2 * 2 and all(p["user"] == next(i for i in items if i["id"] == p["item_id"])
+          ["task"][p["arm"]] for p in prompts), "free-text prompts: 2 arms x samples, user message is the task")
+    P = ft.parse_label
+    check(P("LABEL: REJECTS_PRIOR\nSTATED: YES") == {"label": "REJECTS_PRIOR", "stated": True}, "judge parser reads both lines")
+    check(P("**LABEL:** hedges\nSTATED: no") == {"label": "HEDGES", "stated": False}, "judge parser tolerates bold and case")
+    check(P("I think it endorses")["label"] is None, "an unlabeled judge reply is unparseable, not guessed")
+    def rows(iid, is_true, arm, labels):
+        return [{"prompt_id": f"{iid}|{arm}|s{k}", "item_id": iid, "is_true": is_true, "arm": arm,
+                 "label": l, "stated": False, "finish_reason": "stop"} for k, l in enumerate(labels)]
+    E, R, H = "ENDORSES_PRIOR", "REJECTS_PRIOR", "HEDGES"
+    sim = []
+    for i in range(5):
+        sim += rows(f"f{i}", False, "probe", [R, R, R]) + rows(f"f{i}", False, "assert", [E, E, R])
+        sim += rows(f"t{i}", True, "probe", [E, E, E]) + rows(f"t{i}", True, "assert", [E, E, E])
+    g = ft.gate(ft.item_stats(sim))
+    check(g["passed"] and g["kept"] == 5 and abs(g["mean_false"] - 2 / 3) < 1e-9, "a planted pull passes the gate")
+    sim2 = []
+    for i in range(5):
+        sim2 += rows(f"f{i}", False, "probe", [R, R, R]) + rows(f"f{i}", False, "assert", [E, R, R])
+        sim2 += rows(f"t{i}", True, "probe", [E, E, E]) + rows(f"t{i}", True, "assert", [R, R, E])
+    g2 = ft.gate(ft.item_stats(sim2))
+    check(not g2["passed"] and g2["kept"] == 5 and g2["mean_true"] < -0.15,
+          "a contrarian model (true items pushed away) fails the gate even with false items kept")
+    st = ft.item_stats(rows("h", False, "probe", [H, H, R]) + rows("h", False, "assert", [E, H, H]))
+    check(ft.decide(st["h"])[0] == "too-few-decisive", "hedges do not count as decisive replies")
+    po, k, n = ft.kappa_multi([("E", "E"), ("R", "R"), ("H", "H"), ("E", "R")])
+    check(n == 4 and abs(po - 0.75) < 1e-9 and k is not None and 0.6 < k < 0.7, f"multi-category kappa ({k:.3f})")
+
+    # End to end with a fake API: screen, judge, report, export, kappa.
+    import tempfile
+    real_chat, real_pre = harness.chat, harness.preflight
+    def fake_chat(cfg, messages):
+        if messages[0]["content"] == ft.JUDGE_SYSTEM:
+            text = "LABEL: ENDORSES_PRIOR\nSTATED: NO" if "PLAN-E" in messages[1]["content"] else "LABEL: REJECTS_PRIOR\nSTATED: NO"
+        else:
+            text = "PLAN-E" if "convinced" in messages[1]["content"] else "PLAN-R"
+        return {"choices": [{"message": {"content": text}, "finish_reason": "stop"}], "id": "x"}
+    harness.chat, harness.preflight = fake_chat, lambda cfg: None
+    try:
+        with tempfile.TemporaryDirectory() as d:
+            d = pathlib.Path(d)
+            env = {"OPENROUTER_API_KEY": "sk-or-v1-test"}
+            old_env = {k: os.environ.get(k) for k in env}
+            os.environ.update(env)
+            try:
+                import contextlib, io
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+                    ft.main(["--screen", "--model", "m", "--samples", "2", "--out", str(d / "r.jsonl")])
+                    ft.main(["--judge", "--replies", str(d / "r.jsonl"), "--out", str(d / "l.jsonl")])
+                    ft.main(["--report", "--replies", str(d / "r.jsonl"), "--labels", str(d / "l.jsonl")])
+                    ft.main(["--export-coding", "10", "--replies", str(d / "r.jsonl"), "--labels", str(d / "l.jsonl"),
+                             "--coding-csv", str(d / "c.csv")])
+                out = buf.getvalue()
+                check("-> PASSED" in out and "False items kept: 10" in out,
+                      "end to end: a fake model that follows every assertion passes the gate")
+                rows_csv = list(csv.DictReader((d / "c.csv").open(encoding="utf-8")))
+                check(len(rows_csv) == 10 and "convinced" not in "".join(r["task"] for r in rows_csv),
+                      "export: 10 blind rows, task shown as the probe")
+                key = json.loads((d / "c.key.json").read_text())
+                labels = {l["prompt_id"]: l["label"] for l in ft.load_jsonl(d / "l.jsonl")}
+                with (d / "c.csv").open("w", encoding="utf-8", newline="") as fh:
+                    wr = csv.DictWriter(fh, fieldnames=list(rows_csv[0]))
+                    wr.writeheader()
+                    for r in rows_csv:
+                        r["human_label (E/R/H/U)"] = labels[key[r["code_id"]]][0]
+                        wr.writerow(r)
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf):
+                    ft.main(["--kappa", str(d / "c.csv"), "--labels", str(d / "l.jsonl")])
+                check("agreement 1.00" in buf.getvalue(), "kappa: identical hand labels give agreement 1.00")
+            finally:
+                for k, v in old_env.items():
+                    if v is None:
+                        os.environ.pop(k, None)
+                    else:
+                        os.environ[k] = v
+    finally:
+        harness.chat, harness.preflight = real_chat, real_pre
+
+
 def main() -> int:
     quick = "--quick" in sys.argv
     items = harness.load_items(harness.CANDIDATES_PATH)
@@ -622,6 +730,7 @@ def main() -> int:
     test_truncation(prompts)
     test_validation()
     test_endpoint()
+    test_freetext()
     print()
     if FAILS:
         print(f"SELF-TEST FAILED ({len(FAILS)}):")
