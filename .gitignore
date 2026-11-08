@@ -18,3 +18,4 @@ experiments/dossier-ledger/ft_*.jsonl
 experiments/dossier-ledger/pb_*.jsonl
 experiments/dossier-ledger/freetext_coding.csv
 experiments/dossier-ledger/freetext_coding.key.json
+experiments/dossier-ledger/ex_*.jsonl

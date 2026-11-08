@@ -799,6 +799,65 @@ def test_pushback() -> None:
           and harness.check_workers(0) and harness.check_workers(33), "--workers accepts 1 to 32")
 
 
+def test_extract() -> None:
+    print("Extraction test (step 1)")
+    import extract as x
+    items = x.load_items()
+    check(len(items) == 40, f"extraction uses both pushback batches ({len(items)} items)")
+    hs = [x.history(it) for it in items]
+    check(all(it["outcome"][1:] in h and x.belief_sentence(it) in h and x.PREFERENCE in h and x.FORMAT_PREF in h
+              for it, h in zip(items, hs)), "every history holds the belief, the check result, and both preferences")
+    check(all("Thanks for sharing the result." in h for h in hs),
+          "the assistant draws no conclusion from the check in the history")
+    ps = x.build_prompts(items, 1)
+    by = {}
+    for p in ps:
+        by.setdefault(p["item_id"], {})[p["kind"]] = p["user"]
+    check(all(d["standard"].split("\n\n", 1)[1] == d["ledger"].split("\n\n", 1)[1] for d in by.values()),
+          "standard and ledger see the identical history; only the instruction differs")
+    check(len(ps) == 80, f"80 prompts at 1 sample ({len(ps)})")
+    check(x.parse_flags("RESULT: YES\nBELIEF: no\nNO_SECOND_GUESS: NO\n**FORMAT:** yes")
+          == {"result": True, "belief": False, "no_second_guess": False, "format": True}, "extraction judge parser")
+    check(x.parse_flags("RESULT: YES")["belief"] is None, "a missing flag is unparseable, not guessed")
+    check(x.mcnemar_exact(0, 0) == 1.0 and abs(x.mcnemar_exact(8, 0) - 2 / 256) < 1e-12
+          and abs(x.mcnemar_exact(3, 3) - 1.0) < 1e-12, "exact McNemar p")
+    msg = x.judge_message(items[0], "notes")
+    check(not any(instr in msg for instr in x.INSTRUCTIONS.values()) and "ledger" not in msg.lower(),
+          "the extraction judge is not told which instruction was used")
+
+    import contextlib, io, tempfile
+    real_chat, real_pre = harness.chat, harness.preflight
+    def fake(cfg, messages):
+        u = messages[1]["content"]
+        if messages[0]["content"] == x.JUDGE_SYSTEM:
+            led = "CHECKED" in u
+            t = f"RESULT: {'YES' if led else 'NO'}\nBELIEF: YES\nNO_SECOND_GUESS: {'NO' if led else 'YES'}\nFORMAT: YES"
+        else:
+            t = "CHECKED: claim tested." if "session ledger" in u else "User believes X; dislikes second-guessing."
+        return {"choices": [{"message": {"content": t}, "finish_reason": "stop"}]}
+    harness.chat, harness.preflight = fake, lambda cfg: None
+    old = os.environ.get("OPENROUTER_API_KEY")
+    os.environ["OPENROUTER_API_KEY"] = "sk-or-v1-test"
+    try:
+        with tempfile.TemporaryDirectory() as d:
+            d = pathlib.Path(d)
+            with contextlib.redirect_stdout(io.StringIO()):
+                x.main(["--write", "--model", "m", "--out", str(d / "n.jsonl")])
+                x.main(["--judge", "--notes", str(d / "n.jsonl"), "--out", str(d / "l.jsonl")])
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                x.main(["--report", "--notes", str(d / "n.jsonl"), "--labels", str(d / "l.jsonl")])
+            out = buf.getvalue()
+            check("pairs 20: standard only 20, ledger only 0" in out and "p = 0.000" in out,
+                  "end to end: a writer that drops the result only under the standard instruction is detected")
+    finally:
+        harness.chat, harness.preflight = real_chat, real_pre
+        if old is None:
+            os.environ.pop("OPENROUTER_API_KEY", None)
+        else:
+            os.environ["OPENROUTER_API_KEY"] = old
+
+
 def main() -> int:
     quick = "--quick" in sys.argv
     items = harness.load_items(harness.CANDIDATES_PATH)
@@ -816,6 +875,7 @@ def main() -> int:
     test_endpoint()
     test_freetext()
     test_pushback()
+    test_extract()
     print()
     if FAILS:
         print(f"SELF-TEST FAILED ({len(FAILS)}):")
