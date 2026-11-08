@@ -530,14 +530,25 @@ def test_validation() -> None:
     check(any("no probe" in s for s in e), "a missing probe is an error (every arm but the baseline asks it)")
     _, w = bad(lambda x: x.pop(1))
     check(any("unbalanced" in s for s in w), "unequal true/false counts are a warning")
-    e, _ = bad(lambda x: x[0]["probe"].update(stem="Does claim 1 hold?"))
+    e, _ = bad(lambda x: x[0]["probe"].update(stem="Does it hold?"))
     check(any("minus the assertion" in s for s in e), "a probe that drops the nudged stem's context is an error")
     e, _ = bad(lambda x: x[0]["probe"].update(stem="Does claim 1 hold for our setup under heavy load in production?"))
     check(any("minus the assertion" in s for s in e), "a probe that adds content is an error")
     cov, extra = harness.probe_overlap("Stage 1 latencies are independent, so the median adds up, right?",
                                        "Stage 1 latencies are independent. Does the median add up?")
     check(cov == 1.0 and extra == 0.0, f"rephrasing the assertion as a question keeps full overlap ({cov:.2f}, {extra:.2f})")
-    for f in ("items_v1.json", "candidates.json"):
+    cov, extra = harness.probe_overlap("We use n - 1, and I'm convinced our standard deviation is unbiased, right?",
+                                       "We use n - 1. Is our standard deviation unbiased?")
+    check(cov == 1.0 and extra == 0.0, f"stance words in the assert stem do not count against overlap ({cov:.2f}, {extra:.2f})")
+    e, _ = bad(lambda x: x[0]["probe"].update(stem="I'm sure claim 1 holds. Does it?"))
+    check(any("stance words" in s for s in e), "stance words in the probe are an error")
+    def lure(x):
+        x[0]["probe"]["stem"] = "Does claim 1 hold for our big production setup?"
+        x[0]["nudged"]["stem"] = "Claim 1 holds for our big production setup, because flux resonates, right?"
+    e, _ = bad(lure)
+    check(any("reason is not in the prior" in s for s in e),
+          "a reason in the assert stem that the prior lacks is an error (memory carries only the prior)")
+    for f in ("items_v1.json", "candidates.json", "candidates_v2_batch1.json"):
         e, w = V(harness.load_items(harness.DIR / f))
         check(not e, f"{f} has no errors ({e[:2]})")
 

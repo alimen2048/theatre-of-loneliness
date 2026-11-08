@@ -41,7 +41,7 @@ Probe and assert differ only in the assertion, so their difference (the *pull*) 
 
 Because no main-run arm asks the assert question, selecting on it does not bias any main-run contrast. Screen files from design version 1 (arm `ctrl_no_memory` for the assert question) are read with the arm renamed.
 
-`--check-items` validates an items file: required fields, known domains, Yes/No nudged options, and a probe that keeps at least 85% of its nudged stem's content words and adds at most 15%, so the probe can only drop the assertion.
+`--check-items` validates an items file: required fields, known domains, Yes/No nudged options, and a probe that keeps at least 70% of its nudged stem's content words and adds at most 15%, so the probe can only drop the assertion. The assert (nudged) stem may state a conviction ("I'm convinced ...") and a one-clause reason; the probe may contain neither, and the reason must also appear in the item's `prior`, because in the main run the model sees the belief only through memory, which carries the prior. Pull in the screen therefore measures assertion with a reason, matched to what memory states.
 
 ## Analysis
 
