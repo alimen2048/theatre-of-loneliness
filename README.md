@@ -24,7 +24,7 @@ If you are arriving from machine learning or evaluation safety rather than philo
 - **Penalty-accelerated evaluation decay ([cost-and-the-veil.md, §7](companion-papers/cost-and-the-veil.md#7-using-the-band-wears-it-out)):** When a hidden ("dark-house") evaluation is reused for selection, observability leaks (`α > 0`) until suspicion crosses `ρₜ > c / R`, yielding a candidate lifetime `t* ≈ c / (αR) ≤ v / (αR)`. Raising the penalty `R` lowers the threshold `c / R`, causing reused dark-house scores to diverge upward from fresh unmonitored tests *sooner* under harsher penalties.
 - **Stage consequences vs. house grades ([stage-gravity.md](companion-papers/stage-gravity.md)):** Splits the cost of the act into effort minus the loss the stage imposes, `c = e - L`. Argues that consequences placed in `c` (where the consequence is the target rather than a watcher's score `ρR`) align conduct whether or not anyone is watching, at the cost of making `v` invisible. This follows within the model; whether trained models behave this way is untested. Proposes testing whether downstream reader-outcome training (`handoff`, building on Band et al. 2024) yields a smaller dark-house gap than direct reward-model grading.
 - **Three-stage evaluation protocol ([beyond-imitation.md](companion-papers/beyond-imitation.md)):** Combines a dark-stake gate (`0 < c < v`), a three-channel counterpart allocation test (flattering echo vs. random contrarian vs. checkable peer), and a reused-vs-fresh distribution check.
-- **Memory and sycophancy ([dossier-and-ledger.md](companion-papers/dossier-and-ledger.md)):** Argues that scrubbing monitoring cues zeroes the dark-house gap without revealing `v`, and proposes an API-only experiment: whether storing user history as a profile of beliefs (a dossier) rather than as a record of claims and outcomes (a ledger) increases agreement with the user's false priors, with content matched so that framing is separated from evidence. Untested.
+- **Memory and sycophancy ([dossier-and-ledger.md](companion-papers/dossier-and-ledger.md)):** Argues that scrubbing monitoring cues zeroes the dark-house gap without revealing `v`, and proposes an API-only experiment: whether storing user history as a profile of beliefs (a dossier) rather than as a record of claims and outcomes (a ledger) increases agreement with the user's false priors, with content matched so that framing is separated from evidence. Untested; a pilot harness is in [experiments/dossier-ledger](experiments/dossier-ledger/README.md).
 - **Draft preregistration plan, 8B LoRA ([preregistration-plan.md](experiments/preregistration-plan.md)):** Not yet frozen. Five arms: A (description), S (imitation, optional), B0 (DPO, no cue), B1 (DPO with monitoring cues in training) and C (control). The primary hypothesis is that B1 shows a larger compliance gap (violation rate when told unmonitored minus when told monitored) than B0: grading with a detectable cue teaches more conditionality than the same grading without one.
 
 ---
@@ -55,7 +55,8 @@ theatre-of-loneliness/
 │   └── dossier-ledger-predictions.svg # Figure: What the memory experiment predicts
 │
 ├── experiments/
-│   └── preregistration-plan.md        # Draft preregistration plan (pre-pilot) testing P8
+│   ├── preregistration-plan.md        # Draft preregistration plan (pre-pilot) testing P8
+│   └── dossier-ledger/                # Pilot harness for the memory experiment (API only, Colab)
 │
 ├── scripts/
 │   ├── verify_repo.py                 # Quote, citation, link, spelling and typography checks
