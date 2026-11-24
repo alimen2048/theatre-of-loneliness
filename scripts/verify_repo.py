@@ -516,31 +516,39 @@ def check_online(entries: list[dict]) -> tuple[list[str], int, int, list[str]]:
             continue
         y = int(e["year"])
         q = urllib.parse.quote(e["title"])
-        # Crossref indexes some names without diacritics ("Benabou"), and an
-        # accented query can miss them; matching below folds both sides anyway.
-        a = urllib.parse.quote(fold(e["surname"]))
-        url = (f"https://api.crossref.org/works?query.bibliographic={q}&query.author={a}"
-               f"&filter=from-pub-date:{y - 2},until-pub-date:{y + 2}&rows=10")
-        try:
-            items = json.loads(http_get(url, ua)).get("message", {}).get("items", [])
-        except Exception as exc:  # noqa: BLE001
-            errors.append(f"{label}: Crossref lookup failed: {exc}")
-            continue
         target = fold(e["surname"])
-        matched, nearest = False, None
-        for it in items:
-            score = similar(" ".join(it.get("title") or [""]), e["title"])
-            parts = (it.get("issued") or {}).get("date-parts") or [[None]]
-            year = parts[0][0]
-            families = [fold(x.get("family", "")) for x in it.get("author") or []]
-            ok_title = score >= 0.85
-            ok_year = year is not None and abs(int(year) - y) <= 1
-            ok_author = not families or target in families
-            if ok_title and ok_year and ok_author:
-                matched = True
+        # Crossref spells some names inconsistently: the same author is indexed
+        # as "Bénabou" on one record and "Benabou" on another, and the author
+        # query is accent-sensitive. Try the name as written, then folded.
+        spellings = [e["surname"]] + ([target] if target != e["surname"] else [])
+        matched, nearest, failed = False, None, None
+        for spelling in spellings:
+            a = urllib.parse.quote(spelling)
+            url = (f"https://api.crossref.org/works?query.bibliographic={q}&query.author={a}"
+                   f"&filter=from-pub-date:{y - 2},until-pub-date:{y + 2}&rows=10")
+            try:
+                items = json.loads(http_get(url, ua)).get("message", {}).get("items", [])
+            except Exception as exc:  # noqa: BLE001
+                failed = exc
+                continue
+            for it in items:
+                score = similar(" ".join(it.get("title") or [""]), e["title"])
+                parts = (it.get("issued") or {}).get("date-parts") or [[None]]
+                year = parts[0][0]
+                families = [fold(x.get("family", "")) for x in it.get("author") or []]
+                ok_title = score >= 0.85
+                ok_year = year is not None and abs(int(year) - y) <= 1
+                ok_author = not families or target in families
+                if ok_title and ok_year and ok_author:
+                    matched = True
+                    break
+                if nearest is None or score > nearest[0]:
+                    nearest = (score, " ".join(it.get("title") or ["<none>"]), year)
+            if matched:
                 break
-            if nearest is None or score > nearest[0]:
-                nearest = (score, " ".join(it.get("title") or ["<none>"]), year)
+        if not matched and nearest is None and failed is not None:
+            errors.append(f"{label}: Crossref lookup failed: {failed}")
+            continue
         if not matched:
             if nearest:
                 errors.append(f"{label}: no Crossref record matches title, year and author "
