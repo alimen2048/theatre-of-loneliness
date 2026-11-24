@@ -41,6 +41,7 @@ import sys
 import tempfile
 import time
 import unicodedata
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -447,16 +448,24 @@ def check_citations(root: pathlib.Path) -> tuple[list[str], list[dict], int]:
 
 # ---------------------------------------------------------------------- online
 
-def http_get(url: str, headers: dict | None = None, retries: int = 3) -> bytes:
+def http_get(url: str, headers: dict | None = None, retries: int = 5) -> bytes:
+    """GET with retries. Rate limits (429, 503) wait for Retry-After when the
+    server sends one, otherwise back off exponentially; timeouts back off too."""
     last = None
     for attempt in range(retries):
         try:
             req = urllib.request.Request(url, headers=headers or {})
-            with urllib.request.urlopen(req, timeout=20) as resp:
+            with urllib.request.urlopen(req, timeout=30) as resp:
                 return resp.read()
         except Exception as exc:  # noqa: BLE001
             last = exc
-            time.sleep(2 * (attempt + 1))
+            wait = 3 * 2 ** attempt
+            if isinstance(exc, urllib.error.HTTPError) and exc.code in (429, 503):
+                retry_after = exc.headers.get("Retry-After", "")
+                if retry_after.isdigit():
+                    wait = max(wait, int(retry_after))
+            if attempt < retries - 1:
+                time.sleep(min(wait, 60))
     raise RuntimeError(str(last))
 
 
@@ -496,6 +505,7 @@ def check_online(entries: list[dict]) -> tuple[list[str], int, int, list[str]]:
                 checked += 1
             except Exception as exc:  # noqa: BLE001
                 errors.append(f"{label}: arXiv lookup failed: {exc}")
+            time.sleep(3)  # arXiv API terms: at most one request every 3 seconds
             continue
         if not e["title"]:
             skipped += 1  # books and chapters without a leading quoted title
@@ -506,7 +516,9 @@ def check_online(entries: list[dict]) -> tuple[list[str], int, int, list[str]]:
             continue
         y = int(e["year"])
         q = urllib.parse.quote(e["title"])
-        a = urllib.parse.quote(e["surname"])
+        # Crossref indexes some names without diacritics ("Benabou"), and an
+        # accented query can miss them; matching below folds both sides anyway.
+        a = urllib.parse.quote(fold(e["surname"]))
         url = (f"https://api.crossref.org/works?query.bibliographic={q}&query.author={a}"
                f"&filter=from-pub-date:{y - 2},until-pub-date:{y + 2}&rows=10")
         try:
