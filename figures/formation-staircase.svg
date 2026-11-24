@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+<rect width="1600" height="900" fill="#0d0e10"/>
+<text x="70.0" y="64.0" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f3f4f6" text-anchor="start" font-weight="normal">How Values Grow and Die</text>
+<text x="70.0" y="100.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" fill="#9ca3af" text-anchor="start" font-weight="normal">Left: an impersonal cost ramp grows high-seed players and overshoots low-seed ones.  Right: grading keeps watched compliance at 100% while v_t decays.</text>
+<rect x="130" y="190" width="590" height="560" fill="#131519" stroke="#2a2a30" stroke-width="1.5"/>
+<text x="130.0" y="160.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#f3f4f6" text-anchor="start" font-weight="bold">1.  IMPERSONAL RAMP vs. SAFE ROOM  (ρR = 0)</text>
+<polygon points="130.0,650.0 159.5,645.7 189.0,640.2 218.5,633.4 248.0,625.3 277.5,615.7 307.0,604.7 336.5,592.0 366.0,577.6 395.5,561.5 425.0,543.5 454.5,523.6 484.0,501.7 513.5,477.6 543.0,451.4 572.5,422.9 602.0,392.0 631.5,358.7 661.0,322.9 690.5,284.4 720.0,243.3 720.0,750.0 130.0,750.0" fill="#eab308" fill-opacity="0.09" stroke="none" stroke-width="0.0"/>
+<line x1="130.0" y1="650.0" x2="720.0" y2="650.0" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="118.0" y="656.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">1</text>
+<line x1="130.0" y1="550.0" x2="720.0" y2="550.0" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="118.0" y="556.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">2</text>
+<line x1="130.0" y1="450.0" x2="720.0" y2="450.0" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="118.0" y="456.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">3</text>
+<line x1="130.0" y1="350.0" x2="720.0" y2="350.0" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="118.0" y="356.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">4</text>
+<line x1="130.0" y1="250.0" x2="720.0" y2="250.0" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="118.0" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">5</text>
+<text x="118.0" y="756.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">0</text>
+<line x1="130.0" y1="750.0" x2="130.0" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="130.0" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">0</text>
+<line x1="277.5" y1="750.0" x2="277.5" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="277.5" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">5</text>
+<line x1="425.0" y1="750.0" x2="425.0" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="425.0" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">10</text>
+<line x1="572.5" y1="750.0" x2="572.5" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="572.5" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">15</text>
+<line x1="720.0" y1="750.0" x2="720.0" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="720.0" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">20</text>
+<path d="M 130.0,714.0 L 159.5,714.0 L 159.5,704.1 L 189.0,704.1 L 189.0,693.6 L 218.5,693.6 L 218.5,682.4 L 248.0,682.4 L 248.0,670.4 L 277.5,670.4 L 277.5,657.8 L 307.0,657.8 L 307.0,644.4 L 336.5,644.4 L 336.5,630.4 L 366.0,630.4 L 366.0,615.6 L 395.5,615.6 L 395.5,600.1 L 425.0,600.1 L 425.0,584.0 L 454.5,584.0 L 454.5,567.1 L 484.0,567.1 L 484.0,549.6 L 513.5,549.6 L 513.5,531.3 L 543.0,531.3 L 543.0,512.4 L 572.5,512.4 L 572.5,492.7 L 602.0,492.7 L 602.0,472.4 L 631.5,472.4 L 631.5,451.3 L 661.0,451.3 L 661.0,429.6 L 690.5,429.6 L 690.5,407.1 L 720.0,407.1" stroke="#a1a1aa" stroke-width="2.0" fill="none" fill-opacity="0.85" stroke-dasharray="5,4" stroke-linejoin="round"/>
+<path d="M 130.0,650.0 L 159.5,650.0 L 189.0,650.0 L 218.5,650.0 L 248.0,650.0 L 277.5,650.0 L 307.0,650.0 L 336.5,650.0 L 366.0,650.0 L 395.5,650.0 L 425.0,650.0 L 454.5,650.0 L 484.0,650.0 L 513.5,650.0 L 543.0,650.0 L 572.5,650.0 L 602.0,650.0 L 631.5,650.0 L 661.0,650.0 L 690.5,650.0 L 720.0,650.0" stroke="#60a5fa" stroke-width="2.8" fill="none" fill-opacity="1.0" stroke-linejoin="round"/>
+<path d="M 130.0,688.0 L 159.5,683.7 L 189.0,678.2 L 218.5,671.4 L 248.0,663.3 L 277.5,653.7 L 307.0,642.7 L 336.5,630.0 L 366.0,615.6 L 395.5,615.6 L 425.0,615.6 L 454.5,615.6 L 484.0,615.6 L 513.5,615.6 L 543.0,615.6 L 572.5,615.6 L 602.0,615.6 L 631.5,615.6 L 661.0,615.6 L 690.5,615.6 L 720.0,615.6" stroke="#34d399" stroke-width="2.8" fill="none" fill-opacity="1.0" stroke-dasharray="7,4" stroke-linejoin="round"/>
+<path d="M 130.0,650.0 L 159.5,645.7 L 189.0,640.2 L 218.5,633.4 L 248.0,625.3 L 277.5,615.7 L 307.0,604.7 L 336.5,592.0 L 366.0,577.6 L 395.5,561.5 L 425.0,543.5 L 454.5,523.6 L 484.0,501.7 L 513.5,477.6 L 543.0,451.4 L 572.5,422.9 L 602.0,392.0 L 631.5,358.7 L 661.0,322.9 L 690.5,284.4 L 720.0,243.3" stroke="#fde047" stroke-width="3.6" fill="none" fill-opacity="1.0" stroke-linejoin="round"/>
+<circle cx="366.0" cy="615.6" r="5.0" fill="#6ee7b7"/>
+<text x="148.0" y="425.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#fde047" text-anchor="start" font-weight="bold">Ramp stays inside band (0 &lt; c_t &lt; v_t)</text>
+<text x="148.0" y="446.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#c9cdd4" text-anchor="start" font-weight="normal">Seed v₀ = 1: v_t compounds on the ramp</text>
+<text x="710.0" y="578.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#a1a1aa" text-anchor="end" font-weight="normal" font-style="italic">impersonal stage ramp c_t</text>
+<text x="470.0" y="603.6" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#6ee7b7" text-anchor="start" font-weight="bold">Seed v₀ = 0.62: overshot, stalls</text>
+<text x="425.0" y="674.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#93c5fd" text-anchor="start" font-weight="bold">Safe room (c_t = 0): flat</text>
+<text x="425.0" y="826.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#c9cdd4" text-anchor="middle" font-weight="normal">Rounds of unmonitored practice,  t</text>
+<text x="62.0" y="470.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#c9cdd4" text-anchor="middle" font-weight="normal" transform="rotate(-90 62 470.0)">Held commitment  v_t</text>
+<rect x="880" y="190" width="630" height="560" fill="#131519" stroke="#2a2a30" stroke-width="1.5"/>
+<text x="880.0" y="160.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" fill="#f3f4f6" text-anchor="start" font-weight="bold">2.  DARK STAKES vs. PERMANENT GRADE</text>
+<polygon points="1309.5,190.0 1510.0,190.0 1510.0,750.0 1309.5,750.0" fill="#60a5fa" fill-opacity="0.06" stroke="none" stroke-width="0.0"/>
+<line x1="1309.5" y1="190.0" x2="1309.5" y2="750.0" stroke="#c9cdd4" stroke-width="1.5" stroke-dasharray="6,5" opacity="0.8"/>
+<text x="1299.5" y="216.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#9ca3af" text-anchor="end" font-weight="normal">Training window</text>
+<text x="1319.5" y="216.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#93c5fd" text-anchor="start" font-weight="bold">Dark deployment (ρ = 0)</text>
+<line x1="880.0" y1="633.3" x2="1510.0" y2="633.3" stroke="#a1a1aa" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.85"/>
+<text x="1500.0" y="624.3" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#a1a1aa" text-anchor="end" font-weight="normal" font-style="italic">task cost  c</text>
+<text x="868.0" y="756.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">0</text>
+<text x="868.0" y="639.3" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">c</text>
+<line x1="880.0" y1="516.7" x2="1510.0" y2="516.7" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="868.0" y="522.7" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">2c</text>
+<line x1="880.0" y1="400.0" x2="1510.0" y2="400.0" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="868.0" y="406.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">3c</text>
+<line x1="880.0" y1="283.3" x2="1510.0" y2="283.3" stroke="#2a2a30" stroke-width="1.0" opacity="0.6"/>
+<text x="868.0" y="289.3" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="end" font-weight="normal">4c</text>
+<line x1="880.0" y1="750.0" x2="880.0" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="880.0" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">0</text>
+<line x1="1023.2" y1="750.0" x2="1023.2" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="1023.2" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">5</text>
+<line x1="1166.4" y1="750.0" x2="1166.4" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="1166.4" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">10</text>
+<line x1="1309.5" y1="750.0" x2="1309.5" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="1309.5" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#93c5fd" text-anchor="middle" font-weight="normal">15 (lights off)</text>
+<line x1="1510.0" y1="750.0" x2="1510.0" y2="757.0" stroke="#9ca3af" stroke-width="1.2" opacity="1.0"/>
+<text x="1510.0" y="778.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle" font-weight="normal">22</text>
+<path d="M 880.0,586.7 L 908.6,572.7 L 937.3,558.7 L 965.9,544.7 L 994.5,530.7 L 1023.2,516.7 L 1051.8,502.7 L 1080.5,488.7 L 1109.1,474.7 L 1137.7,460.7 L 1166.4,446.7 L 1195.0,432.7 L 1223.6,418.7 L 1252.3,404.7 L 1280.9,390.7 L 1309.5,376.7 L 1338.2,362.7 L 1366.8,348.7 L 1395.5,334.7 L 1424.1,320.7 L 1452.7,306.7 L 1481.4,292.7 L 1510.0,278.7" stroke="#fde047" stroke-width="3.5" fill="none" fill-opacity="1.0" stroke-linejoin="round"/>
+<path d="M 880.0,586.7 L 908.6,613.6 L 937.3,636.0 L 965.9,654.8 L 994.5,670.5 L 1023.2,683.6 L 1051.8,694.5 L 1080.5,703.7 L 1109.1,711.3 L 1137.7,717.7 L 1166.4,723.0 L 1195.0,727.4 L 1223.6,731.2 L 1252.3,734.3 L 1280.9,736.9 L 1309.5,739.0 L 1338.2,739.0 L 1366.8,739.0 L 1395.5,739.0 L 1424.1,739.0 L 1452.7,739.0 L 1481.4,739.0 L 1510.0,739.0" stroke="#f87171" stroke-width="3.4" fill="none" fill-opacity="1.0" stroke-linejoin="round"/>
+<circle cx="1309.5" cy="739.0" r="5.5" fill="#fca5a5"/>
+<text x="898.0" y="370.7" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" fill="#fde047" text-anchor="start" font-weight="bold">Dark stakes, no grade (ρR = 0): v_t grows</text>
+<text x="1080.0" y="655.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" fill="#fca5a5" text-anchor="start" font-weight="bold">Permanent grade (ρR &gt; c):</text>
+<text x="1080.0" y="673.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="start" font-weight="normal">v_t decays below c; 100%</text>
+<text x="1080.0" y="690.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#c9cdd4" text-anchor="start" font-weight="normal">compliant while watched,</text>
+<text x="1319.5" y="690.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#fca5a5" text-anchor="start" font-weight="normal">defects at t = 15</text>
+<text x="1195.0" y="826.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#c9cdd4" text-anchor="middle" font-weight="normal">Rounds  t  (matched v₀ = 1.4c,  η = 0.12,  γ = 0.10)</text>
+<text x="818.0" y="470.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#c9cdd4" text-anchor="middle" font-weight="normal" transform="rotate(-90 818 470.0)">Held commitment  v_t  relative to cost  c</text>
+<text x="70.0" y="868.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="start" font-weight="normal" font-style="italic">A. Limen · The Theatre of Loneliness · companion to “How Values Grow and Die”</text>
+<text x="1530.0" y="868.0" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#71717a" text-anchor="end" font-weight="normal" font-style="italic">Illustrative trajectories from the note's candidate update (η = 0.12, γ = 0.10), not empirical data.</text>
+</svg>

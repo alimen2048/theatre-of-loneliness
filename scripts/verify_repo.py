@@ -55,6 +55,7 @@ PAPERS_REL = [
     "companion-papers/beyond-imitation.md",
     "companion-papers/stage-gravity.md",
     "companion-papers/dossier-and-ledger.md",
+    "companion-papers/formation-dynamics.md",
     "experiments/preregistration-plan.md",
 ]
 

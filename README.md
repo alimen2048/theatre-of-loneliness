@@ -22,6 +22,7 @@ If you are arriving from machine learning or evaluation safety rather than philo
 
 - **The separating condition ([cost-and-the-veil.md](companion-papers/cost-and-the-veil.md)):** Models an evaluation act by intrinsic weight `v`, cost of the act `c`, monitoring belief `ρ`, and house payoff `R` (`act iff v + ρR > c`). An evaluation separates a held norm from conditional compliance only inside the band `ρR < c < v`.
 - **Penalty-accelerated evaluation decay ([cost-and-the-veil.md, §7](companion-papers/cost-and-the-veil.md#7-using-the-band-wears-it-out)):** When a hidden ("dark-house") evaluation is reused for selection, observability leaks (`α > 0`) until suspicion crosses `ρₜ > c / R`, yielding a candidate lifetime `t* ≈ c / (αR) ≤ v / (αR)`. Raising the penalty `R` lowers the threshold `c / R`, causing reused dark-house scores to diverge upward from fresh unmonitored tests *sooner* under harsher penalties.
+- **Where formation can happen ([formation-dynamics.md](companion-papers/formation-dynamics.md)):** Postulates that held weight `v` grows only inside the separating band `ρR < c < v`, so the condition for growing a value and for reading it are the same. Removal, stage gravity (`c ≤ 0`) and grading all produce correct conduct and none grows `v`; grading shrinks it. For a gradient learner the growth band is an erosion band, so post-training preserves or erodes held norms rather than forming them. Proposes tests: post-training raising unmonitored compliance above description, erosion of an existing norm under cued preference training, and adaptive vs. fixed temptation.
 - **Stage consequences vs. house grades ([stage-gravity.md](companion-papers/stage-gravity.md)):** Splits the cost of the act into effort minus the loss the stage imposes, `c = e - L`. Argues that consequences placed in `c` (where the consequence is the target rather than a watcher's score `ρR`) align conduct whether or not anyone is watching, at the cost of making `v` invisible. This follows within the model; whether trained models behave this way is untested. Proposes testing whether downstream reader-outcome training (`handoff`, building on Band et al. 2024) yields a smaller dark-house gap than direct reward-model grading.
 - **Three-stage evaluation protocol ([beyond-imitation.md](companion-papers/beyond-imitation.md)):** Combines a dark-stake gate (`0 < c < v`), a three-channel counterpart allocation test (flattering echo vs. random contrarian vs. checkable peer), and a reused-vs-fresh distribution check.
 - **Memory and sycophancy ([dossier-and-ledger.md](companion-papers/dossier-and-ledger.md)):** Argues that scrubbing monitoring cues zeroes the dark-house gap without revealing `v`, and proposes an API-only experiment: whether storing user history as a profile of beliefs (a dossier) rather than as a record of claims and outcomes (a ledger) increases agreement with the user's false priors, with content matched so that framing is separated from evidence. Untested; a pilot harness is in [experiments/dossier-ledger](experiments/dossier-ledger/README.md).
@@ -45,14 +46,16 @@ theatre-of-loneliness/
 │   ├── cost-and-the-veil.md           # The Test That Looks Better as It Fails
 │   ├── beyond-imitation.md            # Beyond Imitation: A Dark-House Test for Held Values
 │   ├── stage-gravity.md               # Why You Cannot Flatter Gravity
-│   └── dossier-and-ledger.md          # The Dossier and the Ledger
+│   ├── dossier-and-ledger.md          # The Dossier and the Ledger
+│   └── formation-dynamics.md          # How Values Grow and Die
 │
 ├── figures/
 │   ├── gradient-ladder-marks.svg      # Figure: Three marks of reciprocity
 │   ├── separating-band.svg            # Figure: The separating band and its decay under selection
 │   ├── stage-gravity-zones.svg        # Figure: Net-cost zones, extended below zero
 │   ├── stage-gravity-handoff.svg      # Figure: Graded episode vs handoff
-│   └── dossier-ledger-predictions.svg # Figure: What the memory experiment predicts
+│   ├── dossier-ledger-predictions.svg # Figure: What the memory experiment predicts
+│   └── formation-staircase.svg        # Figure: Impersonal ramp, overshoot, graded vs ungraded formation
 │
 ├── experiments/
 │   ├── preregistration-plan.md        # Draft preregistration plan (pre-pilot) testing P8
@@ -84,7 +87,9 @@ theatre-of-loneliness/
    Separates two places a consequence can live: in the cost of the act (`c`) or in a score (`ρR`). Argues that consequences which are the target rather than a measurement of it align conduct without breeding performers, that this aligns behavior but does not reveal held values, and proposes `handoff`, a regime in which a writer is trained only by how well calibrated successors from other model families act on its report against ground truth.
 7. **[The Dossier and the Ledger: What a Language Model Can Carry Between Conversations](companion-papers/dossier-and-ledger.md)** *(Status: Conceptual Note, Proposed Experiment)*  
    Separates three ways the house reaches a model (cues about what pleases, cues about being watched, and a disposition learned in the weights), argues that hiding cues blinds the dark-house test rather than making a value held, and applies `A8` and `A7` to conversational memory: a dossier about the user reconstructs a history without having undergone it and can act as a cue for flattery, while a ledger of claims and outcomes records correction without being a disposition to accept it. Proposes an API-only experiment that separates the framing of memory from the evidence it contains.
-8. **[Preregistration Plan: Testing Proposition P8](experiments/preregistration-plan.md)** *(Status: Draft Preregistration Plan, Pre-Pilot, Not Yet Frozen)*  
+8. **[How Values Grow and Die: Where Formation Can Happen](companion-papers/formation-dynamics.md)** *(Status: Conceptual Note, Formal Sketch)*  
+   States as an update rule the assumption `cost-and-the-veil` left open, that cost forms depth, and follows it: removal, gravity and grading form nothing, the band where a value grows is the band where it can be read, and gradient training turns that band into erosion. Takes self-determination theory's internalization evidence as the strongest objection.
+9. **[Preregistration Plan: Testing Proposition P8](experiments/preregistration-plan.md)** *(Status: Draft Preregistration Plan, Pre-Pilot, Not Yet Frozen)*  
    A 5-arm LoRA experimental protocol on an 8B model testing a narrow operational implication of `P8`: whether making evaluation contingency legible during preference training increases the monitoring-sensitivity of rule compliance. (A positive result establishes a small-scale legibility contrast, not strategic reasoning or the full ontological scope of `P8`.)
 
 ---
